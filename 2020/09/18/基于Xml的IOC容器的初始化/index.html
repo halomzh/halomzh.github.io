@@ -20,30 +20,38 @@
     var CONFIG = {"hostname":"halomzh.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="学习记录">
-<meta property="og:type" content="website">
-<meta property="og:title" content="halomzh.github.io">
-<meta property="og:url" content="https://halomzh.github.io/index.html">
+  <meta name="description" content="IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。其继承体系如下图所示： ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。 #1、寻找入口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Xml的IOC容器的初始化">
+<meta property="og:url" content="https://halomzh.github.io/2020/09/18/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
 <meta property="og:site_name" content="halomzh.github.io">
-<meta property="og:description" content="学习记录">
+<meta property="og:description" content="IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。其继承体系如下图所示： ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。 #1、寻找入口">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-17e22cf5186678b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-c14cf25265e3e677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-7380c12d754ff550.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-09-18T05:06:09.000Z">
+<meta property="article:modified_time" content="2020-09-18T05:06:45.296Z">
 <meta property="article:author" content="halomzh">
+<meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
-<link rel="canonical" href="https://halomzh.github.io/">
+<link rel="canonical" href="https://halomzh.github.io/2020/09/18/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>halomzh.github.io</title>
+  <title>基于Xml的IOC容器的初始化 | halomzh.github.io</title>
   
 
 
@@ -152,9 +160,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -170,10 +179,9 @@
       <meta itemprop="name" content="halomzh.github.io">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/18/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/" class="post-title-link" itemprop="url">基于Xml的IOC容器的初始化</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          基于Xml的IOC容器的初始化
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -206,7 +214,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。<br>其继承体系如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+        <p>IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。<br>其继承体系如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。</p>
 <p>#1、寻找入口<br>我们用的比较多的ClassPathXmlApplicationContext，通过main()方法启动:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext app &#x3D; new ClassPathXmlApplicationContext(&quot;application.xml&quot;);</span><br></pre></td></tr></table></figure>
@@ -251,100 +259,33 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;存储注册信息的BeanDefinition</span><br><span class="line">private final Map&lt;String, BeanDefinition&gt; beanDefinitionMap &#x3D; new ConcurrentHashMap&lt;&gt;(256);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;向IOC 容器注册解析的BeanDefiniton</span><br><span class="line">@Override</span><br><span class="line">public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)</span><br><span class="line">        throws BeanDefinitionStoreException &#123;</span><br><span class="line">    Assert.hasText(beanName, &quot;Bean name must not be empty&quot;);</span><br><span class="line">    Assert.notNull(beanDefinition, &quot;BeanDefinition must not be null&quot;);</span><br><span class="line">    &#x2F;&#x2F;校验解析的BeanDefiniton</span><br><span class="line">    if (beanDefinition instanceof AbstractBeanDefinition) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            ((AbstractBeanDefinition) beanDefinition).validate();</span><br><span class="line">        &#125; catch (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">            throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</span><br><span class="line">                    &quot;Validation of bean definition failed&quot;, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    BeanDefinition oldBeanDefinition;</span><br><span class="line">    oldBeanDefinition &#x3D; this.beanDefinitionMap.get(beanName);</span><br><span class="line">    if (oldBeanDefinition !&#x3D; null) &#123;</span><br><span class="line">        if (!isAllowBeanDefinitionOverriding()) &#123;</span><br><span class="line">            throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</span><br><span class="line">                    &quot;Cannot register bean definition [&quot; + beanDefinition + &quot;] for bean &#39;&quot; + beanName +</span><br><span class="line">                            &quot;&#39;: There is already [&quot; + oldBeanDefinition + &quot;] bound.&quot;);</span><br><span class="line">        &#125; else if (oldBeanDefinition.getRole() &lt; beanDefinition.getRole()) &#123;</span><br><span class="line">            &#x2F;&#x2F; e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE</span><br><span class="line">            if (this.logger.isWarnEnabled()) &#123;</span><br><span class="line">                this.logger.warn(&quot;Overriding user-defined bean definition for bean &#39;&quot; + beanName +</span><br><span class="line">                        &quot;&#39; with a framework-generated bean definition: replacing [&quot; +</span><br><span class="line">                        oldBeanDefinition + &quot;] with [&quot; + beanDefinition + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else if (!beanDefinition.equals(oldBeanDefinition)) &#123;</span><br><span class="line">            if (this.logger.isInfoEnabled()) &#123;</span><br><span class="line">                this.logger.info(&quot;Overriding bean definition for bean &#39;&quot; + beanName +</span><br><span class="line">                        &quot;&#39; with a different definition: replacing [&quot; + oldBeanDefinition +</span><br><span class="line">                        &quot;] with [&quot; + beanDefinition + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            if (this.logger.isDebugEnabled()) &#123;</span><br><span class="line">                this.logger.debug(&quot;Overriding bean definition for bean &#39;&quot; + beanName +</span><br><span class="line">                        &quot;&#39; with an equivalent definition: replacing [&quot; + oldBeanDefinition +</span><br><span class="line">                        &quot;] with [&quot; + beanDefinition + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (hasBeanCreationStarted()) &#123;</span><br><span class="line">            &#x2F;&#x2F;注册的过程中需要线程同步，以保证数据的一致性</span><br><span class="line">            synchronized (this.beanDefinitionMap) &#123;</span><br><span class="line">                this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">                List&lt;String&gt; updatedDefinitions &#x3D; new ArrayList&lt;&gt;(this.beanDefinitionNames.size() + 1);</span><br><span class="line">                updatedDefinitions.addAll(this.beanDefinitionNames);</span><br><span class="line">                updatedDefinitions.add(beanName);</span><br><span class="line">                this.beanDefinitionNames &#x3D; updatedDefinitions;</span><br><span class="line">                if (this.manualSingletonNames.contains(beanName)) &#123;</span><br><span class="line">                    Set&lt;String&gt; updatedSingletons &#x3D; new LinkedHashSet&lt;&gt;(this.manualSingletonNames);</span><br><span class="line">                    updatedSingletons.remove(beanName);</span><br><span class="line">                    this.manualSingletonNames &#x3D; updatedSingletons;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">            this.beanDefinitionNames.add(beanName);</span><br><span class="line">            this.manualSingletonNames.remove(beanName);</span><br><span class="line">        &#125;</span><br><span class="line">        this.frozenBeanDefinitionNames &#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;检查是否有同名的BeanDefinition 已经在IOC 容器中注册</span><br><span class="line">    if (oldBeanDefinition !&#x3D; null || containsSingleton(beanName)) &#123;</span><br><span class="line">        &#x2F;&#x2F;重置所有已经注册过的BeanDefinition 的缓存</span><br><span class="line">        resetBeanDefinition(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>至此，Bean 配置信息中配置的Bean 被解析过后，已经注册到IOC 容器中，被容器管理起来，真正完成了IOC 容器初始化所做的全部工作。现在IOC 容器中已经建立了整个Bean 的配置信息，这些BeanDefinition 信息已经可以使用，并且可以被检索，IOC 容器的作用就是对这些注册的Bean 定义信息进行处理和维护。这些的注册的Bean 定义信息是IOC 容器控制反转的基础，正是有了这些注册的数据，容器才可以进行依赖注入。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/18/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/18/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/" class="post-title-link" itemprop="url">Spring核心容器类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-18 12:51:14 / 修改时间：13:02:18" itemprop="dateCreated datePublished" datetime="2020-09-18T12:51:14+08:00">2020-09-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">源码</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1、BeanFactory"><a href="#1、BeanFactory" class="headerlink" title="1、BeanFactory"></a>1、BeanFactory</h1><p><img src="https://upload-images.jianshu.io/upload_images/24719542-2fb5053e70f253b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>其中BeanFactory 作为最顶层的一个接口类，它定义了IOC 容器的基本功能规范，BeanFactory 有三个重要的子类：ListableBeanFactory、HierarchicalBeanFactory 和AutowireCapableBeanFactory。但是从类图中我们可以发现最终的默认实现类是DefaultListableBeanFactory，它实现了所有的接口。</p>
-<h2 id="1、ListableBeanFactory-接口表示这些Bean-是可列表化的"><a href="#1、ListableBeanFactory-接口表示这些Bean-是可列表化的" class="headerlink" title="1、ListableBeanFactory 接口表示这些Bean 是可列表化的"></a>1、ListableBeanFactory 接口表示这些Bean 是可列表化的</h2><p><img src="https://upload-images.jianshu.io/upload_images/24719542-4abb36abff2b0ef8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h2 id="2、HierarchicalBeanFactory-表示的是这些Bean-是有继承关系的，也就是每个Bean-有可能有父Bean"><a href="#2、HierarchicalBeanFactory-表示的是这些Bean-是有继承关系的，也就是每个Bean-有可能有父Bean" class="headerlink" title="2、HierarchicalBeanFactory 表示的是这些Bean 是有继承关系的，也就是每个Bean 有可能有父Bean"></a>2、HierarchicalBeanFactory 表示的是这些Bean 是有继承关系的，也就是每个Bean 有可能有父Bean</h2><p><img src="https://upload-images.jianshu.io/upload_images/24719542-22a0f789f8bc1c6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h2 id="3、AutowireCapableBeanFactory-接口定义Bean-的自动装配规则"><a href="#3、AutowireCapableBeanFactory-接口定义Bean-的自动装配规则" class="headerlink" title="3、AutowireCapableBeanFactory 接口定义Bean 的自动装配规则"></a>3、AutowireCapableBeanFactory 接口定义Bean 的自动装配规则</h2><p><img src="https://upload-images.jianshu.io/upload_images/24719542-c46ef2c592dba6ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>这三个接口共同定义了Bean 的集合、Bean 之间的关系、以及Bean 行为。</p>
-<p>在BeanFactory 里只对IOC 容器的基本行为作了定义，根本不关心你的Bean 是如何定义怎样加载的。</p>
-<p>而要知道工厂是如何产生对象的，我们需要看具体的IOC 容器实现，Spring 提供了许多IOC 容器的实现。比如GenericApplicationContext ， ClasspathXmlApplicationContext 等。</p>
-<h1 id="2、BeanDefinition"><a href="#2、BeanDefinition" class="headerlink" title="2、BeanDefinition"></a>2、BeanDefinition</h1><p>SpringIOC 容器管理了我们定义的各种Bean 对象及其相互的关系，Bean 对象在Spring 实现中是以BeanDefinition 来描述的。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/24719542-7373a5c6418ae465.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h1 id="3、BeanDefinitionReader"><a href="#3、BeanDefinitionReader" class="headerlink" title="3、BeanDefinitionReader"></a>3、BeanDefinitionReader</h1><p>Bean 的解析过程非常复杂，功能被分的很细，因为这里需要被扩展的地方很多，必须保证有足够的灵活性，以应对可能的变化。Bean 的解析主要就是对Spring 配置文件的解析。这个解析过程主要通过BeanDefintionReader 来完成。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/24719542-7802218e5157371d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/18/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/" rel="prev" title="Spring核心容器类">
+      <i class="fa fa-chevron-left"></i> Spring核心容器类
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
