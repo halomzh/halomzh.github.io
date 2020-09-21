@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-21 16:39:50 / 修改时间：16:40:27" itemprop="dateCreated datePublished" datetime="2020-09-21T16:39:50+08:00">2020-09-21</time>
+              <time title="创建时间：2020-09-21 16:39:50 / 修改时间：18:19:12" itemprop="dateCreated datePublished" datetime="2020-09-21T16:39:50+08:00">2020-09-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,7 +234,143 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="数据库事务原理详解"><a href="#数据库事务原理详解" class="headerlink" title="数据库事务原理详解"></a>数据库事务原理详解</h1><h2 id="1、事务基本概念"><a href="#1、事务基本概念" class="headerlink" title="1、事务基本概念"></a>1、事务基本概念</h2><p>事务(Transaction)是访问并可能更新数据库中各种数据项的一个程序执行单元(unit)。</p>
+<p>特点：事务是恢复和并发控制的基本单位。事务应该具有4 个属性：<strong>原子性</strong>、<strong>一致性</strong>、<strong>隔离性</strong>、<strong>持久性</strong>。这四个属性通常称为ACID 特性。</p>
+<p><strong>原子性（Automicity）</strong>。一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</p>
+<p><strong>一致性（Consistency）</strong>。事务必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的。</p>
+<p><strong>隔离性（Isolation）</strong>。一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对并发的其他事务是隔离的，并发执行的各个事务之间不能互相干扰。</p>
+<p><strong>持久性（Durability）</strong>。持久性也称永久性（Permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其有任何影响。</p>
+<h2 id="2、事务的基本原理"><a href="#2、事务的基本原理" class="headerlink" title="2、事务的基本原理"></a>2、事务的基本原理</h2><p>Spring 事务的本质其实就是数据库对事务的支持，没有数据库的事务支持，Spring 是无法提供事务功能的。对于纯JDBC 操作数据库，想要用到事务，可以按照以下步骤进行：</p>
+<p>1、获取连接Connection con = DriverManager.getConnection()</p>
+<p>2、开启事务con.setAutoCommit(true/false);</p>
+<p>3、执行CRUD</p>
+<p>4、提交事务/回滚事务con.commit() / con.rollback();</p>
+<p>5、关闭连接conn.close();</p>
+<p>使用Spring 的事务管理功能后，我们可以不再写步骤2 和4 的代码，而是由Spirng 自动完成。</p>
+<p>那么Spring 是如何在我们书写的CRUD 之前和之后开启事务和关闭事务的呢？解决这个问题，也就可以从整体上理解Spring 的事务管理实现原理了。</p>
+<p>下面简单地介绍下，注解方式为例子:</p>
+<p>配置文件开启注解驱动，在相关的类和方法上通过注解@Transactional 标识。</p>
+<p>Spring 在启动的时候会去解析生成相关的bean，这时候会查看拥有相关注解的类和方法，并且为这些类和方法生成代理，并根据@Transaction 的相关参数进行相关配置注入，这样就在代理中为我们把相关的事务处理掉了（开启正常提交事务，异常回滚事务）。真正的数据库层的事务提交和回滚是通过binlog 或者redo log 实现的。</p>
+<h2 id="3、Spring-事务的传播属性"><a href="#3、Spring-事务的传播属性" class="headerlink" title="3、Spring 事务的传播属性"></a>3、Spring 事务的传播属性</h2><p>所谓spring 事务的传播属性，就是定义在存在多个事务同时存在的时候，spring 应该如何处理这些事务的行为。这些属性在TransactionDefinition 中定义，具体常量的解释见下表：</p>
+<table>
+<thead>
+<tr>
+<th>常量名称</th>
+<th>常量解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PROPAGATION_REQUIRED</td>
+<td>支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择，也是Spring默认的事务的传播。</td>
+</tr>
+<tr>
+<td>PROPAGATION_REQUIRES_NEW</td>
+<td>新建事务，如果当前存在事务，把当前事务挂起。新建的事务将和被挂起的事务没有任何关系，是两个独立的事务，外层事务失败回滚之后，不能回滚内层事务执行的结果，内层事务失败抛出异常，外层事务捕获，也可以不处理回滚操作</td>
+</tr>
+<tr>
+<td>PROPAGATION_SUPPORTS</td>
+<td>支持当前事务，如果当前没有事务，就以非事务方式执行。</td>
+</tr>
+<tr>
+<td>PROPAGATION_MANDATORY</td>
+<td>支持当前事务，如果当前没有事务，就抛出异常。</td>
+</tr>
+<tr>
+<td>PROPAGATION_NOT_SUPPORTED</td>
+<td>以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</td>
+</tr>
+<tr>
+<td>PROPAGATION_NEVER</td>
+<td>以非事务方式执行，如果当前存在事务，则抛出异常。</td>
+</tr>
+<tr>
+<td>PROPAGATION_NESTED</td>
+<td>如果一个活动的事务存在，则运行在一个嵌套的事务中。如果没有活动事务，则按REQUIRED 属性执行。它使用了一个单独的事务，这个事务拥有多个可以回滚的保存点。内部事务的回滚不会对外部事务造成影响。它只对DataSourceTransactionManager 事务管理器起效。</td>
+</tr>
+</tbody></table>
+<h2 id="4、数据库隔离级别"><a href="#4、数据库隔离级别" class="headerlink" title="4、数据库隔离级别"></a>4、数据库隔离级别</h2><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>隔离级别的值</th>
+<th>导致的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Read-Uncommitted</td>
+<td>0</td>
+<td>导致脏读</td>
+</tr>
+<tr>
+<td>Read-Committed</td>
+<td>1</td>
+<td>避免脏读，允许不可重复读和幻读</td>
+</tr>
+<tr>
+<td>Repeatable-Read</td>
+<td>2</td>
+<td>避免脏读，不可重复读，允许幻读</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td>3</td>
+<td>串行化读，事务只能一个一个执行，避免了脏读、不可重复读、幻读。执行效率慢，使用时慎重</td>
+</tr>
+</tbody></table>
+<p><strong>脏读</strong>：一事务对数据进行了增删改，但未提交，另一事务可以读取到未提交的数据。如果第一个事务这时候回滚了，那么第二个事务就读到了脏数据。</p>
+<p><strong>不可重复读</strong>：一个事务中发生了两次读操作，第一次读操作和第二次操作之间，另外一个事务对数据进行了修改，这时候两次读取的数据是不一致的。</p>
+<p><strong>幻读</strong>：第一个事务对一定范围的数据进行批量修改，第二个事务在这个范围增加一条数据，这时候第一个事务就会丢失对新增数据的修改。</p>
+<p><strong>总结</strong>：隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。大多数的数据库默认隔离级别为Read Commited，比如SqlServer、Oracle，少数数据库默认隔离级别为：Repeatable Read 比如： MySQL InnoDB</p>
+<h2 id="5、Spring-中的隔离级别"><a href="#5、Spring-中的隔离级别" class="headerlink" title="5、Spring 中的隔离级别"></a>5、Spring 中的隔离级别</h2><table>
+<thead>
+<tr>
+<th>常量</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ISOLATION_DEFAULT</td>
+<td>这是个PlatfromTransactionManager 默认的隔离级别，使用数据库默认的事务隔离级别。另外四个与JDBC 的隔离级别相对应。</td>
+</tr>
+<tr>
+<td>ISOLATION_READ_UNCOMMITTED</td>
+<td>这是事务最低的隔离级别，它允许另外一个事务可以看到这个事务未提交的数据。这种隔离级别会产生脏读，不可重复读和幻像读。</td>
+</tr>
+<tr>
+<td>ISOLATION_READ_COMMITTED</td>
+<td>保证一个事务修改的数据提交后才能被另外一个事务读取。另外一个事务不能读取该事务未提交的数据。</td>
+</tr>
+<tr>
+<td>ISOLATION_REPEATABLE_READ</td>
+<td>这种事务隔离级别可以防止脏读，不可重复读。但是可能出现幻像读。</td>
+</tr>
+<tr>
+<td>ISOLATION_SERIALIZABLE</td>
+<td>这是花费最高代价但是最可靠的事务隔离级别。事务被处理为顺序执行。</td>
+</tr>
+</tbody></table>
+<h2 id="6、事务的嵌套"><a href="#6、事务的嵌套" class="headerlink" title="6、事务的嵌套"></a>6、事务的嵌套</h2><p>通过上面的理论知识的铺垫，我们大致知道了数据库事务和Spring 事务的一些属性和特点，接下来我们通过分析一些嵌套事务的场景，来深入理解Spring 事务传播的机制。</p>
+<p>假设外层事务Service A 的Method A() 调用内层Service B 的Method B()</p>
+<p><strong>PROPAGATION_REQUIRED(Spring 默认)</strong></p>
+<p>如果ServiceB.MethodB() 的事务级别定义为PROPAGATION_REQUIRED，那么执行ServiceA.MethodA() 的时候Spring 已经起了事务，这时调用ServiceB.MethodB()，ServiceB.MethodB() 看到自己已经运行在ServiceA.MethodA() 的事务内部，就不再起新的事务。</p>
+<p>假如ServiceB.MethodB() 运行的时候发现自己没有在事务中，他就会为自己分配一个事务。</p>
+<p>这样，在ServiceA.MethodA() 或者在ServiceB.MethodB() 内的任何地方出现异常，事务都会被回滚。</p>
+<p><strong>PROPAGATION_REQUIRES_NEW</strong></p>
+<p>比如我们设计ServiceA.MethodA() 的事务级别为PROPAGATION_REQUIRED，ServiceB.MethodB() 的事务级别为PROPAGATION_REQUIRES_NEW。</p>
+<p>那么当执行到ServiceB.MethodB() 的时候，ServiceA.MethodA() 所在的事务就会挂起，ServiceB.MethodB() 会起一个新的事务，等待ServiceB.MethodB() 的事务完成以后，它才继续执行。</p>
+<p>他与PROPAGATION_REQUIRED 的事务区别在于事务的回滚程度了。因为ServiceB.MethodB() 是新起一个事务， 那么就是存在两个不同的事务。如果ServiceB.MethodB() 已经提交， 那么ServiceA.MethodA() 失败回滚，ServiceB.MethodB() 是不会回滚的。如果ServiceB.MethodB() 失败回滚，如果他抛出的异常被ServiceA.MethodA() 捕获，ServiceA.MethodA() 事务仍然可能提交(主要看B 抛出的异常是不是A 会回滚的异常)。</p>
+<p><strong>PROPAGATION_SUPPORTS</strong></p>
+<p>假设ServiceB.MethodB() 的事务级别为PROPAGATION_SUPPORTS，那么当执行到ServiceB.MethodB()时，如果发现ServiceA.MethodA()已经开启了一个事务，则加入当前的事务，如果发现ServiceA.MethodA()没有开启事务，则自己也不开启事务。这种时候，内部方法的事务性完全依赖于最外层的事务。</p>
+<p><strong>PROPAGATION_NESTED</strong></p>
+<p>现在的情况就变得比较复杂了, ServiceB.MethodB() 的事务属性被配置为PROPAGATION_NESTED, 此时两者之间又将如何协作呢? ServiceB.MethodB() 如果rollback, 那么内部事务(即ServiceB.MethodB()) 将回滚到它执行前的SavePoint而外部事务(即ServiceA.MethodA()) 可以有以下两种处理方式:</p>
+<p>捕获异常，执行异常分支逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MethodA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ServiceB.MethodB();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SomeException) &#123;</span><br><span class="line">    <span class="comment">// 执行其他业务, 如ServiceC.MethodC();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式也是嵌套事务最有价值的地方, 它起到了分支执行的效果, 如果ServiceB.MethodB()失败, 那么执行ServiceC.MethodC(), 而ServiceB.MethodB()已经回滚到它执行之前的SavePoint, 所以不会产生脏数据(相当于此方法从未执行过),这种特性可以用在某些特殊的业务中, 而PROPAGATION_REQUIRED 和PROPAGATION_REQUIRES_NEW 都没有办法做到这一点。</p>
+<p>外部事务回滚/提交代码不做任何修改, 那么如果内部事务(ServiceB.MethodB())rollback, 那么首先ServiceB.MethodB() 回滚到它执行之前的SavePoint(在任何情况下都会如此), 外部事务( 即ServiceA.MethodA()) 将根据具体的配置决定自己是commit 还是rollback。</p>
+<p>另外三种事务传播属性基本用不到，在此不做分析。</p>
+<h2 id="7、Spring-事务API-架构图"><a href="#7、Spring-事务API-架构图" class="headerlink" title="7、Spring 事务API 架构图"></a>7、Spring 事务API 架构图</h2><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1giyfuq42rfj31ko0qe0vs.jpg" alt="image-20200921181613310"></p>
+
       
     </div>
 
