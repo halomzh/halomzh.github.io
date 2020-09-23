@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"halomzh.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="Bean生命周期涉及到的所有后置处理器及其执行时机一、接管bean创建逻辑，返回自定义bean从getBean流程开始，当bean创建的时候需要提前解析这个bean的class 123456789101112131415161718192021222324252627282930313233protected Object resolveBeforeInstantiation(String bea">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bean生命周期涉及到的所有后置处理器及其执行时机">
+<meta property="og:url" content="https://halomzh.github.io/2020/09/23/Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/index.html">
+<meta property="og:site_name" content="halomzh.github.io">
+<meta property="og:description" content="Bean生命周期涉及到的所有后置处理器及其执行时机一、接管bean创建逻辑，返回自定义bean从getBean流程开始，当bean创建的时候需要提前解析这个bean的class 123456789101112131415161718192021222324252627282930313233protected Object resolveBeforeInstantiation(String bea">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-23T05:31:44.000Z">
+<meta property="article:modified_time" content="2020-09-23T16:35:49.949Z">
+<meta property="article:author" content="halomzh">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://halomzh.github.io/2020/09/23/Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Bean生命周期涉及到的所有后置处理器及其执行时机 | halomzh.github.io</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="halomzh.github.io" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">halomzh.github.io</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/23/Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Bean生命周期涉及到的所有后置处理器及其执行时机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-23 13:31:44" itemprop="dateCreated datePublished" datetime="2020-09-23T13:31:44+08:00">2020-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-24 00:35:49" itemprop="dateModified" datetime="2020-09-24T00:35:49+08:00">2020-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">源码</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Bean生命周期涉及到的所有后置处理器及其执行时机"><a href="#Bean生命周期涉及到的所有后置处理器及其执行时机" class="headerlink" title="Bean生命周期涉及到的所有后置处理器及其执行时机"></a>Bean生命周期涉及到的所有后置处理器及其执行时机</h1><h2 id="一、接管bean创建逻辑，返回自定义bean"><a href="#一、接管bean创建逻辑，返回自定义bean" class="headerlink" title="一、接管bean创建逻辑，返回自定义bean"></a>一、接管bean创建逻辑，返回自定义bean</h2><p>从getBean流程开始，当<code>bean</code>创建的时候需要提前解析这个<code>bean</code>的<code>class</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">resolveBeforeInstantiation</span><span class="params">(String beanName, RootBeanDefinition mbd)</span> </span>&#123;</span><br><span class="line">    Object bean = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">// 如果这个bean没有被解析过，这里第一次进来肯定没解析过</span></span><br><span class="line">    <span class="keyword">if</span> (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) &#123;</span><br><span class="line">        <span class="comment">// Make sure bean class is actually resolved at this point.</span></span><br><span class="line">        <span class="comment">// 重要！！！合成类知识，不想看这一大段文字，可以直接跳过，到下面if语句中</span></span><br><span class="line">        <span class="comment">// 这里的Synthetic指的是这个类是不是合成类，比如当这个类有个内部类的时候，这个类不能访问到内部类的私有变量</span></span><br><span class="line">        <span class="comment">// 但是这里jvm想要支持，怎么办呢？</span></span><br><span class="line">        <span class="comment">// 所以它采取了一种策略，创建一个新的类出来，合成这个类和内部类，使程序员在使用的时候看起来，可以直接访问内部类，这里不展开了</span></span><br><span class="line">        <span class="comment">// 感兴趣的兄dei可以自己写个类，看看class文件，会多出来一个 xxx1.class</span></span><br><span class="line">        <span class="keyword">if</span> (!mbd.isSynthetic() &amp;&amp; hasInstantiationAwareBeanPostProcessors()) &#123;</span><br><span class="line">            <span class="comment">// 看到这儿，从方法名就可以初步猜测这里是推断出class对象的</span></span><br><span class="line">            <span class="comment">// 但是他是怎么推断出来的呢，emmmmm，嘿嘿，这里挖个坑，后面讲</span></span><br><span class="line">            Class&lt;?&gt; targetType = determineTargetType(beanName, mbd);</span><br><span class="line">            <span class="keyword">if</span> (targetType != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 这里开始正式调用后置处理器，系统内置的后置处理器啥都没干</span></span><br><span class="line">                <span class="comment">// 除非你自己写了个后置处理器，看下个代码框</span></span><br><span class="line">                <span class="comment">// 而且你这个后置处理器提前给别人返回了一个bean，那么就会直接进入下面的判断完成初始化，直接结束</span></span><br><span class="line">                <span class="comment">// 如果你的公司想要自己去实现bean的初始化流程，那么就应该在这里实现</span></span><br><span class="line">                <span class="comment">// 之后Spring就会直接返回你给的这个对象，如下所示</span></span><br><span class="line">                bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);</span><br><span class="line">                <span class="keyword">if</span> (bean != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// 执行后置处理，不同时机</span></span><br><span class="line">                    <span class="comment">// 下面有自定义的例子，gif演示</span></span><br><span class="line">                    bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        mbd.beforeInstantiationResolved = (bean != <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、自行推断构造方法"><a href="#二、自行推断构造方法" class="headerlink" title="二、自行推断构造方法"></a>二、自行推断构造方法</h2><p>我们继续去看第二个bean生命周期的执行时机，接下来，Spring就会去创建<code>bean</code>，那么问题来了，要创建一个bean，首先创建它的对象，如何创建对象？通过构造方法 反射创建？没错，但如果你提供了多个构造方法，我怎么知道要用哪个构造方法创建呢（下节详解，这里大概知道就行）Spring自己对构造方法做了推断，而推断逻辑则是放在了 <code>AutowiredAnnotationBeanPostProcessor</code> 中去推断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Constructor&lt;?&gt;[] determineConstructorsFromBeanPostProcessors(<span class="meta">@Nullable</span> Class&lt;?&gt; beanClass, String beanName)</span><br><span class="line">        <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (beanClass != <span class="keyword">null</span> &amp;&amp; hasInstantiationAwareBeanPostProcessors()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (BeanPostProcessor bp : getBeanPostProcessors()) &#123;</span><br><span class="line">            <span class="comment">// 可以自己去实现SmartInstantiationAwareBeanPostProcessor 的 determineCandidateConstructors</span></span><br><span class="line">            <span class="comment">// 从而实现覆盖 AutowiredAnnotationBeanPostProcessor 完成自定义</span></span><br><span class="line">            <span class="keyword">if</span> (bp <span class="keyword">instanceof</span> SmartInstantiationAwareBeanPostProcessor) &#123;</span><br><span class="line">                SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;</span><br><span class="line">                Constructor&lt;?&gt;[] ctors = ibp.determineCandidateConstructors(beanClass, beanName);</span><br><span class="line">                <span class="keyword">if</span> (ctors != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> ctors;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、合并bean"><a href="#三、合并bean" class="headerlink" title="三、合并bean"></a>三、合并bean</h2><p>首先我们来搞清楚一件事，什么是<code>合并bean</code>，在Spring中存在 三个<code>BeanDefinition</code></p>
+<ol>
+<li><code>RootBeanDefinition</code> 父BD</li>
+<li><code>ChildBeanDefinition</code> 子BD</li>
+<li><code>GenericBeanDefinition</code> 既可作用于父BD，又可是于子BD</li>
+</ol>
+<p>现在有这么个情况，和java继承思想类似，当某个子BD继承了父BD，在使用时可以通过子BD操作父类属性（子类继承父类）。 所以必须要合并一下BD，让子类也有父类的属性</p>
+<p>父子BD解释通了。那为什么不直接用<code>GenericBD</code>，或许是历史遗留原因，现在的版本必须向前兼容，故而必须保留。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> RootBeanDefinition mbd, <span class="keyword">final</span> <span class="meta">@Nullable</span> Object[] args)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Instantiate the bean.</span></span><br><span class="line">    BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">        instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">        instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">    Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">    <span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">        mbd.resolvedTargetType = beanType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">    <span class="comment">// 这里已经写得很清楚了，允许后置处理器去修改合并bean，我们来看看到底是哪个beanPostProcessor完成合并bean的呢？</span></span><br><span class="line">    <span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">                        <span class="string">&quot;Post-processing of merged bean definition failed&quot;</span>, ex);</span><br><span class="line">            &#125;</span><br><span class="line">            mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ·······</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">applyMergedBeanDefinitionPostProcessors</span><span class="params">(RootBeanDefinition mbd, Class&lt;?&gt; beanType, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (BeanPostProcessor bp : getBeanPostProcessors()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (bp <span class="keyword">instanceof</span> MergedBeanDefinitionPostProcessor) &#123;</span><br><span class="line">            MergedBeanDefinitionPostProcessor bdp = (MergedBeanDefinitionPostProcessor) bp;</span><br><span class="line">            bdp.postProcessMergedBeanDefinition(mbd, beanType, beanName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>CommonAnnotationBeanPostProcessor中，主要找 生命周期PostConstruct和PreDestroy切入点和资源切入@Resource xml的WebServiceRef 和 EJB</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessMergedBeanDefinition</span><span class="params">(RootBeanDefinition beanDefinition, Class&lt;?&gt; beanType, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 遍历所有方法，找到所有 @PostConstruct 和 @PreDestroy 注解的方法 并把他们放到 bd 中 把他们放入 bd 的 checkedInitMethods 和 checkedDestroyMethods属性中</span></span><br><span class="line">    <span class="comment">// 这里是调用了父类 “InitDestroyAnnotationBeanPostProcessor” 的方法</span></span><br><span class="line">    <span class="keyword">super</span>.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);</span><br><span class="line">    <span class="comment">// 遍历所有字段和方法，找到所有 @Resource 和 javax.xml.ws.WebServiceRef 和 javax.ejb.EJB 把他们放入 bd 的 checkedElements属性中</span></span><br><span class="line">    InjectionMetadata metadata = findResourceMetadata(beanName, beanType, <span class="keyword">null</span>);</span><br><span class="line">    metadata.checkConfigMembers(beanDefinition);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>AutowiredAnnotationBeanPostProcessor中，主要找 所有带了 @Autowired的属性和方法 （static无论方法属性都不行）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessMergedBeanDefinition</span><span class="params">(RootBeanDefinition beanDefinition, Class&lt;?&gt; beanType, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到所有有 @Autowired 的字段和注解放入 bd 的 checkedElements中</span></span><br><span class="line">    InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, <span class="keyword">null</span>);</span><br><span class="line">    metadata.checkConfigMembers(beanDefinition);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们自己实现一个后置处理器，来找一个我们自己定义的注解，并把它也存到bd中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomMergedBeanDefinitionPostProcessor</span> <span class="keyword">implements</span> <span class="title">MergedBeanDefinitionPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟autowired注解解析流程</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessMergedBeanDefinition</span><span class="params">(RootBeanDefinition beanDefinition, Class&lt;?&gt; beanType, String beanName)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 第一步先找到注解，封装信息</span></span><br><span class="line">        InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">// 第二步将注解信息注入 bd中</span></span><br><span class="line">        metadata.checkConfigMembers(beanDefinition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, InjectionMetadata&gt; injectionMetadataCache = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;(<span class="number">256</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 搞个和autowired类似的</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> InjectionMetadata <span class="title">findAutowiringMetadata</span><span class="params">(String beanName, Class&lt;?&gt; clazz, <span class="meta">@Nullable</span> PropertyValues pvs)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Fall back to class name as cache key, for backwards compatibility with custom callers.</span></span><br><span class="line">        String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());</span><br><span class="line">        <span class="comment">// Quick check on the concurrent map first, with minimal locking.</span></span><br><span class="line">        InjectionMetadata metadata = <span class="keyword">this</span>.injectionMetadataCache.get(cacheKey);</span><br><span class="line">        <span class="keyword">if</span> (InjectionMetadata.needsRefresh(metadata, clazz)) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.injectionMetadataCache) &#123;</span><br><span class="line">                metadata = <span class="keyword">this</span>.injectionMetadataCache.get(cacheKey);</span><br><span class="line">                <span class="keyword">if</span> (InjectionMetadata.needsRefresh(metadata, clazz)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (metadata != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        metadata.clear(pvs);</span><br><span class="line">                    &#125;</span><br><span class="line">                    metadata = buildAutowiringMetadata(clazz);</span><br><span class="line">                    <span class="keyword">this</span>.injectionMetadataCache.put(cacheKey, metadata);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> metadata;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> InjectionMetadata <span class="title">buildAutowiringMetadata</span><span class="params">(<span class="keyword">final</span> Class&lt;?&gt; clazz)</span> </span>&#123;</span><br><span class="line">        List&lt;InjectionMetadata.InjectedElement&gt; elements = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Class&lt;?&gt; targetClass = clazz;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="keyword">final</span> List&lt;InjectionMetadata.InjectedElement&gt; currElements = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="comment">// 查找所有带了字段</span></span><br><span class="line">            ReflectionUtils.doWithLocalFields(targetClass, field -&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (field.isAnnotationPresent(ZWL.class)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (Modifier.isStatic(field.getModifiers())) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">boolean</span> required = field.getAnnotation(ZWL.class).required();</span><br><span class="line">                    String requiredStr = required? <span class="string">&quot;必输&quot;</span>:<span class="string">&quot;非必输&quot;</span>;</span><br><span class="line">                    <span class="comment">// 用来保存 注解信息，这样下次需要去注入时，再通过该element注入就好</span></span><br><span class="line">                    System.out.println(<span class="string">&quot;找到一个ZWL注解，在&quot;</span> + clazz.getSimpleName() + <span class="string">&quot;类中，是&quot;</span> + requiredStr + <span class="string">&quot;的&quot;</span>);</span><br><span class="line">                    currElements.add(<span class="keyword">new</span> ZWLFieldElement(field, required));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            elements.addAll(<span class="number">0</span>, currElements);</span><br><span class="line">            targetClass = targetClass.getSuperclass();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (targetClass != <span class="keyword">null</span> &amp;&amp; targetClass != Object.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 返回封装后解析到的信息，用InjectionMetadata统一处理</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> InjectionMetadata(clazz, elements);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ZWLFieldElement</span> <span class="keyword">extends</span> <span class="title">InjectionMetadata</span>.<span class="title">InjectedElement</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> required;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> cached = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Nullable</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> Object cachedFieldValue;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ZWLFieldElement</span><span class="params">(Field field, <span class="keyword">boolean</span> required)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(field, <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">this</span>.required = required;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(Object bean, <span class="meta">@Nullable</span> String beanName, <span class="meta">@Nullable</span> PropertyValues pvs)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">            <span class="comment">// 注入bean</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、提前使用工厂暴露代理对象"><a href="#四、提前使用工厂暴露代理对象" class="headerlink" title="四、提前使用工厂暴露代理对象"></a>四、提前使用工厂暴露代理对象</h2><p>循环依赖提到的，在过程 A-&gt;B-&gt;A 给B注入A对象时，如果A已经被代理，那么必须给他注入一个代理对象才行，所以这个地方就是要通过工厂来生产了，而这个工厂的运作方式，就是通过后置处理器返回的代理对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getSingleton</span><span class="params">(String beanName, <span class="keyword">boolean</span> allowEarlyReference)</span> </span>&#123;</span><br><span class="line">    Object singletonObject = <span class="keyword">this</span>.singletonObjects.get(beanName);</span><br><span class="line">    <span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.singletonObjects) &#123;</span><br><span class="line">            singletonObject = <span class="keyword">this</span>.earlySingletonObjects.get(beanName);</span><br><span class="line">            <span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; allowEarlyReference) &#123;</span><br><span class="line">                ObjectFactory&lt;?&gt; singletonFactory = <span class="keyword">this</span>.singletonFactories.get(beanName);</span><br><span class="line">                <span class="keyword">if</span> (singletonFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// 调用工厂方法生产</span></span><br><span class="line">                    singletonObject = singletonFactory.getObject();</span><br><span class="line">                    <span class="keyword">this</span>.earlySingletonObjects.put(beanName, singletonObject);</span><br><span class="line">                    <span class="keyword">this</span>.singletonFactories.remove(beanName);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> singletonObject;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 工厂方法</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getEarlyBeanReference</span><span class="params">(String beanName, RootBeanDefinition mbd, Object bean)</span> </span>&#123;</span><br><span class="line">    Object exposedObject = bean;</span><br><span class="line">    <span class="keyword">if</span> (!mbd.isSynthetic() &amp;&amp; hasInstantiationAwareBeanPostProcessors()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (BeanPostProcessor bp : getBeanPostProcessors()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (bp <span class="keyword">instanceof</span> SmartInstantiationAwareBeanPostProcessor) &#123;</span><br><span class="line">                <span class="comment">// 这么多后置处理器中有AnnotationAwareAspectJAutoProxyCreator 的 getEarlyBeanReference方法 创建了一个代理对象</span></span><br><span class="line">                SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;</span><br><span class="line">                exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> exposedObject;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、在bean注入属性前，可以对bean做一些判断修改，也可以直接中断bean属性注入（判断是否需要继续注入属性）"><a href="#五、在bean注入属性前，可以对bean做一些判断修改，也可以直接中断bean属性注入（判断是否需要继续注入属性）" class="headerlink" title="五、在bean注入属性前，可以对bean做一些判断修改，也可以直接中断bean属性注入（判断是否需要继续注入属性）"></a>五、在bean注入属性前，可以对bean做一些判断修改，也可以直接中断bean属性注入（判断是否需要继续注入属性）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在这里 Spring内置的beanPostProcessor 什么事也没干</span></span><br><span class="line"><span class="comment">// 所以只能我们自定义一个</span></span><br><span class="line"><span class="keyword">if</span> (!mbd.isSynthetic() &amp;&amp; hasInstantiationAwareBeanPostProcessors()) &#123;</span><br><span class="line">    <span class="keyword">for</span> (BeanPostProcessor bp : getBeanPostProcessors()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (bp <span class="keyword">instanceof</span> InstantiationAwareBeanPostProcessor) &#123;</span><br><span class="line">            InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;</span><br><span class="line">            <span class="keyword">if</span> (!ibp.postProcessAfterInstantiation(bw.getWrappedInstance(), beanName)) &#123;</span><br><span class="line">                continueWithPropertyPopulation = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 来看看我们的自定义的例子，这里复用了之前的 CustomInstantiationAwareBPP</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomInstantiationAwareBPP</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInstantiation</span><span class="params">(Class&lt;?&gt; beanClass, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    Object result = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (beanName.equals(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;在初始化之前来整一个A&quot;</span>);</span><br><span class="line">        result = <span class="keyword">new</span> ObjectA();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 避免返回自定义对象，结束创建bean</span></span><br><span class="line">    <span class="comment">// return result;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新的在这里！！！</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">postProcessAfterInstantiation</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;在属性真正注入之前对&quot;</span> + beanName + <span class="string">&quot;bean做些小动作&quot;</span>);</span><br><span class="line">    <span class="comment">// 是否继续注入属性，true则继续</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (beanName.equals(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A已经整完了，好了，拿走吧&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="六、属性注入"><a href="#六、属性注入" class="headerlink" title="六、属性注入"></a>六、属性注入</h2><p>后置处理器的执行点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">PropertyDescriptor[] filteredPds = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (hasInstAwareBpps) &#123;</span><br><span class="line">    <span class="keyword">if</span> (pvs == <span class="keyword">null</span>) &#123;</span><br><span class="line">        pvs = mbd.getPropertyValues();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (BeanPostProcessor bp : getBeanPostProcessors()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (bp <span class="keyword">instanceof</span> InstantiationAwareBeanPostProcessor) &#123;</span><br><span class="line">            InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;</span><br><span class="line">            <span class="comment">// 修改bean的propertyValues</span></span><br><span class="line">            PropertyValues pvsToUse = ibp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);</span><br><span class="line">            <span class="keyword">if</span> (pvsToUse == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (filteredPds == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 改方法已经遗弃不建议使用</span></span><br><span class="line">                pvsToUse = ibp.postProcessPropertyValues(pvs, filteredPds, bw.getWrappedInstance(), beanName);</span><br><span class="line">                <span class="keyword">if</span> (pvsToUse == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            pvs = pvsToUse;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>CommonAnnotationBeanPostProcessor</code> 会去注入之前提到过的 <code>@Resource</code>、<code>WebServiceRef</code>、<code>EJB</code>的属性或者调用方法 设置值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> PropertyValues <span class="title">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 还是和前面合并bean的功能一样，查找@Resource等信息，如果之前有解析过，那么这里就不会解析了，直接拿出缓存中的值</span></span><br><span class="line">    InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 上次是放到了将这些属性注入到了BD中，这次是注入到Bean中</span></span><br><span class="line">        metadata.inject(bean, beanName, pvs);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(beanName, <span class="string">&quot;Injection of resource dependencies failed&quot;</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pvs;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>同样的<code>AutowiredAnnotationBeanPostProcessor</code> 也是在这里完成属性注入的，这里的 代码逻辑就是找到 <code>@Autowired</code> 的属性或方法 然后查找它合适的值然后注入，至于如何查找值，这个知识点下篇文章详解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> PropertyValues <span class="title">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> </span>&#123;</span><br><span class="line">    InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        metadata.inject(bean, beanName, pvs);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (BeanCreationException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(beanName, <span class="string">&quot;Injection of autowired dependencies failed&quot;</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pvs;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>最后照例，我们自己的 后置处理器，还是沿用之前的 <code>CustomInstantiationAwareBPP</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomInstantiationAwareBPP</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInstantiation</span><span class="params">(Class&lt;?&gt; beanClass, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    Object result = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (beanName.equals(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;在初始化之前来整一个A&quot;</span>);</span><br><span class="line">        result = <span class="keyword">new</span> ObjectA();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 避免返回自定义对象，结束创建bean</span></span><br><span class="line">    <span class="comment">// return result;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">postProcessAfterInstantiation</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;在属性真正注入之前对&quot;</span> + beanName + <span class="string">&quot;bean做些小动作&quot;</span>);</span><br><span class="line">    <span class="comment">// 是否继续注入属性，true则继续</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> PropertyValues <span class="title">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;对bean的PropertyValues 做修改，然后注入对应属性&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> pvs;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (beanName.equals(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A已经整完了，好了，拿走吧&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="七、在初始化前，调用各种awares"><a href="#七、在初始化前，调用各种awares" class="headerlink" title="七、在初始化前，调用各种awares"></a>七、在初始化前，调用各种awares</h2><p>首先来看下初始化整体的调用逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">initializeBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> Object bean, <span class="meta">@Nullable</span> RootBeanDefinition mbd)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 调用 bean 的aware类型的方法</span></span><br><span class="line">    <span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; &#123;</span><br><span class="line">            invokeAwareMethods(beanName, bean);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;, getAccessControlContext());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        invokeAwareMethods(beanName, bean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在初始化之前调用</span></span><br><span class="line">    Object wrappedBean = bean;</span><br><span class="line">    <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">        wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 调用实现的初始化的方法</span></span><br><span class="line">        invokeInitMethods(beanName, wrappedBean, mbd);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">                (mbd != <span class="keyword">null</span> ? mbd.getResourceDescription() : <span class="keyword">null</span>),</span><br><span class="line">                beanName, <span class="string">&quot;Invocation of init method failed&quot;</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在初始化之后调用</span></span><br><span class="line">    <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">        wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrappedBean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>初始化之前的切入点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">applyBeanPostProcessorsBeforeInitialization</span><span class="params">(Object existingBean, String beanName)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line"></span><br><span class="line">    Object result = existingBean;</span><br><span class="line">    <span class="keyword">for</span> (BeanPostProcessor processor : getBeanPostProcessors()) &#123;</span><br><span class="line">        Object current = processor.postProcessBeforeInitialization(result, beanName);</span><br><span class="line">        <span class="keyword">if</span> (current == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        result = current;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先看 <code>ApplicationContextAwareProcessor</code> 主要是去触发一些实现了<code>环境事件监听</code>、<code>资源load``信息发布</code>等等事件接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(<span class="keyword">final</span> Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    AccessControlContext acc = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">            (bean <span class="keyword">instanceof</span> EnvironmentAware || bean <span class="keyword">instanceof</span> EmbeddedValueResolverAware ||</span><br><span class="line">                    bean <span class="keyword">instanceof</span> ResourceLoaderAware || bean <span class="keyword">instanceof</span> ApplicationEventPublisherAware ||</span><br><span class="line">                    bean <span class="keyword">instanceof</span> MessageSourceAware || bean <span class="keyword">instanceof</span> ApplicationContextAware)) &#123;</span><br><span class="line">        acc = <span class="keyword">this</span>.applicationContext.getBeanFactory().getAccessControlContext();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 这个acc就是和资源、环境有关的aware，执行需要doPrivileged</span></span><br><span class="line">    <span class="keyword">if</span> (acc != <span class="keyword">null</span>) &#123;</span><br><span class="line">        AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; &#123;</span><br><span class="line">            invokeAwareInterfaces(bean);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;, acc);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        invokeAwareInterfaces(bean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">invokeAwareInterfaces</span><span class="params">(Object bean)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> Aware) &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> EnvironmentAware) &#123;</span><br><span class="line">            ((EnvironmentAware) bean).setEnvironment(<span class="keyword">this</span>.applicationContext.getEnvironment());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> EmbeddedValueResolverAware) &#123;</span><br><span class="line">            ((EmbeddedValueResolverAware) bean).setEmbeddedValueResolver(<span class="keyword">this</span>.embeddedValueResolver);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ResourceLoaderAware) &#123;</span><br><span class="line">            ((ResourceLoaderAware) bean).setResourceLoader(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ApplicationEventPublisherAware) &#123;</span><br><span class="line">            ((ApplicationEventPublisherAware) bean).setApplicationEventPublisher(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> MessageSourceAware) &#123;</span><br><span class="line">            ((MessageSourceAware) bean).setMessageSource(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ApplicationContextAware) &#123;</span><br><span class="line">            ((ApplicationContextAware) bean).setApplicationContext(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>环境相关的接口都invoke后，自定义的后置处理器开始执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomInstantiationAwareBPP</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"><span class="comment">// 还是这个类，熟悉的味道，伴随着bean的整个实例化生命周期</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (beanName.equals(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;在真正初始化之前，对bean A 修改一下&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其他生命周期的调用方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>还记得我们前面说的<code>CommonAnnotationBeanPostProcessor</code>在<code>合并bean</code>的时候，同样是这个<code>后置处理器</code>，调用它的父类<code>InitDestroyAnnotationBeanPostProcessor</code> 将<code>@PostConstruct</code> 和 <code>@PreDestroy</code>注解的方法存到当前这个<code>后置处理器</code>了么，下面就是要invoke他们的时候了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="comment">// 找到之前 找出的 `@PostConstruct` 和 `@PreDestroy`</span></span><br><span class="line">    LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 执行他们</span></span><br><span class="line">        metadata.invokeInitMethods(bean, beanName);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (InvocationTargetException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(beanName, <span class="string">&quot;Invocation of init method failed&quot;</span>, ex.getTargetException());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(beanName, <span class="string">&quot;Failed to invoke init method&quot;</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="第八次、在完成bean的初始化后-完成代理"><a href="#第八次、在完成bean的初始化后-完成代理" class="headerlink" title="第八次、在完成bean的初始化后 - 完成代理"></a>第八次、在完成bean的初始化后 - 完成代理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">applyBeanPostProcessorsAfterInitialization</span><span class="params">(Object existingBean, String beanName)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line"></span><br><span class="line">    Object result = existingBean;</span><br><span class="line">    <span class="keyword">for</span> (BeanPostProcessor processor : getBeanPostProcessors()) &#123;</span><br><span class="line">        Object current = processor.postProcessAfterInitialization(result, beanName);</span><br><span class="line">        <span class="keyword">if</span> (current == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        result = current;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里就不贴自定义的后置处理器了，和前面before大同小异</p>
+<h3 id="第一个后置处理器是PostProcessorRegistrationDelegate"><a href="#第一个后置处理器是PostProcessorRegistrationDelegate" class="headerlink" title="第一个后置处理器是PostProcessorRegistrationDelegate"></a>第一个后置处理器是<code>PostProcessorRegistrationDelegate</code></h3><p>他首先会check一下，在当前正在创建的bean时，不是BeanPostProcessor，不是spring的基础类型bean，并且！！！ 重点来了：如果当前工厂的所有bean 后置处理器的数量小于实际执行后置处理器数量，就会打个info，这里有很多人踩坑。先看下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!(bean <span class="keyword">instanceof</span> BeanPostProcessor) &amp;&amp; !isInfrastructureBean(beanName) &amp;&amp;</span><br><span class="line">            <span class="keyword">this</span>.beanFactory.getBeanPostProcessorCount() &lt; <span class="keyword">this</span>.beanPostProcessorTargetCount) &#123;</span><br><span class="line">        <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">            logger.info(<span class="string">&quot;Bean &#x27;&quot;</span> + beanName + <span class="string">&quot;&#x27; of type [&quot;</span> + bean.getClass().getName() +</span><br><span class="line">                    <span class="string">&quot;] is not eligible for getting processed by all BeanPostProcessors &quot;</span> +</span><br><span class="line">                    <span class="string">&quot;(for example: not eligible for auto-proxying)&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>踩什么坑？比如，看下面打的日志，Spring说 你当前这个bean，还没有准备好被所有后置处理器调用，比如自动代理（造成代理失败）。</p>
+<p>这就是很多人突然发现自己项目，事务、AOP或者异步失效了，就很懵逼。</p>
+<p>要怎么解决呢？</p>
+<p>比如你为了省麻烦，不想自己单独开个配置类，在以前项目代码的一个使用比较低优先级的<code>BeanPostProcessor</code>（比如order很低的）来完成这个业务<code>bean</code>的注入。当注入这个<code>bean</code>的时候，因为处理事务、AOP的后置处理器还没加载，自然也没发代理这个<code>bean</code>，从而显得他们都失效</p>
+<p>说人话就是，自己把业务bean放到，Spring的后置处理器前面实例化了</p>
+<p>解决方法就是，不偷懒，自己搞个配置类放进去，保证在后面执行就ok</p>
+<h3 id="第二个是AbstractAutoProxyCreator"><a href="#第二个是AbstractAutoProxyCreator" class="headerlink" title="第二个是AbstractAutoProxyCreator"></a>第二个是AbstractAutoProxyCreator</h3><p>就是看你需不需要代理，需要就给你整个代理 这个地方要结合着，前面，循环依赖来看，当 A-&gt;B-&gt;A 时，A如果需要被代理，那么earlyProxyReferences就会有A的cache，从而在这里完成代理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(<span class="meta">@Nullable</span> Object bean, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (bean != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Object cacheKey = getCacheKey(bean.getClass(), beanName);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.earlyProxyReferences.remove(cacheKey) != bean) &#123;</span><br><span class="line">            <span class="keyword">return</span> wrapIfNecessary(bean, beanName, cacheKey);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="最后一个起作用的是-ApplicationListenerDetector"><a href="#最后一个起作用的是-ApplicationListenerDetector" class="headerlink" title="最后一个起作用的是 ApplicationListenerDetector"></a>最后一个起作用的是 ApplicationListenerDetector</h3><p>这儿其实就看一行代码this.applicationContext.addApplicationListener((ApplicationListener&lt;?&gt;) bean);</p>
+<p>将监听器当道环境中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ApplicationListener) &#123;</span><br><span class="line">        <span class="comment">// potentially not detected as a listener by getBeanNamesForType retrieval</span></span><br><span class="line">        Boolean flag = <span class="keyword">this</span>.singletonNames.get(beanName);</span><br><span class="line">        <span class="keyword">if</span> (Boolean.TRUE.equals(flag)) &#123;</span><br><span class="line">            <span class="comment">// singleton bean (top-level or inner): register on the fly</span></span><br><span class="line">            <span class="keyword">this</span>.applicationContext.addApplicationListener((ApplicationListener&lt;?&gt;) bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (Boolean.FALSE.equals(flag)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (logger.isWarnEnabled() &amp;&amp; !<span class="keyword">this</span>.applicationContext.containsBean(beanName)) &#123;</span><br><span class="line">                <span class="comment">// inner bean with other scope - can&#x27;t reliably process events</span></span><br><span class="line">                logger.warn(<span class="string">&quot;Inner bean &#x27;&quot;</span> + beanName + <span class="string">&quot;&#x27; implements ApplicationListener interface &quot;</span> +</span><br><span class="line">                        <span class="string">&quot;but is not reachable for event multicasting by its containing ApplicationContext &quot;</span> +</span><br><span class="line">                        <span class="string">&quot;because it does not have singleton scope. Only top-level listener beans are allowed &quot;</span> +</span><br><span class="line">                        <span class="string">&quot;to be of non-singleton scope.&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.singletonNames.remove(beanName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/21/Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="prev" title="Bean的生命周期">
+      <i class="fa fa-chevron-left"></i> Bean的生命周期
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">Bean生命周期涉及到的所有后置处理器及其执行时机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%8E%A5%E7%AE%A1bean%E5%88%9B%E5%BB%BA%E9%80%BB%E8%BE%91%EF%BC%8C%E8%BF%94%E5%9B%9E%E8%87%AA%E5%AE%9A%E4%B9%89bean"><span class="nav-number">1.1.</span> <span class="nav-text">一、接管bean创建逻辑，返回自定义bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%87%AA%E8%A1%8C%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">二、自行推断构造方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%90%88%E5%B9%B6bean"><span class="nav-number">1.3.</span> <span class="nav-text">三、合并bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8F%90%E5%89%8D%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%8E%82%E6%9A%B4%E9%9C%B2%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.4.</span> <span class="nav-text">四、提前使用工厂暴露代理对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%9C%A8bean%E6%B3%A8%E5%85%A5%E5%B1%9E%E6%80%A7%E5%89%8D%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AF%B9bean%E5%81%9A%E4%B8%80%E4%BA%9B%E5%88%A4%E6%96%AD%E4%BF%AE%E6%94%B9%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E4%B8%AD%E6%96%ADbean%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5%EF%BC%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81%E7%BB%A7%E7%BB%AD%E6%B3%A8%E5%85%A5%E5%B1%9E%E6%80%A7%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">五、在bean注入属性前，可以对bean做一些判断修改，也可以直接中断bean属性注入（判断是否需要继续注入属性）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5"><span class="nav-number">1.6.</span> <span class="nav-text">六、属性注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%9C%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%89%8D%EF%BC%8C%E8%B0%83%E7%94%A8%E5%90%84%E7%A7%8Dawares"><span class="nav-number">1.7.</span> <span class="nav-text">七、在初始化前，调用各种awares</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%85%AB%E6%AC%A1%E3%80%81%E5%9C%A8%E5%AE%8C%E6%88%90bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E-%E5%AE%8C%E6%88%90%E4%BB%A3%E7%90%86"><span class="nav-number">1.8.</span> <span class="nav-text">第八次、在完成bean的初始化后 - 完成代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E6%98%AFPostProcessorRegistrationDelegate"><span class="nav-number">1.8.1.</span> <span class="nav-text">第一个后置处理器是PostProcessorRegistrationDelegate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%98%AFAbstractAutoProxyCreator"><span class="nav-number">1.8.2.</span> <span class="nav-text">第二个是AbstractAutoProxyCreator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E8%B5%B7%E4%BD%9C%E7%94%A8%E7%9A%84%E6%98%AF-ApplicationListenerDetector"><span class="nav-number">1.8.3.</span> <span class="nav-text">最后一个起作用的是 ApplicationListenerDetector</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">halomzh</p>
+  <div class="site-description" itemprop="description">学习记录</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">halomzh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
