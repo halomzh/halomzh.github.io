@@ -2112,10 +2112,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-27 14:32:12 / 修改时间：22:27:19" itemprop="dateCreated datePublished" datetime="2020-09-27T14:32:12+08:00">2020-09-27</time>
+              <time title="创建时间：2020-09-27 14:32:12" itemprop="dateCreated datePublished" datetime="2020-09-27T14:32:12+08:00">2020-09-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-28 00:24:20" itemprop="dateModified" datetime="2020-09-28T00:24:20+08:00">2020-09-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -2302,7 +2308,7 @@
 <h4 id="什么是-Callable-和-Future"><a href="#什么是-Callable-和-Future" class="headerlink" title="什么是 Callable 和 Future?"></a><strong>什么是 Callable 和 Future?</strong></h4><p>Callable 接口类似于 Runnable，从名字就可以看出来了，但是 Runnable 不会返回结果，并且无法抛出返回结果的异常，而 Callable 功能更强大一些，被线程执行后，可以返回值，这个返回值可以被 Future 拿到，也就是说，Future 可以拿到异步执行任务的返回值。</p>
 <p>Future 接口表示异步任务，是一个可能还没有完成的异步任务的结果。所以说 Callable用于产生结果，Future 用于获取结果。</p>
 <h4 id="什么是-FutureTask"><a href="#什么是-FutureTask" class="headerlink" title="什么是 FutureTask"></a><strong>什么是 FutureTask</strong></h4><p>FutureTask 表示一个异步运算的任务。FutureTask 里面可以传入一个 Callable 的具体实现类，可以对这个异步运算的任务的结果进行等待获取、判断是否已经完成、取消任务等操作。只有当运算完成的时候结果才能取回，如果运算尚未完成 get 方法将会阻塞。一个 FutureTask 对象可以对调用了 Callable 和 Runnable 的对象进行包装，由于 FutureTask 也是Runnable 接口的实现类，所以 FutureTask 也可以放入线程池中。</p>
-<h3 id="线程的状态和基本操作"><a href="#线程的状态和基本操作" class="headerlink" title="线程的状态和基本操作"></a><strong>线程的状态和基本操作</strong></h3><h4 id="说说线程的生命周期及五种基本状态？"><a href="#说说线程的生命周期及五种基本状态？" class="headerlink" title="说说线程的生命周期及五种基本状态？"></a><strong>说说线程的生命周期及五种基本状态？</strong></h4><p><img src="../../../Desktop/EC025A87A1094C9D8845476A4C6CA68B.png" alt="EC025A87A1094C9D8845476A4C6CA68B"></p>
+<h3 id="线程的状态和基本操作"><a href="#线程的状态和基本操作" class="headerlink" title="线程的状态和基本操作"></a><strong>线程的状态和基本操作</strong></h3><h4 id="说说线程的生命周期及五种基本状态？"><a href="#说说线程的生命周期及五种基本状态？" class="headerlink" title="说说线程的生命周期及五种基本状态？"></a><strong>说说线程的生命周期及五种基本状态？</strong></h4><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5o7cawdej30yq0kuh3u.jpg" alt="image-20200928002410968"></p>
 <ol>
 <li>**新建(new)**：新创建了一个线程对象。</li>
 <li>**可运行(runnable)**：线程对象创建后，当调用线程对象的 start()方法，该线程处于就绪状态，等待被线程调度选中，获取cpu的使用权。</li>
@@ -2866,10 +2872,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-27 11:04:55 / 修改时间：22:26:46" itemprop="dateCreated datePublished" datetime="2020-09-27T11:04:55+08:00">2020-09-27</time>
+              <time title="创建时间：2020-09-27 11:04:55" itemprop="dateCreated datePublished" datetime="2020-09-27T11:04:55+08:00">2020-09-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-28 00:26:53" itemprop="dateModified" datetime="2020-09-28T00:26:53+08:00">2020-09-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -2928,7 +2940,7 @@
 <li>List接口的实现类主要有：ArrayList、LinkedList、Stack以及Vector等</li>
 </ol>
 <p><strong>List，Set，Map三者的区别？List、Set、Map 是否继承自 Collection 接口？List、Map、Set 三个接口存取元素时，各有什么特点？</strong></p>
-<p><img src="../../../Desktop/97070AFFD1A9436B910B6BBD253D56DE.jpeg" alt="97070AFFD1A9436B910B6BBD253D56DE"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5o9y4vl2j30vu0o0k1x.jpg" alt="image-20200928002640711"></p>
 <p>Java 容器分为 Collection 和 Map 两大类，Collection集合的子接口有Set、List、Queue三种子接口。我们比较常用的是Set、List，Map接口不是collection的子接口。</p>
 <p>Collection集合主要有List和Set两大接口</p>
 <ul>
