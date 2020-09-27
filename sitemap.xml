@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://halomzh.github.io/2020/09/27/Java%E5%BC%82%E5%B8%B8/</loc>
+    
+    <lastmod>2020-09-27</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://halomzh.github.io/2020/09/27/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
     
     <lastmod>2020-09-27</lastmod>
@@ -152,6 +159,13 @@
   
   <url>
     <loc>https://halomzh.github.io/tags/%E5%8E%9F%E5%88%9B/</loc>
+    <lastmod>2020-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/tags/Java%E5%BC%82%E5%B8%B8/</loc>
     <lastmod>2020-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
