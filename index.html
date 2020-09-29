@@ -186,6 +186,283 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/SpringCloud%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/SpringCloud%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">SpringCloud总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-29 10:55:20 / 修改时间：11:10:30" itemprop="dateCreated datePublished" datetime="2020-09-29T10:55:20+08:00">2020-09-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">概览</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="SpringCloud总结"><a href="#SpringCloud总结" class="headerlink" title="SpringCloud总结"></a>SpringCloud总结</h1><h2 id="为什么需要学习Spring-Cloud"><a href="#为什么需要学习Spring-Cloud" class="headerlink" title="为什么需要学习Spring Cloud"></a><strong>为什么需要学习Spring Cloud</strong></h2><p>不论是商业应用还是用户应用，在业务初期都很简单，我们通常会把它实现为单体结构的应用。但是，随着业务逐渐发展，产品思想会变得越来越复杂，单体结构的应用也会越来越复杂。这就会给应用带来如下的几个问题：</p>
+<ul>
+<li>代码结构混乱：业务复杂，导致代码量很大，管理会越来越困难。同时，这也会给业务的快速迭代带来巨大挑战；</li>
+<li>开发效率变低：开发人员同时开发一套代码，很难避免代码冲突。开发过程会伴随着不断解决冲突的过程，这会严重的影响开发效率；</li>
+<li>排查解决问题成本高：线上业务发现 bug，修复 bug 的过程可能很简单。但是，由于只有一套代码，需要重新编译、打包、上线，成本很高。</li>
+</ul>
+<p>由于单体结构的应用随着系统复杂度的增高，会暴露出各种各样的问题。近些年来，微服务架构逐渐取代了单体架构，且这种趋势将会越来越流行。Spring Cloud是目前最常用的微服务开发框架，已经在企业级开发中大量的应用。</p>
+<h2 id="什么是Spring-Cloud"><a href="#什么是Spring-Cloud" class="headerlink" title="什么是Spring Cloud"></a><strong>什么是Spring Cloud</strong></h2><p>Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、智能路由、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。Spring Cloud并没有重复制造轮子，它只是将各家公司开发的比较成熟、经得起实际考验的服务框架组合起来，通过Spring Boot风格进行再封装屏蔽掉了复杂的配置和实现原理，最终给开发者留出了一套简单易懂、易部署和易维护的分布式系统开发工具包。</p>
+<h3 id="设计目标与优缺点"><a href="#设计目标与优缺点" class="headerlink" title="设计目标与优缺点"></a><strong>设计目标与优缺点</strong></h3><h4 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a><strong>设计目标</strong></h4><h5 id="协调各个微服务，简化分布式系统开发。"><a href="#协调各个微服务，简化分布式系统开发。" class="headerlink" title="协调各个微服务，简化分布式系统开发。"></a><strong>协调各个微服务，简化分布式系统开发</strong>。</h5><p><strong>优缺点</strong></p>
+<p>微服务的框架那么多比如：dubbo、Kubernetes，为什么就要使用Spring Cloud的呢？</p>
+<p>优点：</p>
+<ul>
+<li>产出于Spring大家族，Spring在企业级开发框架中无人能敌，来头很大，可以保证后续的更新、完善</li>
+<li>组件丰富，功能齐全。Spring Cloud 为微服务架构提供了非常完整的支持。例如、配置管理、服务发现、断路器、微服务网关等；</li>
+<li>Spring Cloud 社区活跃度很高，教程很丰富，遇到问题很容易找到解决方案</li>
+<li>服务拆分粒度更细，耦合度比较低，有利于资源重复利用，有利于提高开发效率</li>
+<li>可以更精准的制定优化服务方案，提高系统的可维护性</li>
+<li>减轻团队的成本，可以并行开发，不用关注其他人怎么开发，先关注自己的开发</li>
+<li>微服务可以是跨平台的，可以用任何一种语言开发</li>
+<li>适于互联网时代，产品迭代周期更短</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>微服务过多，治理成本高，不利于维护系统</li>
+<li>分布式系统开发的成本高（容错，分布式事务等）对团队挑战大</li>
+</ul>
+<p>总的来说优点大过于缺点，目前看来Spring Cloud是一套非常完善的分布式框架，目前很多企业开始用微服务、Spring Cloud的优势是显而易见的。因此对于想研究微服务架构的同学来说，学习Spring Cloud是一个不错的选择。</p>
+<h2 id="Spring-Cloud发展前景"><a href="#Spring-Cloud发展前景" class="headerlink" title="Spring Cloud发展前景"></a><strong>Spring Cloud发展前景</strong></h2><p>Spring Cloud对于中小型互联网公司来说是一种福音，因为这类公司往往没有实力或者没有足够的资金投入去开发自己的分布式系统基础设施，使用Spring Cloud一站式解决方案能在从容应对业务发展的同时大大减少开发成本。同时，随着近几年微服务架构和Docker容器概念的火爆，也会让Spring Cloud在未来越来越“云”化的软件开发风格中立有一席之地，尤其是在五花八门的分布式解决方案中提供了标准化的、全站式的技术方案，意义可能会堪比当年Servlet规范的诞生，有效推进服务端软件系统技术水平的进步。</p>
+<h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a><strong>整体架构</strong></h3><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7c4zql0dj317o0mdgrx.jpg" alt="9BBB0225B3264E22849DB1DB1617DCA0"></p>
+<h3 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a><strong>主要项目</strong></h3><p>Spring Cloud的子项目，大致可分成两类，一类是对现有成熟框架”Spring Boot化”的封装和抽象，也是数量最多的项目；第二类是开发了一部分分布式系统的基础设施的实现，如Spring Cloud Stream扮演的就是kafka, ActiveMQ这样的角色。</p>
+<h4 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a><strong>Spring Cloud Config</strong></h4><p>集中配置管理工具，分布式系统中统一的外部配置管理，默认使用Git来存储配置，可以支持客户端配置的刷新及加密、解密操作。</p>
+<h4 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a><strong>Spring Cloud Netflix</strong></h4><p>Netflix OSS 开源组件集成，包括Eureka、Hystrix、Ribbon、Feign、Zuul等核心组件。</p>
+<ul>
+<li>Eureka：服务治理组件，包括服务端的注册中心和客户端的服务发现机制；</li>
+<li>Ribbon：负载均衡的服务调用组件，具有多种负载均衡调用策略；</li>
+<li>Hystrix：服务容错组件，实现了断路器模式，为依赖服务的出错和延迟提供了容错能力；</li>
+<li>Feign：基于Ribbon和Hystrix的声明式服务调用组件；</li>
+<li>Zuul：API网关组件，对请求提供路由及过滤功能。</li>
+</ul>
+<h4 id="Spring-Cloud-Bus"><a href="#Spring-Cloud-Bus" class="headerlink" title="Spring Cloud Bus"></a><strong>Spring Cloud Bus</strong></h4><p>用于传播集群状态变化的消息总线，使用轻量级消息代理链接分布式系统中的节点，可以用来动态刷新集群中的服务配置。</p>
+<h4 id="Spring-Cloud-Consul"><a href="#Spring-Cloud-Consul" class="headerlink" title="Spring Cloud Consul"></a><strong>Spring Cloud Consul</strong></h4><p>基于Hashicorp Consul的服务治理组件。</p>
+<h4 id="Spring-Cloud-Security"><a href="#Spring-Cloud-Security" class="headerlink" title="Spring Cloud Security"></a><strong>Spring Cloud Security</strong></h4><p>安全工具包，对Zuul代理中的负载均衡OAuth2客户端及登录认证进行支持。</p>
+<h4 id="Spring-Cloud-Sleuth"><a href="#Spring-Cloud-Sleuth" class="headerlink" title="Spring Cloud Sleuth"></a><strong>Spring Cloud Sleuth</strong></h4><p>Spring Cloud应用程序的分布式请求链路跟踪，支持使用Zipkin、HTrace和基于日志（例如ELK）的跟踪。</p>
+<h4 id="Spring-Cloud-Stream"><a href="#Spring-Cloud-Stream" class="headerlink" title="Spring Cloud Stream"></a><strong>Spring Cloud Stream</strong></h4><p>轻量级事件驱动微服务框架，可以使用简单的声明式模型来发送及接收消息，主要实现为Apache Kafka及RabbitMQ。</p>
+<h4 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a><strong>Spring Cloud Task</strong></h4><p>用于快速构建短暂、有限数据处理任务的微服务框架，用于向应用中添加功能性和非功能性的特性。</p>
+<h4 id="Spring-Cloud-Zookeeper"><a href="#Spring-Cloud-Zookeeper" class="headerlink" title="Spring Cloud Zookeeper"></a><strong>Spring Cloud Zookeeper</strong></h4><p>基于Apache Zookeeper的服务治理组件。</p>
+<h4 id="Spring-Cloud-Gateway"><a href="#Spring-Cloud-Gateway" class="headerlink" title="Spring Cloud Gateway"></a><strong>Spring Cloud Gateway</strong></h4><p>API网关组件，对请求提供路由及过滤功能。</p>
+<h4 id="Spring-Cloud-OpenFeign"><a href="#Spring-Cloud-OpenFeign" class="headerlink" title="Spring Cloud OpenFeign"></a><strong>Spring Cloud OpenFeign</strong></h4><p>基于Ribbon和Hystrix的声明式服务调用组件，可以动态创建基于Spring MVC注解的接口实现用于服务调用，在Spring Cloud 2.0中已经取代Feign成为了一等公民。</p>
+<h2 id="Spring-Cloud的版本关系"><a href="#Spring-Cloud的版本关系" class="headerlink" title="Spring Cloud的版本关系"></a><strong>Spring Cloud的版本关系</strong></h2><p>Spring Cloud是一个由许多子项目组成的综合项目，各子项目有不同的发布节奏。 为了管理Spring Cloud与各子项目的版本依赖关系，发布了一个清单，其中包括了某个Spring Cloud版本对应的子项目版本。 为了避免Spring Cloud版本号与子项目版本号混淆，Spring Cloud版本采用了名称而非版本号的命名，这些版本的名字采用了伦敦地铁站的名字，根据字母表的顺序来对应版本时间顺序，例如Angel是第一个版本，Brixton是第二个版本。 当Spring Cloud的发布内容积累到临界点或者一个重大BUG被解决后，会发布一个”service releases”版本，简称SRX版本，比如Greenwich.SR2就是Spring Cloud发布的Greenwich版本的第2个SRX版本。目前Spring Cloud的最新版本是Hoxton。</p>
+<h3 id="Spring-Cloud和SpringBoot版本对应关系"><a href="#Spring-Cloud和SpringBoot版本对应关系" class="headerlink" title="Spring Cloud和SpringBoot版本对应关系"></a><strong>Spring Cloud和SpringBoot版本对应关系</strong></h3><table>
+<thead>
+<tr>
+<th><strong>Spring Cloud Version</strong></th>
+<th><strong>SpringBoot Version</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hoxton</td>
+<td>2.2.x</td>
+</tr>
+<tr>
+<td>Greenwich</td>
+<td>2.1.x</td>
+</tr>
+<tr>
+<td>Finchley</td>
+<td>2.0.x</td>
+</tr>
+<tr>
+<td>Edgware</td>
+<td>1.5.x</td>
+</tr>
+<tr>
+<td>Dalston</td>
+<td>1.5.x</td>
+</tr>
+</tbody></table>
+<h3 id="Spring-Cloud和各子项目版本对应关系"><a href="#Spring-Cloud和各子项目版本对应关系" class="headerlink" title="Spring Cloud和各子项目版本对应关系"></a><strong>Spring Cloud和各子项目版本对应关系</strong></h3><table>
+<thead>
+<tr>
+<th><strong>Component</strong></th>
+<th><strong>Edgware.SR6</strong></th>
+<th><strong>Greenwich.SR2</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-cloud-bus</td>
+<td>1.3.4.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-commons</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-config</td>
+<td>1.4.7.RELEASE</td>
+<td>2.1.3.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-netflix</td>
+<td>1.4.7.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-security</td>
+<td>1.2.4.RELEASE</td>
+<td>2.1.3.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-consul</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-sleuth</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.1.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-stream</td>
+<td>Ditmars.SR5</td>
+<td>Fishtown.SR3</td>
+</tr>
+<tr>
+<td>spring-cloud-zookeeper</td>
+<td>1.2.3.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-boot</td>
+<td>1.5.21.RELEASE</td>
+<td>2.1.5.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-task</td>
+<td>1.2.4.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-gateway</td>
+<td>1.0.3.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-openfeign</td>
+<td>暂无</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+</tbody></table>
+<p><strong>注意：Hoxton版本是基于SpringBoot 2.2.x版本构建的，不适用于1.5.x版本。随着2019年8月SpringBoot 1.5.x版本停止维护，Edgware版本也将停止维护。</strong></p>
+<h3 id="SpringBoot和SpringCloud的区别？"><a href="#SpringBoot和SpringCloud的区别？" class="headerlink" title="SpringBoot和SpringCloud的区别？"></a><strong>SpringBoot和SpringCloud的区别？</strong></h3><p>SpringBoot专注于快速方便的开发单个个体微服务。</p>
+<p>SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务整合并管理起来，</p>
+<p>为各个微服务之间提供，配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等集成服务</p>
+<p>SpringBoot可以离开SpringCloud独立使用开发项目， 但是SpringCloud离不开SpringBoot ，属于依赖的关系</p>
+<p>SpringBoot专注于快速、方便的开发单个微服务个体，SpringCloud关注全局的服务治理框架。</p>
+<p><strong>使用 Spring Boot 开发分布式微服务时，我们面临以下问题</strong></p>
+<p>（1）与分布式系统相关的复杂性-这种开销包括网络问题，延迟开销，带宽问题，安全问题。</p>
+<p>（2）服务发现-服务发现工具管理群集中的流程和服务如何查找和互相交谈。它涉及一个服务目录，在该目录中注册服务，然后能够查找并连接到该目录中的服务。</p>
+<p>（3）冗余-分布式系统中的冗余问题。</p>
+<p>（4）负载平衡 –负载平衡改善跨多个计算资源的工作负荷，诸如计算机，计算机集群，网络链路，中央处理单元，或磁盘驱动器的分布。</p>
+<p>（5）性能-问题 由于各种运营开销导致的性能问题。</p>
+<p>（6）部署复杂性-Devops 技能的要求。</p>
+<h3 id="服务注册和发现是什么意思？Spring-Cloud-如何实现？"><a href="#服务注册和发现是什么意思？Spring-Cloud-如何实现？" class="headerlink" title="服务注册和发现是什么意思？Spring Cloud 如何实现？"></a><strong>服务注册和发现是什么意思？Spring Cloud 如何实现？</strong></h3><p>当我们开始一个项目时，我们通常在属性文件中进行所有的配置。随着越来越多的服务开发和部署，添加和修改这些属性变得更加复杂。有些服务可能会下降，而某些位置可能会发生变化。手动更改属性可能会产生问题。 Eureka 服务注册和发现可以在这种情况下提供帮助。由于所有服务都在 Eureka 服务器上注册并通过调用 Eureka 服务器完成查找，因此无需处理服务地点的任何更改和处理。</p>
+<h3 id="Spring-Cloud-和dubbo区别"><a href="#Spring-Cloud-和dubbo区别" class="headerlink" title="Spring Cloud 和dubbo区别?"></a><strong>Spring Cloud 和dubbo区别?</strong></h3><p>（1）服务调用方式 dubbo是RPC springcloud Rest Api</p>
+<p>（2）注册中心,dubbo 是zookeeper springcloud是eureka，也可以是zookeeper</p>
+<p>（3）服务网关,dubbo本身没有实现，只能通过其他第三方技术整合，springcloud有Zuul路由网关，作为路由服务器，进行消费者的请求分发,springcloud支持断路器，与git完美集成配置文件支持版本控制，事物总线实现配置文件的更新与服务自动装配等等一系列的微服务架构要素。</p>
+<h3 id="负载平衡的意义什么？"><a href="#负载平衡的意义什么？" class="headerlink" title="负载平衡的意义什么？"></a><strong>负载平衡的意义什么？</strong></h3><p>在计算中，负载平衡可以改善跨计算机，计算机集群，网络链接，中央处理单元或磁盘驱动器等多种计算资源的工作负载分布。负载平衡旨在优化资源使用，最大化吞吐量，最小化响应时间并避免任何单一资源的过载。使用多个组件进行负载平衡而不是单个组件可能会通过冗余来提高可靠性和可用性。负载平衡通常涉及专用软件或硬件，例如多层交换机或域名系统服务器进程。</p>
+<h3 id="什么是-Hystrix？它如何实现容错？"><a href="#什么是-Hystrix？它如何实现容错？" class="headerlink" title="什么是 Hystrix？它如何实现容错？"></a><strong>什么是 Hystrix？它如何实现容错？</strong></h3><p>Hystrix 是一个延迟和容错库，旨在隔离远程系统，服务和第三方库的访问点，当出现故障是不可避免的故障时，停止级联故障并在复杂的分布式系统中实现弹性。</p>
+<p>通常对于使用微服务架构开发的系统，涉及到许多微服务。这些微服务彼此协作。</p>
+<p>思考以下微服务</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cawrmbxj30us0e8wvh.jpg" alt="image-20200929110333157"></p>
+<p>假设如果上图中的微服务 9 失败了，那么使用传统方法我们将传播一个异常。但这仍然会导致整个系统崩溃。</p>
+<p>随着微服务数量的增加，这个问题变得更加复杂。微服务的数量可以高达 1000.这是 hystrix 出现的地方 我们将使用 Hystrix 在这种情况下的 Fallback 方法功能。我们有两个服务 employee-consumer 使用由 employee-consumer 公开的服务。</p>
+<p>简化图如下所示</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cbc99r4j30uw088dol.jpg" alt="image-20200929110357392"></p>
+<p>现在假设由于某种原因，employee-producer 公开的服务会抛出异常。我们在这种情况下使用 Hystrix 定义了一个回退方法。这种后备方法应该具有与公开服务相同的返回类型。如果暴露服务中出现异常，则回退方法将返回一些值。</p>
+<h3 id="什么是-Hystrix-断路器？我们需要它吗？"><a href="#什么是-Hystrix-断路器？我们需要它吗？" class="headerlink" title="什么是 Hystrix 断路器？我们需要它吗？"></a><strong>什么是 Hystrix 断路器？我们需要它吗？</strong></h3><p>由于某些原因，employee-consumer 公开服务会引发异常。在这种情况下使用Hystrix 我们定义了一个回退方法。如果在公开服务中发生异常，则回退方法返回一些默认值。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cbtpmrnj30t20eynd5.jpg" alt="image-20200929110425193"></p>
+<p>如果 firstPage method() 中的异常继续发生，则 Hystrix 电路将中断，并且员工使用者将一起跳过 firtsPage 方法，并直接调用回退方法。 断路器的目的是给第一页方法或第一页方法可能调用的其他方法留出时间，并导致异常恢复。可能发生的情况是，在负载较小的情况下，导致异常的问题有更好的恢复机会 。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7ccpk8ecj30uk0aq78n.jpg" alt="image-20200929110515151"></p>
+<h3 id="什么是-Netflix-Feign？它的优点是什么？"><a href="#什么是-Netflix-Feign？它的优点是什么？" class="headerlink" title="什么是 Netflix Feign？它的优点是什么？"></a><strong>什么是 Netflix Feign？它的优点是什么？</strong></h3><p>Feign 是受到 Retrofit，JAXRS-2.0 和 WebSocket 启发的 java 客户端联编程序。</p>
+<p>Feign 的第一个目标是将约束分母的复杂性统一到 http apis，而不考虑其稳定性。</p>
+<p>在 employee-consumer 的例子中，我们使用了 employee-producer 使用 REST模板公开的 REST 服务。</p>
+<p>但是我们必须编写大量代码才能执行以下步骤</p>
+<p>（1）使用功能区进行负载平衡。</p>
+<p>（2）获取服务实例，然后获取基本 URL。</p>
+<p>（3）利用 REST 模板来使用服务。 前面的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerControllerClient</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LoadBalancerClient loadBalancer;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getEmployee</span><span class="params">()</span> <span class="keyword">throws</span> RestClientException, IOException </span>&#123;</span><br><span class="line">        ServiceInstance serviceInstance = loadBalancer.choose(<span class="string">&quot;employee-producer&quot;</span>);</span><br><span class="line">        System.out.println(serviceInstance.getUri());</span><br><span class="line">        String baseUrl = serviceInstance.getUri().toString();</span><br><span class="line">        baseUrl = baseUrl + <span class="string">&quot;/employee&quot;</span>;</span><br><span class="line">        RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();</span><br><span class="line">        ResponseEntity&lt;String&gt; response = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            response = restTemplate.exchange(baseUrl, HttpMethod.GET, getHeaders(), String.class);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            System.out.println(ex);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(response.getBody());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前的代码，有像 NullPointer 这样的例外的机会，并不是最优的。我们将看到如何使用 Netflix Feign 使呼叫变得更加轻松和清洁。如果 Netflix Ribbon 依赖关系也在类路径中，那么 Feign 默认也会负责负载平衡。</p>
+<h3 id="什么是-Spring-Cloud-Bus？我们需要它吗？"><a href="#什么是-Spring-Cloud-Bus？我们需要它吗？" class="headerlink" title="什么是 Spring Cloud Bus？我们需要它吗？"></a><strong>什么是 Spring Cloud Bus？我们需要它吗？</strong></h3><p>考虑以下情况：我们有多个应用程序使用 Spring Cloud Config 读取属性，而Spring Cloud Config 从 GIT 读取这些属性。</p>
+<p>下面的例子中多个员工生产者模块从 Employee Config Module 获取 Eureka 注册的财产。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cf2b27xj30ua0kqe0l.jpg" alt="image-20200929110732589"></p>
+<p>如果假设 GIT 中的 Eureka 注册属性更改为指向另一台 Eureka 服务器，会发生什么情况。在这种情况下，我们将不得不重新启动服务以获取更新的属性。</p>
+<p>还有另一种使用执行器端点/刷新的方式。但是我们将不得不为每个模块单独调用这个 url。例如，如果 Employee Producer1 部署在端口 8080 上，则调用 http：// localhost：8080 / refresh。同样对于 Employee Producer2 http：//localhost：8081 / refresh 等等。这又很麻烦。这就是 Spring Cloud Bus 发挥作用的地方。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cfikzpcj30tm0lee4d.jpg" alt="image-20200929110757942"></p>
+<p>Spring Cloud Bus 提供了跨多个实例刷新配置的功能。因此，在上面的示例中，如果我们刷新 Employee Producer1，则会自动刷新所有其他必需的模块。如果我们有多个微服务启动并运行，这特别有用。这是通过将所有微服务连接到单个消息代理来实现的。无论何时刷新实例，此事件都会订阅到侦听此代理的所有微服务，并且它们也会刷新。可以通过使用端点/总线/刷新来实现对任何单个实例的刷新。</p>
+<h3 id="Spring-Cloud断路器的作用"><a href="#Spring-Cloud断路器的作用" class="headerlink" title="Spring Cloud断路器的作用"></a><strong>Spring Cloud断路器的作用</strong></h3><p>当一个服务调用另一个服务由于网络原因或自身原因出现问题，调用者就会等待被调用者的响应 当更多的服务请求到这些资源导致更多的请求等待，发生连锁效应（雪崩效应）</p>
+<p>断路器有完全打开状态:一段时间内 达到一定的次数无法调用 并且多次监测没有恢复的迹象 断路器完全打开 那么下次请求就不会请求到该服务</p>
+<p>半开:短时间内 有恢复迹象 断路器会将部分请求发给该服务，正常调用时 断路器关闭</p>
+<p>关闭：当服务一直处于正常状态 能正常调用</p>
+<h3 id="什么是Spring-Cloud-Config"><a href="#什么是Spring-Cloud-Config" class="headerlink" title="什么是Spring Cloud Config?"></a><strong>什么是Spring Cloud Config?</strong></h3><p>在分布式系统中，由于服务数量巨多，为了方便服务配置文件统一管理，实时更新，所以需要分布式配置中心组件。在Spring Cloud中，有分布式配置中心组件spring cloud config ，它支持配置服务放在配置服务的内存中（即本地），也支持放在远程Git仓库中。在spring cloud config 组件中，分两个角色，一是config server，二是config client。</p>
+<p>使用：</p>
+<p>（1）添加pom依赖</p>
+<p>（2）配置文件添加相关配置</p>
+<p>（3）启动类添加注解@EnableConfigServer</p>
+<h3 id="什么是Spring-Cloud-Gateway"><a href="#什么是Spring-Cloud-Gateway" class="headerlink" title="什么是Spring Cloud Gateway?"></a><strong>什么是Spring Cloud Gateway?</strong></h3><p>Spring Cloud Gateway是Spring Cloud官方推出的第二代网关框架，取代Zuul网关。网关作为流量的，在微服务系统中有着非常作用，网关常见的功能有路由转发、权限校验、限流控制等作用。</p>
+<p>使用了一个RouteLocatorBuilder的bean去创建路由，除了创建路由RouteLocatorBuilder可以让你添加各种predicates和filters，predicates断言的意思，顾名思义就是根据具体的请求的规则，由具体的route去处理，filters是各种过滤器，用来对请求做各种判断和修改。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/28/SpringBoot%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3464,285 +3741,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/27/Java%E5%BC%82%E5%B8%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/27/Java%E5%BC%82%E5%B8%B8/" class="post-title-link" itemprop="url">Java异常</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-27 21:45:02" itemprop="dateCreated datePublished" datetime="2020-09-27T21:45:02+08:00">2020-09-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-29 10:22:03" itemprop="dateModified" datetime="2020-09-29T10:22:03+08:00">2020-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">概览</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Java异常"><a href="#Java异常" class="headerlink" title="Java异常"></a>Java异常</h1><h2 id="Java异常架构与异常关键字"><a href="#Java异常架构与异常关键字" class="headerlink" title="Java异常架构与异常关键字"></a><strong>Java异常架构与异常关键字</strong></h2><h3 id="Java异常简介"><a href="#Java异常简介" class="headerlink" title="Java异常简介"></a><strong>Java异常简介</strong></h3><p>Java异常是Java提供的一种识别及响应错误的一致性机制。</p>
-<p>Java异常机制可以使程序中异常处理代码和正常业务代码分离，保证程序代码更加优雅，并提高程序健壮性。在有效使用异常的情况下，异常能清晰的回答what, where, why这3个问题：异常类型回答了“什么”被抛出，异常堆栈跟踪回答了“在哪”抛出，异常信息回答了“为什么”会抛出。</p>
-<h3 id="Java异常架构"><a href="#Java异常架构" class="headerlink" title="Java异常架构"></a><strong>Java异常架构</strong></h3><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5jnewbi9j30xg0nbjvw.jpg" alt="BF3FB71A26524F5FA7C5C301B8E40262"></p>
-<h4 id="1-Throwable"><a href="#1-Throwable" class="headerlink" title="1. Throwable"></a><strong>1. Throwable</strong></h4><p>Throwable 是 Java 语言中所有错误与异常的超类。</p>
-<p>Throwable 包含两个子类：Error（错误）和 Exception（异常），它们通常用于指示发生了异常情况。</p>
-<p>Throwable 包含了其线程创建时线程执行堆栈的快照，它提供了 printStackTrace() 等接口用于获取堆栈跟踪数据等信息。</p>
-<h4 id="2-Error（错误）"><a href="#2-Error（错误）" class="headerlink" title="2. Error（错误）"></a><strong>2. Error（错误）</strong></h4><p><strong>定义</strong>：Error 类及其子类。程序中无法处理的错误，表示运行应用程序中出现了严重的错误。</p>
-<p><strong>特点</strong>：此类错误一般表示代码运行时 JVM 出现问题。通常有 Virtual MachineError（虚拟机运行错误）、NoClassDefFoundError（类定义错误）等。比如 OutOfMemoryError：内存不足错误；StackOverflowError：栈溢出错误。此类错误发生时，JVM 将终止线程。</p>
-<p>这些错误是不受检异常，非代码性错误。因此，当此类错误发生时，应用程序不应该去处理此类错误。按照Java惯例，我们是不应该实现任何新的Error子类的！</p>
-<h4 id="3-Exception（异常）"><a href="#3-Exception（异常）" class="headerlink" title="3. Exception（异常）"></a><strong>3. Exception（异常）</strong></h4><p>程序本身可以捕获并且可以处理的异常。Exception 这种异常又分为两类：运行时异常和编译时异常。</p>
-<p><strong>运行时异常</strong></p>
-<p><strong>定义</strong>：RuntimeException 类及其子类，表示 JVM 在运行期间可能出现的异常。</p>
-<p><strong>特点</strong>：Java 编译器不会检查它。也就是说，当程序中可能出现这类异常时，倘若既”没有通过throws声明抛出它”，也”没有用try-catch语句捕获它”，还是会编译通过。比如NullPointerException空指针异常、ArrayIndexOutBoundException数组下标越界异常、ClassCastException类型转换异常、ArithmeticExecption算术异常。此类异常属于不受检异常，一般是由程序逻辑错误引起的，在程序中可以选择捕获处理，也可以不处理。虽然 Java 编译器不会检查运行时异常，但是我们也可以通过 throws 进行声明抛出，也可以通过 try-catch 对它进行捕获处理。如果产生运行时异常，则需要通过修改代码来进行避免。例如，若会发生除数为零的情况，则需要通过代码避免该情况的发生！</p>
-<p>RuntimeException 异常会由 Java 虚拟机自动抛出并自动捕获（<strong>就算我们没写异常捕获语句运行时也会抛出错误</strong>！！），此类异常的出现绝大数情况是代码本身有问题应该从逻辑上去解决并改进代码。</p>
-<p><strong>编译时异常</strong></p>
-<p><strong>定义</strong>: Exception 中除 RuntimeException 及其子类之外的异常。</p>
-<p><strong>特点</strong>: Java 编译器会检查它。如果程序中出现此类异常，比如 ClassNotFoundException（没有找到指定的类异常），IOException（IO流异常），要么通过throws进行声明抛出，要么通过try-catch进行捕获处理，否则不能通过编译。在程序中，通常不会自定义该类异常，而是直接使用系统提供的异常类。<strong>该异常我们必须手动在代码里添加捕获语句来处理该异常</strong>。</p>
-<h4 id="4-受检异常与非受检异常"><a href="#4-受检异常与非受检异常" class="headerlink" title="4. 受检异常与非受检异常"></a><strong>4. 受检异常与非受检异常</strong></h4><p>Java 的所有异常可以分为受检异常（checked exception）和非受检异常（unchecked exception）。</p>
-<p><strong>受检异常</strong></p>
-<p>编译器要求必须处理的异常。正确的程序在运行过程中，经常容易出现的、符合预期的异常情况。一旦发生此类异常，就必须采用某种方式进行处理。<strong>除 RuntimeException 及其子类外，其他的 Exception 异常都属于受检异常</strong>。编译器会检查此类异常，也就是说当编译器检查到应用中的某处可能会此类异常时，将会提示你处理本异常——要么使用try-catch捕获，要么使用方法签名中用 throws 关键字抛出，否则编译不通过。</p>
-<p><strong>非受检异常</strong></p>
-<p>编译器不会进行检查并且不要求必须处理的异常，也就说当程序中出现此类异常时，即使我们没有try-catch捕获它，也没有使用throws抛出该异常，编译也会正常通过。<strong>该类异常包括运行时异常（RuntimeException极其子类）和错误（Error）。</strong></p>
-<p><strong>Java异常关键字</strong></p>
-<p>• <strong>try</strong> – 用于监听。将要被监听的代码(可能抛出异常的代码)放在try语句块之内，当try语句块内发生异常时，异常就被抛出。</p>
-<p>• <strong>catch</strong> – 用于捕获异常。catch用来捕获try语句块中发生的异常。</p>
-<p>• <strong>finally</strong> – finally语句块总是会被执行。它主要用于回收在try块里打开的物力资源(如数据库连接、网络连接和磁盘文件)。只有finally块，执行完成之后，才会回来执行try或者catch块中的return或者throw语句，如果finally中使用了return或者throw等终止方法的语句，则就不会跳回执行，直接停止。</p>
-<p>• <strong>throw</strong> – 用于抛出异常。</p>
-<p>• <strong>throws</strong> – 用在方法签名中，用于声明该方法可能抛出的异常。</p>
-<p><strong>Java异常处理</strong></p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5job52y6j30t60h7myw.jpg" alt="DED9F04CAFA549A2B7317344C26B58E2"></p>
-<p>Java 通过面向对象的方法进行异常处理，一旦方法抛出异常，系统自动根据该异常对象寻找合适异常处理器（Exception Handler）来处理该异常，把各种不同的异常进行分类，并提供了良好的接口。在 Java 中，每个异常都是一个对象，它是 Throwable 类或其子类的实例。当一个方法出现异常后便抛出一个异常对象，该对象中包含有异常信息，调用这个对象的方法可以捕获到这个异常并可以对其进行处理。Java 的异常处理是通过 5 个关键词来实现的：try、catch、throw、throws 和 finally。</p>
-<p>在Java应用中，异常的处理机制分为声明异常，抛出异常和捕获异常。</p>
-<p><strong>声明异常</strong></p>
-<p>通常，应该捕获那些知道如何处理的异常，将不知道如何处理的异常继续传递下去。传递异常可以在方法签名处使用 <strong>throws</strong> 关键字声明可能会抛出的异常。</p>
-<p>注意</p>
-<ul>
-<li>非检查异常（Error、RuntimeException 或它们的子类）不可使用 throws 关键字来声明要抛出的异常。</li>
-<li>一个方法出现编译时异常，就需要 try-catch/ throws 处理，否则会导致编译错误。</li>
-</ul>
-<p><strong>抛出异常</strong></p>
-<p>如果你觉得解决不了某些异常问题，且不需要调用者处理，那么你可以抛出异常。</p>
-<p>throw关键字作用是在方法内部抛出一个Throwable类型的异常。任何Java代码都可以通过throw语句抛出异常。</p>
-<p><strong>捕获异常</strong></p>
-<p>程序通常在运行之前不报错，但是运行后可能会出现某些未知的错误，但是还不想直接抛出到上一级，那么就需要通过try…catch…的形式进行异常捕获，之后根据不同的异常情况来进行相应的处理。</p>
-<p><strong>如何选择异常类型</strong></p>
-<p>可以根据下图来选择是捕获异常，声明异常还是抛出异常</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5jotcsrsj30ty0ciwf6.jpg" alt="800031E4A0B04DE89070BA224E025A0F"></p>
-<h2 id="常见异常处理方式"><a href="#常见异常处理方式" class="headerlink" title="常见异常处理方式"></a><strong>常见异常处理方式</strong></h2><h3 id="直接抛出异常"><a href="#直接抛出异常" class="headerlink" title="直接抛出异常"></a><strong>直接抛出异常</strong></h3><p>通常，应该捕获那些知道如何处理的异常，将不知道如何处理的异常继续传递下去。传递异常可以在方法签名处使用 <strong>throws</strong> 关键字声明可能会抛出的异常。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filePath)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    File file = <span class="keyword">new</span> File(filePath);</span><br><span class="line">    String result;</span><br><span class="line">    BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">    <span class="keyword">while</span> ((result = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">    reader.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="封装异常再抛出"><a href="#封装异常再抛出" class="headerlink" title="封装异常再抛出"></a><strong>封装异常再抛出</strong></h3><p>有时我们会从 catch 中抛出一个异常，目的是为了改变异常的类型。多用于在多系统集成时，当某个子系统故障，异常类型可能有多种，可以用统一的异常类型向外暴露，不需暴露太多内部异常细节。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filePath)</span> <span class="keyword">throws</span> MyException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        MyException ex = <span class="keyword">new</span> MyException(<span class="string">&quot;read file failed.&quot;</span>);</span><br><span class="line">        ex.initCause(e);</span><br><span class="line">        <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a><strong>捕获异常</strong></h3><p>在一个 try-catch 语句块中可以捕获多个异常类型，并对不同类型的异常做出不同的处理</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filePath)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        <span class="comment">// handle FileNotFoundException</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="comment">// handle IOException</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同一个 catch 也可以捕获多种类型异常，用 | 隔开</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filePath)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException | UnknownHostException e) &#123;</span><br><span class="line">        <span class="comment">// handle FileNotFoundException or UnknownHostException</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="comment">// handle IOException</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a><strong>自定义异常</strong></h3><p>习惯上，定义一个异常类应包含两个构造函数，一个无参构造函数和一个带有详细描述信息的构造函数（Throwable 的 toString 方法会打印这些详细信息，调试时很有用）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="try-catch-finally"><a href="#try-catch-finally" class="headerlink" title="try-catch-finally"></a><strong>try-catch-finally</strong></h3><p>当方法中发生异常，异常处之后的代码不会再执行，如果之前获取了一些本地资源需要释放，则需要在方法正常结束时和 catch 语句中都调用释放本地资源的代码，显得代码比较繁琐，finally 语句可以解决这个问题。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filePath)</span> <span class="keyword">throws</span> MyException </span>&#123;</span><br><span class="line">    File file = <span class="keyword">new</span> File(filePath);</span><br><span class="line">    String result;</span><br><span class="line">    BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">        <span class="keyword">while</span> ((result = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;readFile method catch block.&quot;</span>);</span><br><span class="line">        MyException ex = newMyException(<span class="string">&quot;read file failed.&quot;</span>);</span><br><span class="line">        ex.initCause(e);</span><br><span class="line">        <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;readFile method finally block.&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != reader) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                reader.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用该方法时，读取文件时若发生异常，代码会进入 catch 代码块，之后进入 finally 代码块；若读取文件时未发生异常，则会跳过 catch 代码块直接进入 finally 代码块。所以无论代码中是否发生异常，fianlly 中的代码都会执行。</p>
-<h3 id="try-with-resource"><a href="#try-with-resource" class="headerlink" title="try-with-resource"></a><strong>try-with-resource</strong></h3><p>上面例子中，finally 中的 close 方法也可能抛出 IOException, 从而覆盖了原始异常。JAVA 7 提供了更优雅的方式来实现资源的自动释放，自动释放的资源需要是实现了 AutoCloseable 接口的类。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">tryWithResourceTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> (Scanner scanner = newScanner(newFileInputStream(<span class="string">&quot;c:/abc&quot;</span>), <span class="string">&quot;UTF-8&quot;</span>)) &#123;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="comment">// handle exception</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>try 代码块退出时，会自动调用 scanner.close 方法，和把 scanner.close 方法放在 finally 代码块中不同的是，若 scanner.close 抛出异常，则会被抑制，抛出的仍然为原始异常。被抑制的异常会由 addSusppressed 方法添加到原来的异常，如果想要获取被抑制的异常列表，可以调用 getSuppressed 方法来获取。</p>
-<h2 id="Java异常常见面试题"><a href="#Java异常常见面试题" class="headerlink" title="Java异常常见面试题"></a><strong>Java异常常见面试题</strong></h2><h3 id="1-Error-和-Exception-区别是什么？"><a href="#1-Error-和-Exception-区别是什么？" class="headerlink" title="1. Error 和 Exception 区别是什么？"></a><strong>1. Error 和 Exception 区别是什么？</strong></h3><p>Error 类型的错误通常为虚拟机相关错误，如系统崩溃，内存不足，堆栈溢出等，编译器不会对这类错误进行检测，JAVA 应用程序也不应对这类错误进行捕获，一旦这类错误发生，通常应用程序会被终止，仅靠应用程序本身无法恢复；</p>
-<p>Exception 类的错误是可以在应用程序中进行捕获并处理的，通常遇到这种错误，应对其进行处理，使应用程序可以继续正常运行。</p>
-<h3 id="2-运行时异常和一般异常-受检异常-区别是什么？"><a href="#2-运行时异常和一般异常-受检异常-区别是什么？" class="headerlink" title="2. 运行时异常和一般异常(受检异常)区别是什么？"></a><strong>2. 运行时异常和一般异常(受检异常)区别是什么？</strong></h3><p>运行时异常包括 RuntimeException 类及其子类，表示 JVM 在运行期间可能出现的异常。 Java 编译器不会检查运行时异常。</p>
-<p>受检异常是Exception 中除 RuntimeException 及其子类之外的异常。 Java 编译器会检查受检异常。</p>
-<p><strong>RuntimeException异常和受检异常之间的区别</strong>：是否强制要求调用者必须处理此异常，如果强制要求调用者必须进行处理，那么就使用受检异常，否则就选择非受检异常(RuntimeException)。一般来讲，如果没有特殊的要求，我们建议使用RuntimeException异常。</p>
-<h3 id="3-JVM-是如何处理异常的？"><a href="#3-JVM-是如何处理异常的？" class="headerlink" title="3. JVM 是如何处理异常的？"></a><strong>3. JVM 是如何处理异常的？</strong></h3><p>在一个方法中如果发生异常，这个方法会创建一个异常对象，并转交给 JVM，该异常对象包含异常名称，异常描述以及异常发生时应用程序的状态。创建异常对象并转交给 JVM 的过程称为抛出异常。可能有一系列的方法调用，最终才进入抛出异常的方法，这一系列方法调用的有序列表叫做调用栈。</p>
-<p>JVM 会顺着调用栈去查找看是否有可以处理异常的代码，如果有，则调用异常处理代码。当 JVM 发现可以处理异常的代码时，会把发生的异常传递给它。如果 JVM 没有找到可以处理该异常的代码块，JVM 就会将该异常转交给默认的异常处理器（默认处理器为 JVM 的一部分），默认异常处理器打印出异常信息并终止应用程序。</p>
-<h3 id="4-throw-和-throws-的区别是什么？"><a href="#4-throw-和-throws-的区别是什么？" class="headerlink" title="4. throw 和 throws 的区别是什么？"></a><strong>4. throw 和 throws 的区别是什么？</strong></h3><p>Java 中的异常处理除了包括捕获异常和处理异常之外，还包括声明异常和拋出异常，可以通过 throws 关键字在方法上声明该方法要拋出的异常，或者在方法内部通过 throw 拋出异常对象。</p>
-<p><strong>throws 关键字和 throw 关键字在使用上的几点区别如下</strong>：</p>
-<ul>
-<li>throw 关键字用在方法内部，只能用于抛出一种异常，用来抛出方法或代码块中的异常，受查异常和非受查异常都可以被抛出。</li>
-<li>throws 关键字用在方法声明上，可以抛出多个异常，用来标识该方法可能抛出的异常列表。一个方法用 throws 标识了可能抛出的异常列表，调用该方法的方法中必须包含可处理异常的代码，否则也要在方法签名中用 throws 关键字声明相应的异常。</li>
-</ul>
-<h3 id="5-final、finally、finalize-有什么区别？"><a href="#5-final、finally、finalize-有什么区别？" class="headerlink" title="5. final、finally、finalize 有什么区别？"></a><strong>5. final、finally、finalize 有什么区别？</strong></h3><ul>
-<li>final可以修饰类、变量、方法，修饰类表示该类不能被继承、修饰方法表示该方法不能被重写、修饰变量表示该变量是一个常量不能被重新赋值。</li>
-<li>finally一般作用在try-catch代码块中，在处理异常的时候，通常我们将一定要执行的代码方法finally代码块中，表示不管是否出现异常，该代码块都会执行，一般用来存放一些关闭资源的代码。</li>
-<li>finalize是一个方法，属于Object类的一个方法，而Object类是所有类的父类，Java 中允许使用 finalize()方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。</li>
-</ul>
-<h3 id="6-NoClassDefFoundError-和-ClassNotFoundException-区别？"><a href="#6-NoClassDefFoundError-和-ClassNotFoundException-区别？" class="headerlink" title="6. NoClassDefFoundError 和 ClassNotFoundException 区别？"></a><strong>6. NoClassDefFoundError 和 ClassNotFoundException 区别？</strong></h3><p>NoClassDefFoundError 是一个 Error 类型的异常，是由 JVM 引起的，不应该尝试捕获这个异常。</p>
-<p>引起该异常的原因是 JVM 或 ClassLoader 尝试加载某类时在内存中找不到该类的定义，该动作发生在运行期间，即编译时该类存在，但是在运行时却找不到了，可能是变异后被删除了等原因导致；</p>
-<p>ClassNotFoundException 是一个受查异常，需要显式地使用 try-catch 对其进行捕获和处理，或在方法签名中用 throws 关键字进行声明。当使用 Class.forName, ClassLoader.loadClass 或 ClassLoader.findSystemClass 动态加载类到内存的时候，通过传入的类路径参数没有找到该类，就会抛出该异常；另一种抛出该异常的可能原因是某个类已经由一个类加载器加载至内存中，另一个加载器又尝试去加载它。</p>
-<h3 id="7-try-catch-finally-中哪个部分可以省略？"><a href="#7-try-catch-finally-中哪个部分可以省略？" class="headerlink" title="7. try-catch-finally 中哪个部分可以省略？"></a><strong>7. try-catch-finally 中哪个部分可以省略？</strong></h3><p>答：catch 可以省略</p>
-<p><strong>原因</strong></p>
-<p>更为严格的说法其实是：try只适合处理运行时异常，try+catch适合处理运行时异常+普通异常。也就是说，如果你只用try去处理普通异常却不加以catch处理，编译是通不过的，因为编译器硬性规定，普通异常如果选择捕获，则必须用catch显示声明以便进一步处理。而运行时异常在编译时没有如此规定，所以catch可以省略，你加上catch编译器也觉得无可厚非。</p>
-<p>理论上，编译器看任何代码都不顺眼，都觉得可能有潜在的问题，所以你即使对所有代码加上try，代码在运行期时也只不过是在正常运行的基础上加一层皮。但是你一旦对一段代码加上try，就等于显示地承诺编译器，对这段代码可能抛出的异常进行捕获而非向上抛出处理。如果是普通异常，编译器要求必须用catch捕获以便进一步处理；如果运行时异常，捕获然后丢弃并且+finally扫尾处理，或者加上catch捕获以便进一步处理。</p>
-<p>至于加上finally，则是在不管有没捕获异常，都要进行的“扫尾”处理。</p>
-<h3 id="8-try-catch-finally-中，如果-catch-中-return-了，finally-还会执行吗？"><a href="#8-try-catch-finally-中，如果-catch-中-return-了，finally-还会执行吗？" class="headerlink" title="8. try-catch-finally 中，如果 catch 中 return 了，finally 还会执行吗？"></a><strong>8. try-catch-finally 中，如果 catch 中 return 了，finally 还会执行吗？</strong></h3><p>答：会执行，在 return 前执行。</p>
-<p><strong>注意</strong>：在 finally 中改变返回值的做法是不好的，因为如果存在 finally 代码块，try中的 return 语句不会立马返回调用者，而是记录下返回值待 finally 代码块执行完毕之后再向调用者返回其值，然后如果在 finally 中修改了返回值，就会返回修改后的值。显然，在 finally 中返回或者修改返回值会对程序造成很大的困扰，C#中直接用编译错误的方式来阻止程序员干这种龌龊的事情，Java 中也可以通过提升编译器的语法检查级别来产生警告或错误。</p>
-<h3 id="9-类-ExampleA-继承-Exception，类-ExampleB-继承ExampleA。"><a href="#9-类-ExampleA-继承-Exception，类-ExampleB-继承ExampleA。" class="headerlink" title="9. 类 ExampleA 继承 Exception，类 ExampleB 继承ExampleA。"></a><strong>9. 类 ExampleA 继承 Exception，类 ExampleB 继承ExampleA。</strong></h3><p>有如下代码片断：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ExampleB(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">catch</span>（ExampleA e）&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;ExampleA&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span>（Exception e）&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Exception&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>请问执行此段代码的输出是什么？</p>
-<p><strong>答</strong>：</p>
-<p>输出：ExampleA。（根据里氏代换原则[能使用父类型的地方一定能使用子类型]，抓取 ExampleA 类型异常的 catch 块能够抓住 try 块中抛出的 ExampleB 类型的异常）</p>
-<h3 id="10-常见的-RuntimeException-有哪些？"><a href="#10-常见的-RuntimeException-有哪些？" class="headerlink" title="10. 常见的 RuntimeException 有哪些？"></a><strong>10. 常见的 RuntimeException 有哪些？</strong></h3><ul>
-<li>ClassCastException(类转换异常)</li>
-<li>IndexOutOfBoundsException(数组越界)</li>
-<li>NullPointerException(空指针)</li>
-<li>ArrayStoreException(数据存储异常，操作数组时类型不一致)</li>
-<li>还有IO操作的BufferOverflowException异常</li>
-</ul>
-<h3 id="11-Java常见异常有哪些"><a href="#11-Java常见异常有哪些" class="headerlink" title="11. Java常见异常有哪些"></a><strong>11. Java常见异常有哪些</strong></h3><p>java.lang.IllegalAccessError：违法访问错误。当一个应用试图访问、修改某个类的域（Field）或者调用其方法，但是又违反域或方法的可见性声明，则抛出该异常。</p>
-<p>java.lang.InstantiationError：实例化错误。当一个应用试图通过Java的new操作符构造一个抽象类或者接口时抛出该异常.</p>
-<p>java.lang.OutOfMemoryError：内存不足错误。当可用内存不足以让Java虚拟机分配给一个对象时抛出该错误。</p>
-<p>java.lang.StackOverflowError：堆栈溢出错误。当一个应用递归调用的层次太深而导致堆栈溢出或者陷入死循环时抛出该错误。</p>
-<p>java.lang.ClassCastException：类造型异常。假设有类A和B（A不是B的父类或子类），O是A的实例，那么当强制将O构造为类B的实例时抛出该异常。该异常经常被称为强制类型转换异常。</p>
-<p>java.lang.ClassNotFoundException：找不到类异常。当应用试图根据字符串形式的类名构造类，而在遍历CLASSPAH之后找不到对应名称的class文件时，抛出该异常。</p>
-<p>java.lang.ArithmeticException：算术条件异常。譬如：整数除零等。</p>
-<p>java.lang.ArrayIndexOutOfBoundsException：数组索引越界异常。当对数组的索引值为负数或大于等于数组大小时抛出。</p>
-<p>java.lang.IndexOutOfBoundsException：索引越界异常。当访问某个序列的索引值小于0或大于等于序列大小时，抛出该异常。</p>
-<p>java.lang.InstantiationException：实例化异常。当试图通过newInstance()方法创建某个类的实例，而该类是一个抽象类或接口时，抛出该异常。</p>
-<p>java.lang.NoSuchFieldException：属性不存在异常。当访问某个类的不存在的属性时抛出该异常。</p>
-<p>java.lang.NoSuchMethodException：方法不存在异常。当访问某个类的不存在的方法时抛出该异常。</p>
-<p>java.lang.NullPointerException：空指针异常。当应用试图在要求使用对象的地方使用了null时，抛出该异常。譬如：调用null对象的实例方法、访问null对象的属性、计算null对象的长度、使用throw语句抛出null等等。</p>
-<p>java.lang.NumberFormatException：数字格式异常。当试图将一个String转换为指定的数字类型，而该字符串确不满足数字类型要求的格式时，抛出该异常。</p>
-<p>java.lang.StringIndexOutOfBoundsException：字符串索引越界异常。当使用索引值访问某个字符串中的字符，而该索引值小于0或大于等于序列大小时，抛出该异常。</p>
-<h2 id="Java异常处理最佳实践"><a href="#Java异常处理最佳实践" class="headerlink" title="Java异常处理最佳实践"></a><strong>Java异常处理最佳实践</strong></h2><p>在 Java 中处理异常并不是一个简单的事情。不仅仅初学者很难理解，即使一些有经验的开发者也需要花费很多时间来思考如何处理异常，包括需要处理哪些异常，怎样处理等等。这也是绝大多数开发团队都会制定一些规则来规范进行异常处理的原因。而团队之间的这些规范往往是截然不同的。</p>
-<p>本文给出几个被很多团队使用的异常处理最佳实践。</p>
-<h3 id="1-在-finally-块中清理资源或者使用-try-with-resource-语句"><a href="#1-在-finally-块中清理资源或者使用-try-with-resource-语句" class="headerlink" title="1. 在 finally 块中清理资源或者使用 try-with-resource 语句"></a><strong>1. 在 finally 块中清理资源或者使用 try-with-resource 语句</strong></h3><p>当使用类似InputStream这种需要使用后关闭的资源时，一个常见的错误就是在try块的最后关闭资源。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doNotCloseResourceInTry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    FileInputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        File file = newFile(<span class="string">&quot;./tmp.txt&quot;</span>);</span><br><span class="line">        inputStream = newFileInputStream(file);</span><br><span class="line">        <span class="comment">// use the inputStream to read a file</span></span><br><span class="line">        <span class="comment">//do NOT do this        </span></span><br><span class="line">        inputStream.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        log.error(e);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        log.error(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>问题就是，只有没有异常抛出的时候，这段代码才可以正常工作。try 代码块内代码会正常执行，并且资源可以正常关闭。但是，使用 try 代码块是有原因的，一般调用一个或多个可能抛出异常的方法，而且，你自己也可能会抛出一个异常，这意味着代码可能不会执行到 try 代码块的最后部分。结果就是，你并没有关闭资源。</p>
-<p>所以，你应该把清理工作的代码放到 finally 里去，或者使用 try-with-resource 特性。</p>
-<h4 id="1-1-使用-finally-代码块"><a href="#1-1-使用-finally-代码块" class="headerlink" title="1.1 使用 finally 代码块"></a><strong>1.1 使用 finally 代码块</strong></h4><p>与前面几行 try 代码块不同，finally 代码块总是会被执行。不管 try 代码块成功执行之后还是你在 catch 代码块中处理完异常后都会执行。因此，你可以确保你清理了所有打开的资源。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">closeResourceInFinally</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    FileInputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        File file = newFile(<span class="string">&quot;./tmp.txt&quot;</span>);</span><br><span class="line">        inputStream = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">        <span class="comment">// use the inputStream to read a file</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        log.error(e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (inputStream != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                inputStream.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                log.error(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="1-2-Java-7-的-try-with-resource-语法"><a href="#1-2-Java-7-的-try-with-resource-语法" class="headerlink" title="1.2 Java 7 的 try-with-resource 语法"></a><strong>1.2 Java 7 的 try-with-resource 语法</strong></h4><p>如果你的资源实现了 AutoCloseable 接口，你可以使用这个语法。大多数的 Java 标准资源都继承了这个接口。当你在 try 子句中打开资源，资源会在 try 代码块执行后或异常处理后自动关闭。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">automaticallyCloseResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    File file = newFile(<span class="string">&quot;./tmp.txt&quot;</span>);</span><br><span class="line">    <span class="keyword">try</span> (FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(file);) &#123;</span><br><span class="line">        <span class="comment">// use the inputStream to read a file</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        log.error(e);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        log.error(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-优先明确的异常"><a href="#2-优先明确的异常" class="headerlink" title="2. 优先明确的异常"></a><strong>2. 优先明确的异常</strong></h3><p>你抛出的异常越明确越好，永远记住，你的同事或者几个月之后的你，将会调用你的方法并且处理异常。</p>
-<p>因此需要保证提供给他们尽可能多的信息。这样你的 API 更容易被理解。你的方法的调用者能够更好的处理异常并且避免额外的检查。</p>
-<p>因此，总是尝试寻找最适合你的异常事件的类，例如，抛出一个 NumberFormatException 来替换一个 IllegalArgumentException 。避免抛出一个不明确的异常。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doNotDoThis</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doThis</span><span class="params">()</span> <span class="keyword">throws</span> NumberFormatException </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-对异常进行文档说明"><a href="#3-对异常进行文档说明" class="headerlink" title="3. 对异常进行文档说明"></a><strong>3. 对异常进行文档说明</strong></h3><p>当在方法上声明抛出异常时，也需要进行文档说明。目的是为了给调用者提供尽可能多的信息，从而可以更好地避免或处理异常。</p>
-<p>在 Javadoc 添加 @throws 声明，并且描述抛出异常的场景。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(String input)</span> <span class="keyword">throws</span> MyBusinessException </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-使用描述性消息抛出异常"><a href="#4-使用描述性消息抛出异常" class="headerlink" title="4. 使用描述性消息抛出异常"></a><strong>4. 使用描述性消息抛出异常</strong></h3><p>在抛出异常时，需要尽可能精确地描述问题和相关信息，这样无论是打印到日志中还是在监控工具中，都能够更容易被人阅读，从而可以更好地定位具体错误信息、错误的严重程度等。</p>
-<p>但这里并不是说要对错误信息长篇大论，因为本来 Exception 的类名就能够反映错误的原因，因此只需要用一到两句话描述即可。</p>
-<p>如果抛出一个特定的异常，它的类名很可能已经描述了这种错误。所以，你不需要提供很多额外的信息。一个很好的例子是 NumberFormatException 。当你以错误的格式提供 String 时，它将被 java.lang.Long 类的构造函数抛出。</p>
-<h3 id="5-优先捕获最具体的异常"><a href="#5-优先捕获最具体的异常" class="headerlink" title="5. 优先捕获最具体的异常"></a><strong>5. 优先捕获最具体的异常</strong></h3><p>大多数 IDE 都可以帮助你实现这个最佳实践。当你尝试首先捕获较不具体的异常时，它们会报告无法访问的代码块。</p>
-<p>但问题在于，只有匹配异常的第一个 catch 块会被执行。 因此，如果首先捕获 IllegalArgumentException ，则永远不会到达应该处理更具体的 NumberFormatException 的 catch 块，因为它是 IllegalArgumentException 的子类。</p>
-<p>总是优先捕获最具体的异常类，并将不太具体的 catch 块添加到列表的末尾。</p>
-<p>你可以在下面的代码片断中看到这样一个 try-catch 语句的例子。 第一个 catch 块处理所有 NumberFormatException 异常，第二个处理所有非 NumberFormatException 异常的IllegalArgumentException 异常。</p>
-<h3 id="6-不要捕获-Throwable-类"><a href="#6-不要捕获-Throwable-类" class="headerlink" title="6. 不要捕获 Throwable 类"></a><strong>6. 不要捕获 Throwable 类</strong></h3><p>Throwable 是所有异常和错误的超类。你可以在 catch 子句中使用它，但是你永远不应该这样做！</p>
-<p>如果在 catch 子句中使用 Throwable ，它不仅会捕获所有异常，也将捕获所有的错误。JVM 抛出错误，指出不应该由应用程序处理的严重问题。 典型的例子是 OutOfMemoryError 或者 StackOverflowError 。两者都是由应用程序控制之外的情况引起的，无法处理。</p>
-<p>所以，最好不要捕获 Throwable ，除非你确定自己处于一种特殊的情况下能够处理错误。</p>
-<h3 id="7-不要忽略异常"><a href="#7-不要忽略异常" class="headerlink" title="7. 不要忽略异常"></a><strong>7. 不要忽略异常</strong></h3><p>很多时候，开发者很有自信不会抛出异常，因此写了一个catch块，但是没有做任何处理或者记录日志。</p>
-<p>但现实是经常会出现无法预料的异常，或者无法确定这里的代码未来是不是会改动(删除了阻止异常抛出的代码)，而此时由于异常被捕获，使得无法拿到足够的错误信息来定位问题。</p>
-<p>合理的做法是至少要记录异常的信息。</p>
-<h3 id="8-不要记录并抛出异常"><a href="#8-不要记录并抛出异常" class="headerlink" title="8. 不要记录并抛出异常"></a><strong>8. 不要记录并抛出异常</strong></h3><p>这可能是本文中最常被忽略的最佳实践。可以发现很多代码甚至类库中都会有捕获异常、记录日志并再次抛出的逻辑。</p>
-<p>如上所示，后面的日志也没有附加更有用的信息。如果想要提供更加有用的信息，那么可以将异常包装为自定义异常。</p>
-<p>因此，仅仅当想要处理异常时才去捕获，否则只需要在方法签名中声明让调用者去处理。</p>
-<h3 id="9-包装异常时不要抛弃原始的异常"><a href="#9-包装异常时不要抛弃原始的异常" class="headerlink" title="9. 包装异常时不要抛弃原始的异常"></a><strong>9. 包装异常时不要抛弃原始的异常</strong></h3><p>捕获标准异常并包装为自定义异常是一个很常见的做法。这样可以添加更为具体的异常信息并能够做针对的异常处理。</p>
-<p>在你这样做时，请确保将原始异常设置为原因（注：参考下方代码 NumberFormatException e 中的原始异常 e ）。Exception 类提供了特殊的构造函数方法，它接受一个 Throwable 作为参数。否则，你将会丢失堆栈跟踪和原始异常的消息，这将会使分析导致异常的异常事件变得困难。</p>
-<h3 id="10-不要使用异常控制程序的流程"><a href="#10-不要使用异常控制程序的流程" class="headerlink" title="10. 不要使用异常控制程序的流程"></a><strong>10. 不要使用异常控制程序的流程</strong></h3><p>不应该使用异常控制应用的执行流程，例如，本应该使用if语句进行条件判断的情况下，你却使用异常处理，这是非常不好的习惯，会严重影响应用的性能。</p>
-<h3 id="11-使用标准异常"><a href="#11-使用标准异常" class="headerlink" title="11. 使用标准异常"></a><strong>11. 使用标准异常</strong></h3><p>如果使用内建的异常可以解决问题，就不要定义自己的异常。Java API 提供了上百种针对不同情况的异常类型，在开发中首先尽可能使用 Java API 提供的异常，如果标准的异常不能满足你的要求，这时候创建自己的定制异常。尽可能得使用标准异常有利于新加入的开发者看懂项目代码。</p>
-<h3 id="12-异常会影响性能"><a href="#12-异常会影响性能" class="headerlink" title="12. 异常会影响性能"></a><strong>12. 异常会影响性能</strong></h3><p>异常处理的性能成本非常高，每个 Java 程序员在开发时都应牢记这句话。创建一个异常非常慢，抛出一个异常又会消耗1~5ms，当一个异常在应用的多个层级之间传递时，会拖累整个应用的性能。</p>
-<ul>
-<li>仅在异常情况下使用异常；</li>
-<li>在可恢复的异常情况下使用异常；</li>
-</ul>
-<p>尽管使用异常有利于 Java 开发，但是在应用中最好不要捕获太多的调用栈，因为在很多情况下都不需要打印调用栈就知道哪里出错了。因此，异常消息应该提供恰到好处的信息。</p>
-<h3 id="13-总结"><a href="#13-总结" class="headerlink" title="13. 总结"></a><strong>13. 总结</strong></h3><p>综上所述，当你抛出或捕获异常的时候，有很多不同的情况需要考虑，而且大部分事情都是为了改善代码的可读性或者 API 的可用性。</p>
-<p>异常不仅仅是一个错误控制机制，也是一个通信媒介。因此，为了和同事更好的合作，一个团队必须要制定出一个最佳实践和规则，只有这样，团队成员才能理解这些通用概念，同时在工作中使用它。</p>
-<h2 id="异常处理-阿里巴巴Java开发手册"><a href="#异常处理-阿里巴巴Java开发手册" class="headerlink" title="异常处理-阿里巴巴Java开发手册"></a><strong>异常处理-阿里巴巴Java开发手册</strong></h2><ol>
-<li><p>【强制】Java 类库中定义的可以通过预检查方式规避的RuntimeException异常不应该通过catch 的方式来处理，比如：NullPointerException，IndexOutOfBoundsException等等。 说明：无法通过预检查的异常除外，比如，在解析字符串形式的数字时，可能存在数字格式错误，不得不通过catch NumberFormatException来实现。 正例：if (obj != null) {…} 反例：try { obj.method(); } catch (NullPointerException e) {…}</p>
-</li>
-<li><p>【强制】异常不要用来做流程控制，条件控制。 说明：异常设计的初衷是解决程序运行中的各种意外情况，且异常的处理效率比条件判断方式要低很多。</p>
-</li>
-<li><p>【强制】catch时请分清稳定代码和非稳定代码，稳定代码指的是无论如何不会出错的代码。对于非稳定代码的catch尽可能进行区分异常类型，再做对应的异常处理。 说明：对大段代码进行try-catch，使程序无法根据不同的异常做出正确的应激反应，也不利于定位问题，这是一种不负责任的表现。 正例：用户注册的场景中，如果用户输入非法字符，或用户名称已存在，或用户输入密码过于简单，在程序上作出分门别类的判断，并提示给用户。</p>
-</li>
-<li><p>【强制】捕获异常是为了处理它，不要捕获了却什么都不处理而抛弃之，如果不想处理它，请将该异常抛给它的调用者。最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容。</p>
-</li>
-<li><p>【强制】有try块放到了事务代码中，catch异常后，如果需要回滚事务，一定要注意手动回滚事务。</p>
-</li>
-<li><p>【强制】finally块必须对资源对象、流对象进行关闭，有异常也要做try-catch。 说明：如果JDK7及以上，可以使用try-with-resources方式。</p>
-</li>
-<li><p>【强制】不要在finally块中使用return。 说明：try块中的return语句执行成功后，并不马上返回，而是继续执行finally块中的语句，如果此处存在return语句，则在此直接返回，无情丢弃掉try块中的返回点。</p>
-</li>
-<li><p>【强制】捕获异常与抛异常，必须是完全匹配，或者捕获异常是抛异常的父类。 说明：如果预期对方抛的是绣球，实际接到的是铅球，就会产生意外情况。</p>
-</li>
-<li><p>【强制】在调用RPC、二方包、或动态生成类的相关方法时，捕捉异常必须使用Throwable类来进行拦截。 说明：通过反射机制来调用方法，如果找不到方法，抛出NoSuchMethodException。什么情况会抛出NoSuchMethodError呢？二方包在类冲突时，仲裁机制可能导致引入非预期的版本使类的方法签名不匹配，或者在字节码修改框架（比如：ASM）动态创建或修改类时，修改了相应的方法签名。这些情况，即使代码编译期是正确的，但在代码运行期时，会抛出NoSuchMethodError。</p>
-</li>
-<li><p>【推荐】方法的返回值可以为null，不强制返回空集合，或者空对象等，必须添加注释充分说明什么情况下会返回null值。 说明：本手册明确防止NPE是调用者的责任。即使被调用方法返回空集合或者空对象，对调用者来说，也并非高枕无忧，必须考虑到远程调用失败、序列化失败、运行时异常等场景返回null的情况。</p>
-</li>
-<li><p>【推荐】防止NPE，是程序员的基本修养，注意NPE产生的场景： 1） 返回类型为基本数据类型，return包装数据类型的对象时，自动拆箱有可能产生NPE。 反例：public int f() { return Integer对象}， 如果为null，自动解箱抛NPE。 2） 数据库的查询结果可能为null。 3） 集合里的元素即使isNotEmpty，取出的数据元素也可能为null。 4） 远程调用返回对象时，一律要求进行空指针判断，防止NPE。 5） 对于Session中获取的数据，建议进行NPE检查，避免空指针。 6） 级联调用obj.getA().getB().getC()；一连串调用，易产生NPE。</p>
-</li>
-</ol>
-<p>正例：使用JDK8的Optional类来防止NPE问题。</p>
-<ol>
-<li>【推荐】定义时区分unchecked / checked 异常，避免直接抛出new RuntimeException()，更不允许抛出Exception或者Throwable，应使用有业务含义的自定义异常。推荐业界已定义过的自定义异常，如：DAOException / ServiceException等。</li>
-<li>【参考】对于公司外的http/api开放接口必须使用“错误码”；而应用内部推荐异常抛出；跨应用间RPC调用优先考虑使用Result方式，封装isSuccess()方法、“错误码”、“错误简短信息”。 说明：关于RPC方法返回方式使用Result方式的理由： 1）使用抛异常返回方式，调用方如果没有捕获到就会产生运行时错误。 2）如果不加栈信息，只是new自定义异常，加入自己的理解的error message，对于调用端解决问题的帮助不会太多。如果加了栈信息，在频繁调用出错的情况下，数据序列化和传输的性能损耗也是问题。</li>
-<li>【参考】避免出现重复的代码（Don’t Repeat Yourself），即DRY原则。 说明：随意复制和粘贴代码，必然会导致代码的重复，在以后需要修改时，需要修改所有的副本，容易遗漏。必要时抽取共性方法，或者抽象公共类，甚至是组件化。 正例：一个类中有多个public方法，都需要进行数行相同的参数校验操作，这个时候请抽取</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3812,7 +3810,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3825,7 +3823,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
