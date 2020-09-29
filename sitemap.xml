@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://halomzh.github.io/2020/09/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    
+    <lastmod>2020-09-29</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/Zookeeper%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-29</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://halomzh.github.io/2020/09/29/SpringCloud%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2020-09-29</lastmod>
@@ -89,13 +103,6 @@
     <loc>https://halomzh.github.io/2020/09/28/Spring%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    
-    <lastmod>2020-09-27</lastmod>
     
   </url>
   
@@ -235,6 +242,13 @@
   </url>
   
   <url>
+    <loc>https://halomzh.github.io/tags/Zookeeper/</loc>
+    <lastmod>2020-09-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://halomzh.github.io/tags/SpringBoot/</loc>
     <lastmod>2020-09-29</lastmod>
     <changefreq>daily</changefreq>
@@ -343,13 +357,6 @@
   
   <url>
     <loc>https://halomzh.github.io/categories/%E6%A6%82%E8%A7%88/</loc>
-    <lastmod>2020-09-29</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/categories/%E9%9D%A2%E8%AF%95/</loc>
     <lastmod>2020-09-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
