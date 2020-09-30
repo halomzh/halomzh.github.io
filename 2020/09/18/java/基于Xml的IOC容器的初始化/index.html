@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"halomzh.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。其继承体系如下图所示： ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。 1、寻找入口我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Xml的IOC容器的初始化">
+<meta property="og:url" content="https://halomzh.github.io/2020/09/18/java/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="halomzh.github.io">
+<meta property="og:description" content="IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。其继承体系如下图所示： ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。 1、寻找入口我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-17e22cf5186678b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-c14cf25265e3e677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/24719542-7380c12d754ff550.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-09-18T05:06:09.000Z">
+<meta property="article:modified_time" content="2020-09-30T17:21:10.623Z">
+<meta property="article:author" content="halomzh">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<link rel="canonical" href="https://halomzh.github.io/2020/09/18/java/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基于Xml的IOC容器的初始化 | halomzh.github.io</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="halomzh.github.io" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">halomzh.github.io</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/18/java/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于Xml的IOC容器的初始化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-18 13:06:09" itemprop="dateCreated datePublished" datetime="2020-09-18T13:06:09+08:00">2020-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 01:21:10" itemprop="dateModified" datetime="2020-10-01T01:21:10+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">源码</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>IOC 容器的初始化包括BeanDefinition 的Resource 定位、加载和注册这三个基本的过程。<br>其继承体系如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/24719542-02d12bd0140643ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的Spring应用提供了一个共享的Bean 定义环境。</p>
+<h1 id="1、寻找入口"><a href="#1、寻找入口" class="headerlink" title="1、寻找入口"></a>1、寻找入口</h1><p>我们用的比较多的ClassPathXmlApplicationContext，通过main()方法启动:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext app = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;application.xml&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>先看其构造函数的调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ClassPathXmlApplicationContext</span><span class="params">(String configLocation)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="keyword">new</span> String[]&#123;configLocation&#125;, <span class="keyword">true</span>, (ApplicationContext)<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实际调用的构造函数为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="keyword">boolean</span> refresh, <span class="meta">@Nullable</span> ApplicationContext parent)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(parent);</span><br><span class="line">    <span class="keyword">this</span>.setConfigLocations(configLocations);</span><br><span class="line">    <span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">        <span class="keyword">this</span>.refresh();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有像AnnotationConfigApplicationContext 、FileSystemXmlApplicationContext 、<br>XmlWebApplicationContext 等都继承自父容器AbstractApplicationContext 主要用到了装饰器模式和策略模式，最终都是调用refresh()方法。</p>
+<h1 id="2、获得配置路径"><a href="#2、获得配置路径" class="headerlink" title="2、获得配置路径"></a>2、获得配置路径</h1><p>在创建ClassPathXmlApplicationContext 容器时，构造方法做以下两项重要工作：</p>
+<p>首先，调用父类容器的构造方法(super(parent)方法)为容器设置好Bean 资源加载器。</p>
+<p>然后， 再调用父类AbstractRefreshableConfigApplicationContext 的setConfigLocations(configLocations)方法设置Bean 配置信息的定位路径。</p>
+<p>通过追踪ClassPathXmlApplicationContext 的继承体系， 发现其父类的父类AbstractApplicationContext 中初始化IOC 容器所做的主要源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractApplicationContext</span> <span class="keyword">extends</span> <span class="title">DefaultResourceLoader</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">ConfigurableApplicationContext</span> </span>&#123;</span><br><span class="line">    <span class="comment">//静态初始化块，在整个容器创建过程中只执行一次</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">//为了避免应用程序在Weblogic8.1 关闭时出现类加载异常加载问题，加载IOC 容</span></span><br><span class="line">        <span class="comment">//器关闭事件(ContextClosedEvent)类</span></span><br><span class="line">        ContextClosedEvent.class.getName();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractApplicationContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.resourcePatternResolver = getResourcePatternResolver();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractApplicationContext</span><span class="params">(<span class="meta">@Nullable</span> ApplicationContext parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>();</span><br><span class="line">        setParent(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取一个Spring Source 的加载器用于读入Spring Bean 配置信息</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ResourcePatternResolver <span class="title">getResourcePatternResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//AbstractApplicationContext 继承DefaultResourceLoader，因此也是一个资源加载器</span></span><br><span class="line">        <span class="comment">//Spring 资源加载器，其getResource(String location)方法用于载入资源</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PathMatchingResourcePatternResolver(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AbstractApplicationContext 的默认构造方法中有调用PathMatchingResourcePatternResolver 的构造方法创建Spring 资源加载器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PathMatchingResourcePatternResolver</span><span class="params">(ResourceLoader resourceLoader)</span> </span>&#123;</span><br><span class="line">    Assert.notNull(resourceLoader, <span class="string">&quot;ResourceLoader must not be null&quot;</span>);</span><br><span class="line">    <span class="comment">//设置Spring 的资源加载器</span></span><br><span class="line">    <span class="keyword">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在设置容器的资源加载器之后，接下来ClassPathXmlApplicationContext 执行setConfigLocations()方法通过调用其父类AbstractRefreshableConfigApplicationContext 的方法进行对Bean 配置信息的定位，该方法的源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Set the config locations for this application context in init-param style,</span></span><br><span class="line"><span class="comment"> * i.e. with distinct locations separated by commas, semicolons or whitespace.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;If not set, the implementation may use a default as appropriate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//处理单个资源文件路径为一个字符串的情况</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConfigLocation</span><span class="params">(String location)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//String CONFIG_LOCATION_DELIMITERS = &quot;,; /t/n&quot;;</span></span><br><span class="line">    <span class="comment">//即多个资源文件路径之间用” ,; \t\n”分隔，解析成数组形式</span></span><br><span class="line">    setConfigLocations(StringUtils.tokenizeToStringArray(location, CONFIG_LOCATION_DELIMITERS));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Set the config locations for this application context.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;If not set, the implementation may use a default as appropriate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//解析Bean 定义资源文件的路径，处理多个资源文件字符串数组</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConfigLocations</span><span class="params">(<span class="meta">@Nullable</span> String... locations)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (locations != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Assert.noNullElements(locations, <span class="string">&quot;Config locations must not be null&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.configLocations = <span class="keyword">new</span> String[locations.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; locations.length; i++) &#123;</span><br><span class="line">            <span class="comment">// resolvePath 为同一个类中将字符串解析为路径的方法</span></span><br><span class="line">            <span class="keyword">this</span>.configLocations[i] = resolvePath(locations[i]).trim();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.configLocations = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这两个方法的源码我们可以看出，我们既可以使用一个字符串来配置多个Spring Bean 配置信息，也可以使用字符串数组，即下面两种方式都是可以的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassPathResource res = <span class="keyword">new</span> ClassPathResource(<span class="string">&quot;a.xml,b.xml&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>多个资源文件路径之间可以是用” , ; \t\n”等分隔。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassPathResource res =<span class="keyword">new</span> ClassPathResource(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;a.xml&quot;</span>,<span class="string">&quot;b.xml&quot;</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>至此，SpringIOC 容器在初始化时将配置的Bean 配置信息定位为Spring 封装的Resource。</p>
+<h1 id="3、开始启动"><a href="#3、开始启动" class="headerlink" title="3、开始启动"></a>3、开始启动</h1><p>SpringIOC 容器对Bean 配置资源的载入是从refresh()函数开始的，refresh()是一个模板方法，规定了IOC 容器的启动流程， 有些逻辑要交给其子类去实现。它对Bean 配置资源进行载入ClassPathXmlApplicationContext 通过调用其父类AbstractApplicationContext 的refresh()函数启动整个IOC 容器对Bean 定义的载入过程，现在我们来详细看看refresh()中的逻辑处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.startupShutdownMonitor) &#123;</span><br><span class="line">        <span class="comment">// Prepare this context for refreshing.</span></span><br><span class="line">        <span class="comment">//1、调用容器准备刷新的方法，获取容器的当时时间，同时给容器设置同步标识</span></span><br><span class="line">        prepareRefresh();</span><br><span class="line">        <span class="comment">// Tell the subclass to refresh the internal bean factory.</span></span><br><span class="line">        <span class="comment">//2、告诉子类启动refreshBeanFactory()方法，Bean 定义资源文件的载入从</span></span><br><span class="line">        <span class="comment">//子类的refreshBeanFactory()方法启动</span></span><br><span class="line">        ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();</span><br><span class="line">        <span class="comment">// Prepare the bean factory for use in this context.</span></span><br><span class="line">        <span class="comment">//3、为BeanFactory 配置容器特性，例如类加载器、事件处理器等</span></span><br><span class="line">        prepareBeanFactory(beanFactory);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// Allows post-processing of the bean factory in context subclasses.</span></span><br><span class="line">            <span class="comment">//4、为容器的某些子类指定特殊的BeanPost 事件处理器</span></span><br><span class="line">            postProcessBeanFactory(beanFactory);</span><br><span class="line">            <span class="comment">// Invoke factory processors registered as beans in the context.</span></span><br><span class="line">            <span class="comment">//5、调用所有注册的BeanFactoryPostProcessor 的Bean</span></span><br><span class="line">            invokeBeanFactoryPostProcessors(beanFactory);</span><br><span class="line">            <span class="comment">// Register bean processors that intercept bean creation.</span></span><br><span class="line">            <span class="comment">//6、为BeanFactory 注册BeanPost 事件处理器.</span></span><br><span class="line">            <span class="comment">//BeanPostProcessor 是Bean 后置处理器，用于监听容器触发的事件</span></span><br><span class="line">            registerBeanPostProcessors(beanFactory);</span><br><span class="line">            <span class="comment">// Initialize message source for this context.</span></span><br><span class="line">            <span class="comment">//7、初始化信息源，和国际化相关.</span></span><br><span class="line">            initMessageSource();</span><br><span class="line">            <span class="comment">// Initialize event multicaster for this context.</span></span><br><span class="line">            <span class="comment">//8、初始化容器事件传播器.</span></span><br><span class="line">            initApplicationEventMulticaster();</span><br><span class="line">            <span class="comment">// Initialize other special beans in specific context subclasses.</span></span><br><span class="line">            <span class="comment">//9、调用子类的某些特殊Bean 初始化方法</span></span><br><span class="line">            onRefresh();</span><br><span class="line">            <span class="comment">// Check for listener beans and register them.</span></span><br><span class="line">            <span class="comment">//10、为事件传播器注册事件监听器.</span></span><br><span class="line">            registerListeners();</span><br><span class="line">            <span class="comment">// Instantiate all remaining (non-lazy-init) singletons.</span></span><br><span class="line">            <span class="comment">//11、初始化所有剩余的单例Bean</span></span><br><span class="line">            finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">            <span class="comment">// Last step: publish corresponding event.</span></span><br><span class="line">            <span class="comment">//12、初始化容器的生命周期事件处理器，并发布容器的生命周期事件</span></span><br><span class="line">            finishRefresh();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (BeansException ex) &#123;</span><br><span class="line">            <span class="keyword">if</span> (logger.isWarnEnabled()) &#123;</span><br><span class="line">                logger.warn(<span class="string">&quot;Exception encountered during context initialization - &quot;</span> +</span><br><span class="line">                        <span class="string">&quot;cancelling refresh attempt: &quot;</span> + ex);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Destroy already created singletons to avoid dangling resources.</span></span><br><span class="line">            <span class="comment">//13、销毁已创建的Bean</span></span><br><span class="line">            destroyBeans();</span><br><span class="line">            <span class="comment">// Reset &#x27;active&#x27; flag.</span></span><br><span class="line">            <span class="comment">//14、取消refresh 操作，重置容器的同步标识.</span></span><br><span class="line">            cancelRefresh(ex);</span><br><span class="line">            <span class="comment">// Propagate exception to caller.</span></span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// Reset common introspection caches in Spring&#x27;s core, since we</span></span><br><span class="line">            <span class="comment">// might not ever need metadata for singleton beans anymore...</span></span><br><span class="line">            <span class="comment">//15、重设公共缓存</span></span><br><span class="line">            resetCommonCaches();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>refresh()方法主要为IOC 容器Bean 的生命周期管理提供条件，Spring IOC 容器载入Bean 配置信息从其子类容器的refreshBeanFactory() 方法启动， 所以整个refresh() 中“ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();”这句以后代码的都是注册容器的信息源和生命周期事件，我们前面说的载入就是从这句代码开始启动。</p>
+<p>refresh()方法的主要作用是：在创建IOC 容器前，如果已经有容器存在，则需要把已有的容器销毁和关闭，以保证在refresh 之后使用的是新建立起来的IOC 容器。它类似于对IOC 容器的重启，在新建立好的容器中对容器进行初始化，对Bean 配置资源进行载入。</p>
+<h1 id="4、创建容器"><a href="#4、创建容器" class="headerlink" title="4、创建容器"></a>4、创建容器</h1><p>obtainFreshBeanFactory()方法调用子类容器的refreshBeanFactory()方法，启动容器载入Bean 配置信息的过程，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ConfigurableListableBeanFactory <span class="title">obtainFreshBeanFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里使用了委派设计模式，父类定义了抽象的refreshBeanFactory()方法，具体实现调用子类容器的refreshBeanFactory()方法</span></span><br><span class="line">    refreshBeanFactory();</span><br><span class="line">    ConfigurableListableBeanFactory beanFactory = getBeanFactory();</span><br><span class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Bean factory for &quot;</span> + getDisplayName() + <span class="string">&quot;: &quot;</span> + beanFactory);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> beanFactory;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AbstractApplicationContext 类中只抽象定义了refreshBeanFactory()方法，容器真正调用的是其子类AbstractRefreshableApplicationContext 实现的refreshBeanFactory()方法，方法的源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">refreshBeanFactory</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="comment">//如果已经有容器，销毁容器中的bean，关闭容器</span></span><br><span class="line">    <span class="keyword">if</span> (hasBeanFactory()) &#123;</span><br><span class="line">        destroyBeans();</span><br><span class="line">        closeBeanFactory();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//创建IOC 容器</span></span><br><span class="line">        DefaultListableBeanFactory beanFactory = createBeanFactory();</span><br><span class="line">        beanFactory.setSerializationId(getId());</span><br><span class="line">        <span class="comment">//对IOC 容器进行定制化，如设置启动参数，开启注解的自动装配等</span></span><br><span class="line">        customizeBeanFactory(beanFactory);</span><br><span class="line">        <span class="comment">//调用载入Bean 定义的方法，主要这里又使用了一个委派模式，在当前类中只定义了抽象的loadBeanDefinitions 方法，具体的实现调用子类容器</span></span><br><span class="line">        loadBeanDefinitions(beanFactory);</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanFactoryMonitor) &#123;</span><br><span class="line">            <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">&quot;I/O error parsing bean definition source for &quot;</span> + getDisplayName(), ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中，先判断BeanFactory 是否存在，如果存在则先销毁beans 并关闭beanFactory，接着创建DefaultListableBeanFactory，并调用loadBeanDefinitions(beanFactory)装载bean 定义。</p>
+<h1 id="5、载入配置路径"><a href="#5、载入配置路径" class="headerlink" title="5、载入配置路径"></a>5、载入配置路径</h1><p>AbstractRefreshableApplicationContext 中只定义了抽象的loadBeanDefinitions 方法，容器真正调用的是其子类AbstractXmlApplicationContext 对该方法的实现，AbstractXmlApplicationContext的主要源码如下：<br>loadBeanDefinitions() 方法同样是抽象方法， 是由其子类实现的， 也即在AbstractXmlApplicationContext 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractXmlApplicationContext</span> <span class="keyword">extends</span> <span class="title">AbstractRefreshableConfigApplicationContext</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">//实现父类抽象的载入Bean 定义方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadBeanDefinitions</span><span class="params">(DefaultListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">//创建XmlBeanDefinitionReader，即创建Bean 读取器，并通过回调设置到容器中去，容器使用该读取器读取Bean 配置资源</span></span><br><span class="line">        XmlBeanDefinitionReader beanDefinitionReader = <span class="keyword">new</span> XmlBeanDefinitionReader(beanFactory);</span><br><span class="line">        <span class="comment">//为Bean 读取器设置Spring 资源加载器，AbstractXmlApplicationContext 的</span></span><br><span class="line">        <span class="comment">//祖先父类AbstractApplicationContext 继承DefaultResourceLoader，因此，容器本身也是一个资源加载器</span></span><br><span class="line">        beanDefinitionReader.setEnvironment(<span class="keyword">this</span>.getEnvironment());</span><br><span class="line">        beanDefinitionReader.setResourceLoader(<span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">//为Bean 读取器设置SAX xml 解析器</span></span><br><span class="line">        beanDefinitionReader.setEntityResolver(<span class="keyword">new</span> ResourceEntityResolver(<span class="keyword">this</span>));</span><br><span class="line">        <span class="comment">//当Bean 读取器读取Bean 定义的Xml 资源文件时，启用Xml 的校验机制</span></span><br><span class="line">        initBeanDefinitionReader(beanDefinitionReader);</span><br><span class="line">        <span class="comment">//Bean 读取器真正实现加载的方法</span></span><br><span class="line">        loadBeanDefinitions(beanDefinitionReader);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initBeanDefinitionReader</span><span class="params">(XmlBeanDefinitionReader reader)</span> </span>&#123;</span><br><span class="line">        reader.setValidating(<span class="keyword">this</span>.validating);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Xml Bean 读取器加载Bean 配置资源</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadBeanDefinitions</span><span class="params">(XmlBeanDefinitionReader reader)</span> <span class="keyword">throws</span> BeansException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">//获取Bean 配置资源的定位</span></span><br><span class="line">        Resource[] configResources = getConfigResources();</span><br><span class="line">        <span class="keyword">if</span> (configResources != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//Xml Bean 读取器调用其父类AbstractBeanDefinitionReader 读取定位的Bean 配置资源</span></span><br><span class="line">            reader.loadBeanDefinitions(configResources);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果子类中获取的Bean 配置资源定位为空，则获取ClassPathXmlApplicationContext</span></span><br><span class="line">        <span class="comment">// 构造方法中setConfigLocations 方法设置的资源</span></span><br><span class="line">        String[] configLocations = getConfigLocations();</span><br><span class="line">        <span class="keyword">if</span> (configLocations != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//Xml Bean 读取器调用其父类AbstractBeanDefinitionReader 读取定位的Bean 配置资源</span></span><br><span class="line">            reader.loadBeanDefinitions(configLocations);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这里又使用了一个委托模式，调用子类的获取Bean 配置资源定位的方法</span></span><br><span class="line">    <span class="comment">//该方法在ClassPathXmlApplicationContext 中进行实现，对于我们</span></span><br><span class="line">    <span class="comment">//举例分析源码的ClassPathXmlApplicationContext 没有使用该方法</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="keyword">protected</span> Resource[] getConfigResources() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以XmlBean 读取器的其中一种策略XmlBeanDefinitionReader 为例。XmlBeanDefinitionReader 调用其父类AbstractBeanDefinitionReader 的reader.loadBeanDefinitions()方法读取Bean 配置资源。<br>由于我们使用ClassPathXmlApplicationContext 作为例子分析，因此getConfigResources 的返回值为null，因此程序执行reader.loadBeanDefinitions(configLocations)分支。</p>
+<h1 id="6、分配路径处理策略"><a href="#6、分配路径处理策略" class="headerlink" title="6、分配路径处理策略"></a>6、分配路径处理策略</h1><p>在XmlBeanDefinitionReader 的抽象父类AbstractBeanDefinitionReader 中定义了载入过程。<br>AbstractBeanDefinitionReader 的loadBeanDefinitions()方法源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//重载方法，调用下面的loadBeanDefinitions(String, Set&lt;Resource&gt;);方法</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">loadBeanDefinitions</span><span class="params">(String location)</span> <span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> loadBeanDefinitions(location, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">loadBeanDefinitions</span><span class="params">(String location, <span class="meta">@Nullable</span> Set&lt;Resource&gt; actualResources)</span> <span class="keyword">throws</span></span></span><br><span class="line"><span class="function">        BeanDefinitionStoreException </span>&#123;</span><br><span class="line">    <span class="comment">//获取在IOC 容器初始化过程中设置的资源加载器</span></span><br><span class="line">    ResourceLoader resourceLoader = getResourceLoader();</span><br><span class="line">    <span class="keyword">if</span> (resourceLoader == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(</span><br><span class="line">                <span class="string">&quot;Cannot import bean definitions from location [&quot;</span> + location + <span class="string">&quot;]: no ResourceLoader available&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (resourceLoader <span class="keyword">instanceof</span> ResourcePatternResolver) &#123;</span><br><span class="line">        <span class="comment">// Resource pattern matching available.</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//将指定位置的Bean 配置信息解析为Spring IOC 容器封装的资源</span></span><br><span class="line">            <span class="comment">//加载多个指定位置的Bean 配置信息</span></span><br><span class="line">            Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);</span><br><span class="line">            <span class="comment">//委派调用其子类XmlBeanDefinitionReader 的方法，实现加载功能</span></span><br><span class="line">            <span class="keyword">int</span> loadCount = loadBeanDefinitions(resources);</span><br><span class="line">            <span class="keyword">if</span> (actualResources != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Resource resource : resources) &#123;</span><br><span class="line">                    actualResources.add(resource);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">                logger.debug(<span class="string">&quot;Loaded &quot;</span> + loadCount + <span class="string">&quot; bean definitions from location pattern [&quot;</span> + location + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> loadCount;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(</span><br><span class="line">                    <span class="string">&quot;Could not resolve bean definition resource pattern [&quot;</span> + location + <span class="string">&quot;]&quot;</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Can only load single resources by absolute URL.</span></span><br><span class="line">        <span class="comment">//将指定位置的Bean 配置信息解析为Spring IOC 容器封装的资源</span></span><br><span class="line">        <span class="comment">//加载单个指定位置的Bean 配置信息</span></span><br><span class="line">        Resource resource = resourceLoader.getResource(location);</span><br><span class="line">        <span class="comment">//委派调用其子类XmlBeanDefinitionReader 的方法，实现加载功能</span></span><br><span class="line">        <span class="keyword">int</span> loadCount = loadBeanDefinitions(resource);</span><br><span class="line">        <span class="keyword">if</span> (actualResources != <span class="keyword">null</span>) &#123;</span><br><span class="line">            actualResources.add(resource);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">            logger.debug(<span class="string">&quot;Loaded &quot;</span> + loadCount + <span class="string">&quot; bean definitions from location [&quot;</span> + location + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> loadCount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//重载方法，调用loadBeanDefinitions(String);</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">loadBeanDefinitions</span><span class="params">(String... locations)</span> <span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</span><br><span class="line">    Assert.notNull(locations, <span class="string">&quot;Location array must not be null&quot;</span>);</span><br><span class="line">    <span class="keyword">int</span> counter = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (String location : locations) &#123;</span><br><span class="line">        counter += loadBeanDefinitions(location);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> counter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AbstractRefreshableConfigApplicationContext 的loadBeanDefinitions(Resource…resources) 方法实际上是调用AbstractBeanDefinitionReader 的loadBeanDefinitions()方法。<br>从对AbstractBeanDefinitionReader 的loadBeanDefinitions()方法源码分析可以看出该方法就做了两件事：<br>首先，调用资源加载器的获取资源方法resourceLoader.getResource(location)，获取到要加载的资源。<br>其次，真正执行加载功能是其子类XmlBeanDefinitionReader 的loadBeanDefinitions()方法。在loadBeanDefinitions()方法中调用了AbstractApplicationContext 的getResources()方法，跟进去之后发现getResources()方法其实定义在ResourcePatternResolver 中，此时，我们有必要来看一下ResourcePatternResolver 的全类图：<br><img src="https://upload-images.jianshu.io/upload_images/24719542-17e22cf5186678b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/24719542-c14cf25265e3e677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>从上面可以看到ResourceLoader 与ApplicationContext 的继承关系，可以看出其实际调用的是DefaultResourceLoader 中的getSource() 方法定位Resource ， 因为ClassPathXmlApplicationContext 本身就是DefaultResourceLoader 的实现类，所以此时又回到了ClassPathXmlApplicationContext 中来。</p>
+<h1 id="7、解析配置文件路径"><a href="#7、解析配置文件路径" class="headerlink" title="7、解析配置文件路径"></a>7、解析配置文件路径</h1><p>XmlBeanDefinitionReader 通过调用ClassPathXmlApplicationContext 的父类DefaultResourceLoader 的getResource()方法获取要加载的资源<br>//TODO添加源码解析</p>
+<h1 id="8、开始读取配置内容"><a href="#8、开始读取配置内容" class="headerlink" title="8、开始读取配置内容"></a>8、开始读取配置内容</h1><p>继续回到XmlBeanDefinitionReader 的loadBeanDefinitions(Resource …)方法看到代表bean 文件的资源定义以后的载入过程。<br>//TODO添加源码解析</p>
+<h1 id="9、准备文档对象"><a href="#9、准备文档对象" class="headerlink" title="9、准备文档对象"></a>9、准备文档对象</h1><p>DocumentLoader 将Bean 配置资源转换成Document 对象<br>//TODO添加源码解析</p>
+<h1 id="10、分配解析策略"><a href="#10、分配解析策略" class="headerlink" title="10、分配解析策略"></a>10、分配解析策略</h1><p>XmlBeanDefinitionReader 类中的doLoadBeanDefinition()方法是从特定XML 文件中实际载入Bean 配置资源的方法，该方法在载入Bean 配置资源之后将其转换为Document 对象，接下来调用registerBeanDefinitions() 启动Spring IOC 容器对Bean 定义的解析过程。<br>//TODO添加源码解析</p>
+<h1 id="11、将配置载入内存"><a href="#11、将配置载入内存" class="headerlink" title="11、将配置载入内存"></a>11、将配置载入内存</h1><p>BeanDefinitionDocumentReader 接口通过registerBeanDefinitions() 方法调用其实现类DefaultBeanDefinitionDocumentReader 对Document 对象进行解析。<br>//TODO添加源码解析</p>
+<h1 id="12、载入-lt-bean-gt-元素"><a href="#12、载入-lt-bean-gt-元素" class="headerlink" title="12、载入&lt; bean &gt;元素"></a>12、载入&lt; bean &gt;元素</h1><p>Bean 配置信息中的&lt; import &gt;和&lt; alias &gt;元素解析在DefaultBeanDefinitionDocumentReader 中已经完成，对Bean 配置信息中使用最多的<bean>元素交由BeanDefinitionParserDelegate 来解析。<br>//TODO添加源码解析</p>
+<h1 id="13、载入-lt-property-gt-元素"><a href="#13、载入-lt-property-gt-元素" class="headerlink" title="13、载入&lt; property &gt;元素"></a>13、载入&lt; property &gt;元素</h1><p>BeanDefinitionParserDelegate 在解析&lt; Bean &gt;调用parsePropertyElements()方法解析&lt; Bean &gt;元素中的&lt; property &gt;属性子元素。<br>//TODO添加源码解析</p>
+<h1 id="14、载入-lt-property-gt-的子元素"><a href="#14、载入-lt-property-gt-的子元素" class="headerlink" title="14、载入&lt; property &gt;的子元素"></a>14、载入&lt; property &gt;的子元素</h1><p>在BeanDefinitionParserDelegate 类中的parsePropertySubElement()方法对&lt; property &gt;中的子元素解析。<br>//TODO添加源码解析</p>
+<h1 id="15、载入-lt-list-gt-的子元素"><a href="#15、载入-lt-list-gt-的子元素" class="headerlink" title="15、载入&lt; list &gt;的子元素"></a>15、载入&lt; list &gt;的子元素</h1><p>在BeanDefinitionParserDelegate 类中的parseListElement()方法就是具体实现解析&lt; property &gt;元素中的&lt; list &gt;集合子元素。<br>//TODO添加源码解析</p>
+<h1 id="16、分配注册策略"><a href="#16、分配注册策略" class="headerlink" title="16、分配注册策略"></a>16、分配注册策略</h1><p>让我们继续跟踪程序的执行顺序，接下来我们来分析DefaultBeanDefinitionDocumentReader 对Bean 定义转换的Document 对象解析的流程中， 在其parseDefaultElement() 方法中完成对Document 对象的解析后得到封装BeanDefinition 的BeanDefinitionHold 对象， 然后调用BeanDefinitionReaderUtils 的registerBeanDefinition() 方法向IOC 容器注册解析的Bean 。</p>
+<p>BeanDefinitionReaderUtils 的注册的源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将解析的BeanDefinitionHold 注册到容器中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerBeanDefinition</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</span><br><span class="line">    <span class="comment">//获取解析的BeanDefinition 的名称</span></span><br><span class="line">    String beanName = definitionHolder.getBeanName();</span><br><span class="line">    <span class="comment">//向IOC 容器注册BeanDefinition</span></span><br><span class="line">    registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());</span><br><span class="line">    <span class="comment">//如果解析的BeanDefinition 有别名，向容器为其注册别名</span></span><br><span class="line">    String[] aliases = definitionHolder.getAliases();</span><br><span class="line">    <span class="keyword">if</span> (aliases != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (String alias : aliases) &#123;</span><br><span class="line">            registry.registerAlias(beanName, alias);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当调用BeanDefinitionReaderUtils 向IOC 容器注册解析的BeanDefinition 时，真正完成注册功能的是DefaultListableBeanFactory。</p>
+<h1 id="17、向容器注册"><a href="#17、向容器注册" class="headerlink" title="17、向容器注册"></a>17、向容器注册</h1><p>DefaultListableBeanFactory 中使用一个HashMap 的集合对象存放IOC 容器中注册解析的BeanDefinition，向IOC 容器注册的主要源码如下：<br><img src="https://upload-images.jianshu.io/upload_images/24719542-7380c12d754ff550.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//存储注册信息的BeanDefinition</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, BeanDefinition&gt; beanDefinitionMap = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;(<span class="number">256</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//向IOC 容器注册解析的BeanDefiniton</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerBeanDefinition</span><span class="params">(String beanName, BeanDefinition beanDefinition)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</span><br><span class="line">    Assert.hasText(beanName, <span class="string">&quot;Bean name must not be empty&quot;</span>);</span><br><span class="line">    Assert.notNull(beanDefinition, <span class="string">&quot;BeanDefinition must not be null&quot;</span>);</span><br><span class="line">    <span class="comment">//校验解析的BeanDefiniton</span></span><br><span class="line">    <span class="keyword">if</span> (beanDefinition <span class="keyword">instanceof</span> AbstractBeanDefinition) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ((AbstractBeanDefinition) beanDefinition).validate();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</span><br><span class="line">                    <span class="string">&quot;Validation of bean definition failed&quot;</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    BeanDefinition oldBeanDefinition;</span><br><span class="line">    oldBeanDefinition = <span class="keyword">this</span>.beanDefinitionMap.get(beanName);</span><br><span class="line">    <span class="keyword">if</span> (oldBeanDefinition != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isAllowBeanDefinitionOverriding()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</span><br><span class="line">                    <span class="string">&quot;Cannot register bean definition [&quot;</span> + beanDefinition + <span class="string">&quot;] for bean &#x27;&quot;</span> + beanName +</span><br><span class="line">                            <span class="string">&quot;&#x27;: There is already [&quot;</span> + oldBeanDefinition + <span class="string">&quot;] bound.&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldBeanDefinition.getRole() &lt; beanDefinition.getRole()) &#123;</span><br><span class="line">            <span class="comment">// e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.logger.isWarnEnabled()) &#123;</span><br><span class="line">                <span class="keyword">this</span>.logger.warn(<span class="string">&quot;Overriding user-defined bean definition for bean &#x27;&quot;</span> + beanName +</span><br><span class="line">                        <span class="string">&quot;&#x27; with a framework-generated bean definition: replacing [&quot;</span> +</span><br><span class="line">                        oldBeanDefinition + <span class="string">&quot;] with [&quot;</span> + beanDefinition + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!beanDefinition.equals(oldBeanDefinition)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.logger.isInfoEnabled()) &#123;</span><br><span class="line">                <span class="keyword">this</span>.logger.info(<span class="string">&quot;Overriding bean definition for bean &#x27;&quot;</span> + beanName +</span><br><span class="line">                        <span class="string">&quot;&#x27; with a different definition: replacing [&quot;</span> + oldBeanDefinition +</span><br><span class="line">                        <span class="string">&quot;] with [&quot;</span> + beanDefinition + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.logger.isDebugEnabled()) &#123;</span><br><span class="line">                <span class="keyword">this</span>.logger.debug(<span class="string">&quot;Overriding bean definition for bean &#x27;&quot;</span> + beanName +</span><br><span class="line">                        <span class="string">&quot;&#x27; with an equivalent definition: replacing [&quot;</span> + oldBeanDefinition +</span><br><span class="line">                        <span class="string">&quot;] with [&quot;</span> + beanDefinition + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (hasBeanCreationStarted()) &#123;</span><br><span class="line">            <span class="comment">//注册的过程中需要线程同步，以保证数据的一致性</span></span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanDefinitionMap) &#123;</span><br><span class="line">                <span class="keyword">this</span>.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">                List&lt;String&gt; updatedDefinitions = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.beanDefinitionNames.size() + <span class="number">1</span>);</span><br><span class="line">                updatedDefinitions.addAll(<span class="keyword">this</span>.beanDefinitionNames);</span><br><span class="line">                updatedDefinitions.add(beanName);</span><br><span class="line">                <span class="keyword">this</span>.beanDefinitionNames = updatedDefinitions;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.manualSingletonNames.contains(beanName)) &#123;</span><br><span class="line">                    Set&lt;String&gt; updatedSingletons = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="keyword">this</span>.manualSingletonNames);</span><br><span class="line">                    updatedSingletons.remove(beanName);</span><br><span class="line">                    <span class="keyword">this</span>.manualSingletonNames = updatedSingletons;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">            <span class="keyword">this</span>.beanDefinitionNames.add(beanName);</span><br><span class="line">            <span class="keyword">this</span>.manualSingletonNames.remove(beanName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.frozenBeanDefinitionNames = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//检查是否有同名的BeanDefinition 已经在IOC 容器中注册</span></span><br><span class="line">    <span class="keyword">if</span> (oldBeanDefinition != <span class="keyword">null</span> || containsSingleton(beanName)) &#123;</span><br><span class="line">        <span class="comment">//重置所有已经注册过的BeanDefinition 的缓存</span></span><br><span class="line">        resetBeanDefinition(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，Bean 配置信息中配置的Bean 被解析过后，已经注册到IOC 容器中，被容器管理起来，真正完成了IOC 容器初始化所做的全部工作。现在IOC 容器中已经建立了整个Bean 的配置信息，这些BeanDefinition 信息已经可以使用，并且可以被检索，IOC 容器的作用就是对这些注册的Bean 定义信息进行处理和维护。这些的注册的Bean 定义信息是IOC 容器控制反转的基础，正是有了这些注册的数据，容器才可以进行依赖注入。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/18/java/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/" rel="prev" title="Spring核心容器类">
+      <i class="fa fa-chevron-left"></i> Spring核心容器类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/18/java/%E5%9F%BA%E4%BA%8EAnnotation%E7%9A%84IOC%E5%88%9D%E5%A7%8B%E5%8C%96/" rel="next" title="基于Annotation的IOC初始化">
+      基于Annotation的IOC初始化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E5%AF%BB%E6%89%BE%E5%85%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">1、寻找入口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E8%8E%B7%E5%BE%97%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84"><span class="nav-number">2.</span> <span class="nav-text">2、获得配置路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E5%BC%80%E5%A7%8B%E5%90%AF%E5%8A%A8"><span class="nav-number">3.</span> <span class="nav-text">3、开始启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%88%9B%E5%BB%BA%E5%AE%B9%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">4、创建容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E8%BD%BD%E5%85%A5%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84"><span class="nav-number">5.</span> <span class="nav-text">5、载入配置路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%88%86%E9%85%8D%E8%B7%AF%E5%BE%84%E5%A4%84%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">6.</span> <span class="nav-text">6、分配路径处理策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="nav-number">7.</span> <span class="nav-text">7、解析配置文件路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8%E3%80%81%E5%BC%80%E5%A7%8B%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E5%86%85%E5%AE%B9"><span class="nav-number">8.</span> <span class="nav-text">8、开始读取配置内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9%E3%80%81%E5%87%86%E5%A4%87%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1"><span class="nav-number">9.</span> <span class="nav-text">9、准备文档对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10%E3%80%81%E5%88%86%E9%85%8D%E8%A7%A3%E6%9E%90%E7%AD%96%E7%95%A5"><span class="nav-number">10.</span> <span class="nav-text">10、分配解析策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11%E3%80%81%E5%B0%86%E9%85%8D%E7%BD%AE%E8%BD%BD%E5%85%A5%E5%86%85%E5%AD%98"><span class="nav-number">11.</span> <span class="nav-text">11、将配置载入内存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12%E3%80%81%E8%BD%BD%E5%85%A5-lt-bean-gt-%E5%85%83%E7%B4%A0"><span class="nav-number">12.</span> <span class="nav-text">12、载入&lt; bean &gt;元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13%E3%80%81%E8%BD%BD%E5%85%A5-lt-property-gt-%E5%85%83%E7%B4%A0"><span class="nav-number">13.</span> <span class="nav-text">13、载入&lt; property &gt;元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14%E3%80%81%E8%BD%BD%E5%85%A5-lt-property-gt-%E7%9A%84%E5%AD%90%E5%85%83%E7%B4%A0"><span class="nav-number">14.</span> <span class="nav-text">14、载入&lt; property &gt;的子元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15%E3%80%81%E8%BD%BD%E5%85%A5-lt-list-gt-%E7%9A%84%E5%AD%90%E5%85%83%E7%B4%A0"><span class="nav-number">15.</span> <span class="nav-text">15、载入&lt; list &gt;的子元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16%E3%80%81%E5%88%86%E9%85%8D%E6%B3%A8%E5%86%8C%E7%AD%96%E7%95%A5"><span class="nav-number">16.</span> <span class="nav-text">16、分配注册策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17%E3%80%81%E5%90%91%E5%AE%B9%E5%99%A8%E6%B3%A8%E5%86%8C"><span class="nav-number">17.</span> <span class="nav-text">17、向容器注册</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">halomzh</p>
+  <div class="site-description" itemprop="description">学习记录</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">halomzh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -2,331 +2,751 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/02.%E8%AF%AD%E8%A8%80%E5%85%83%E7%B4%A0/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/100.Python%E9%9D%A2%E8%AF%95%E9%A2%98%E9%9B%86/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/03.%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/93.MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/04.%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/94.%E7%BD%91%E7%BB%9CAPI%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/05.%E6%9E%84%E9%80%A0%E7%A8%8B%E5%BA%8F%E9%80%BB%E8%BE%91/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/96.%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/06.%E5%87%BD%E6%95%B0%E5%92%8C%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/99.%E9%9D%A2%E8%AF%95%E4%B8%AD%E7%9A%84%E5%85%AC%E5%85%B1%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/07.%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/91.%E5%9B%A2%E9%98%9F%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/08.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/97.%E7%94%B5%E5%95%86%E7%BD%91%E7%AB%99%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E5%89%96%E6%9E%90/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/09.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/98.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E4%B8%8A%E7%BA%BF%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/10.%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E5%92%8C%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/92.Docker%E5%AE%B9%E5%99%A8%E8%AF%A6%E8%A7%A3/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/11.%E6%96%87%E4%BB%B6%E5%92%8C%E5%BC%82%E5%B8%B8/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day91-100/95.%E4%BD%BF%E7%94%A8Django%E5%BC%80%E5%8F%91%E5%95%86%E4%B8%9A%E9%A1%B9%E7%9B%AE/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/13.%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/77.Pandas%E7%9A%84%E5%BA%94%E7%94%A8/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/12.%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/14.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%92%8C%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/79.Matplotlib%E5%92%8C%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/15.%E5%9B%BE%E5%83%8F%E5%92%8C%E5%8A%9E%E5%85%AC%E6%96%87%E6%A1%A3%E5%A4%84%E7%90%86/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/80.k%E6%9C%80%E8%BF%91%E9%82%BB%E5%88%86%E7%B1%BB/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/pythonn/01.%E5%88%9D%E8%AF%86Python/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/81.%E5%86%B3%E7%AD%96%E6%A0%91/</loc>
     
     <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/82.%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/29/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/Dubbo%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/83.%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/29/SpringMvc%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/Zookeeper%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/84.K-%E5%9D%87%E5%80%BC%E8%81%9A%E7%B1%BB/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/29/SpringCloud%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/85.%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/28/SpringBoot%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/86.%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%85%A5%E9%97%A8/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6MQ/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/87.%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%BF%9B%E9%98%B6/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/27/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/88.Tensorflow%E5%85%A5%E9%97%A8/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/Java%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/27/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88JVM%EF%BC%89/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/89.Tensorflow%E5%AE%9E%E6%88%98/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/27/Java%E5%BC%82%E5%B8%B8/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/27/Mybatis%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/90.%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/28/Redis%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-29</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/28/Spring%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day56-60/56-60.%E7%94%A8FastAPI%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3/</loc>
     
-    <lastmod>2020-09-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/18/%E5%9F%BA%E4%BA%8EAnnotation%E7%9A%84IOC%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/18/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/43.%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%92%8CAjax%E8%AF%B7%E6%B1%82/</loc>
     
-    <lastmod>2020-09-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/18/AOP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/25/AOP%E5%B0%8F%E7%BB%93/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/45.%E5%88%B6%E4%BD%9C%E6%8A%A5%E8%A1%A8/</loc>
     
-    <lastmod>2020-09-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/18/AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/21/Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/46.%E6%97%A5%E5%BF%97%E5%92%8C%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E6%A0%8F/</loc>
     
-    <lastmod>2020-09-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/25/Bean%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%B0%8F%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/23/Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/47.%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%BA%94%E7%94%A8/</loc>
     
-    <lastmod>2020-09-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/18/IOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%8F%E7%BB%93/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/18/IOC%E5%AE%B9%E5%99%A8%E4%B8%AD%E9%82%A3%E4%BA%9B%E9%B2%9C%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E7%BB%86%E8%8A%82/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/48.%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/</loc>
     
-    <lastmod>2020-09-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/2020/09/18/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/</loc>
-    
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/21/Spring%E4%BA%8B%E5%8A%A1/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/50.RESTful%E6%9E%B6%E6%9E%84%E5%92%8CDRF%E8%BF%9B%E9%98%B6/</loc>
     
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/2020/09/18/Spring%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/</loc>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/51.%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98/</loc>
     
-    <lastmod>2020-09-25</lastmod>
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/52.%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/53.%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/54.%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/55.%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%BA%BF/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day61-65/62.Tornado%E5%85%A5%E9%97%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day61-65/63.Tornado%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E5%8C%96/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day61-65/64.WebSocket%E7%9A%84%E5%BA%94%E7%94%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day61-65/65.%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/67.%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8C%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/68.%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/69.%E5%B9%B6%E5%8F%91%E4%B8%8B%E8%BD%BD/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/70.%E8%A7%A3%E6%9E%90%E5%8A%A8%E6%80%81%E5%86%85%E5%AE%B9/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/72.Scrapy%E5%85%A5%E9%97%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/73.Scrapy%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/74.Scrapy%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E7%8E%B0/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day76-90/76.%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/75.%E5%B8%B8%E8%A7%81%E5%8F%8D%E7%88%AC%E7%AD%96%E7%95%A5%E5%8F%8A%E5%BA%94%E5%AF%B9%E6%96%B9%E6%A1%88/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/44.Cookie%E5%92%8CSession/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/49.RESTful%E6%9E%B6%E6%9E%84%E5%92%8CDRF%E5%85%A5%E9%97%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day66-75/66.%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/42.%E6%B7%B1%E5%85%A5%E6%A8%A1%E5%9E%8B/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/10.%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E5%92%8C%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/11.%E6%96%87%E4%BB%B6%E5%92%8C%E5%BC%82%E5%B8%B8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/13.%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day21-30/21-30.Web%E5%89%8D%E7%AB%AF%E6%A6%82%E8%BF%B0/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day36-40/39-40.NoSQL%E5%85%A5%E9%97%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day41-55/41.Django%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/01.%E5%88%9D%E8%AF%86Python/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/02.%E8%AF%AD%E8%A8%80%E5%85%83%E7%B4%A0/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/03.%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/04.%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/05.%E6%9E%84%E9%80%A0%E7%A8%8B%E5%BA%8F%E9%80%BB%E8%BE%91/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/06.%E5%87%BD%E6%95%B0%E5%92%8C%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/08.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/12.%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/15.%E5%9B%BE%E5%83%8F%E5%92%8C%E5%8A%9E%E5%85%AC%E6%96%87%E6%A1%A3%E5%A4%84%E7%90%86/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/07.%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/09.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day01-15/14.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%92%8C%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day16-20/16-20.Python%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day36-40/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day31-35/31-35.%E7%8E%A9%E8%BD%ACLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/pythonn/Day61-65/61.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/Zookeeper%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/SpringMvc%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/SpringCloud%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/28/java/SpringBoot%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/28/java/Spring%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/Spring%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/21/java/Spring%E4%BA%8B%E5%8A%A1/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/28/java/Redis%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Mybatis%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Java%E5%BC%82%E5%B8%B8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88JVM%EF%BC%89/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Java%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/IOC%E5%AE%B9%E5%99%A8%E4%B8%AD%E9%82%A3%E4%BA%9B%E9%B2%9C%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E7%BB%86%E8%8A%82/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/IOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%8F%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/Dubbo%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/23/java/Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E6%89%80%E6%9C%89%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%8F%8A%E5%85%B6%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/25/java/Bean%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%B0%8F%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/21/java/Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/25/java/AOP%E5%B0%8F%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/AOP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6MQ/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/27/java/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/%E5%9F%BA%E4%BA%8EXml%E7%9A%84IOC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/18/java/%E5%9F%BA%E4%BA%8EAnnotation%E7%9A%84IOC%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://halomzh.github.io/2020/09/29/java/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-09-30</lastmod>
     
   </url>
   
@@ -389,14 +809,7 @@
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/tags/python/</loc>
-    <lastmod>2020-09-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://halomzh.github.io/tags/python%E5%85%A5%E9%97%A8/</loc>
+    <loc>https://halomzh.github.io/tags/Python100%E5%A4%A9/</loc>
     <lastmod>2020-09-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -538,7 +951,7 @@
   </url>
   
   <url>
-    <loc>https://halomzh.github.io/categories/python%E5%85%A5%E9%97%A8/</loc>
+    <loc>https://halomzh.github.io/categories/Python%E5%85%A5%E9%97%A8/</loc>
     <lastmod>2020-09-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
