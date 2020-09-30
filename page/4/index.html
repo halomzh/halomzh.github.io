@@ -1087,7 +1087,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day91-100/100.Python%E9%9D%A2%E8%AF%95%E9%A2%98%E9%9B%86/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day76-90/76.%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1101,7 +1101,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/Day91-100/100.Python%E9%9D%A2%E8%AF%95%E9%A2%98%E9%9B%86/" class="post-title-link" itemprop="url">Python面试题</a>
+            <a href="/2020/09/29/pythonn/Day76-90/76.%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">机器学习基础</a>
         </h2>
 
         <div class="post-meta">
@@ -1141,163 +1141,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Python面试题"><a href="#Python面试题" class="headerlink" title="Python面试题"></a>Python面试题</h2><ol>
-<li><p>说一说Python中的新式类和旧式类有什么区别。</p>
-<p>答：</p>
-</li>
-<li><p>Python中<code>is</code>运算符和<code>==</code>运算符有什么区别？</p>
-<p>答：请参考<a href="../%E7%95%AA%E5%A4%96%E7%AF%87/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E9%82%A3%E4%BA%9B%E5%9D%91.md">《那些年我们踩过的那些坑》</a>。</p>
-</li>
-<li><p>Python中如何动态设置和获取对象属性？</p>
-<p>答：<code>setattr(object, name, value)</code>和<code>getattr(object, name[, default])</code>内置函数，其中<code>object</code>是对象，<code>name</code>是对象的属性名，<code>value</code>是属性值。这两个函数会调用对象的<code>__getattr__</code>和<code>__setattr__</code>魔术方法。</p>
-</li>
-<li><p>Python如何实现内存管理？有没有可能出现内存泄露的问题？</p>
-<p>答：</p>
-</li>
-<li><p>阐述列表和集合的底层实现原理。</p>
-<p>答：</p>
-</li>
-<li><p>现有字典<code>d = &#123;&#39;a&#39;: 24, &#39;g&#39;: 52, &#39;i&#39;: 12, &#39;k&#39;: 33&#125;</code>，如何按字典中的值对字典进行排序得到排序后的字典。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现将字符串<code>k1:v1|k2:v2|k3:v3</code>处理成字典<code>&#123;&#39;k1&#39;: &#39;v1&#39;, &#39;k2&#39;: &#39;v2&#39;, &#39;k3&#39;: &#39;v3&#39;&#125;</code>。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;key: value <span class="keyword">for</span> key, value <span class="keyword">in</span> (</span><br><span class="line">    item.split(<span class="string">&#x27;:&#x27;</span>) <span class="keyword">for</span> item <span class="keyword">in</span> <span class="string">&#x27;k1:v1|k2:v2|k3:v3&#x27;</span>.split(<span class="string">&#x27;|&#x27;</span>)</span><br><span class="line">)&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>写出生成从<code>m</code>到<code>n</code>公差为<code>k</code>的等差数列的生成器。</p>
-<p>答:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(value <span class="keyword">for</span> value <span class="keyword">in</span> range(m, n + <span class="number">1</span>, k))</span><br></pre></td></tr></table></figure>
-
-<p>或</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">m, n, k</span>):</span></span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> range(m, n + <span class="number">1</span>, k):</span><br><span class="line">        <span class="keyword">yield</span> value</span><br></pre></td></tr></table></figure>
-
-<p>或</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">m, n, k</span>):</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="keyword">from</span> range(m, n + <span class="number">1</span>, k)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>请写出你能想到的反转一个字符串的方式。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;</span>.join(reversed(<span class="string">&#x27;hello&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello&#x27;</span>[::<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverse</span>(<span class="params">content</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(content[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(content) - <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-1</span>))</span><br><span class="line"></span><br><span class="line">reverse(<span class="string">&#x27;hello&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverse</span>(<span class="params">content</span>):</span></span><br><span class="line">    <span class="keyword">return</span> reverse(content[<span class="number">1</span>:]) + content[<span class="number">0</span>] <span class="keyword">if</span> len(content) &gt; <span class="number">1</span> <span class="keyword">else</span> content</span><br><span class="line"></span><br><span class="line">reverse(<span class="string">&#x27;hello&#x27;</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不使用任何内置函数，将字符串<code>&#39;123&#39;</code>转换成整数<code>123</code>。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nums = &#123;<span class="string">&#x27;0&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;1&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;2&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;3&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;4&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;5&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;6&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;7&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;8&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;9&#x27;</span>: <span class="number">9</span>&#125;</span><br><span class="line">total = <span class="number">0</span> </span><br><span class="line"><span class="keyword">for</span> ch <span class="keyword">in</span> <span class="string">&#x27;123&#x27;</span>: </span><br><span class="line">    total *= <span class="number">10</span> </span><br><span class="line">    total += nums[ch]</span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>写一个返回bool值的函数，判断给定的非负整数是不是回文数。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>用一行代码实现求任意非负整数的阶乘。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"></span><br><span class="line">(<span class="keyword">lambda</span> num: reduce(int.__mul__, range(<span class="number">2</span>, num + <span class="number">1</span>), <span class="number">1</span>))(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>写一个函数返回传入的整数列表中第二大的元素。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除列表中的重复元素并保留原有的顺序。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>找出两个列表中的相同元素和不同元素。</p>
-<p>答：</p>
-</li>
-<li><p>列表中的某个元素出现次数占列表元素总数的半数以上，找出这个元素。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现对有序列表进行二分查找的算法。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>输入年月日，输出这一天是这一年的第几天。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>统计一个字符串中各个字符出现的次数。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在Python中如何实现单例模式？</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下面的代码会输出什么。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, value</span>):</span></span><br><span class="line">        self.__value = value</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">value</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.__value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = A(<span class="number">1</span>)</span><br><span class="line">a.__value = <span class="number">2</span></span><br><span class="line">print(a.__value)</span><br><span class="line">print(a.value)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现一个记录函数执行时间的装饰器。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>写一个遍历指定目录下指定后缀名的文件的函数。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有如下所示的字典，请将其转换为CSV格式。</p>
-<p>转换前：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dict_corp = &#123;</span><br><span class="line">    <span class="string">&#x27;cn&#x27;</span>: &#123;<span class="string">&#x27;id&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;土豆&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>: <span class="string">&#x27;土豆&#x27;</span>, <span class="string">&#x27;price&#x27;</span>: &#123;<span class="string">&#x27;gold&#x27;</span>: <span class="number">20</span>, <span class="string">&#x27;kcoin&#x27;</span>: <span class="number">20</span>&#125;&#125;,</span><br><span class="line">    <span class="string">&#x27;en&#x27;</span>: &#123;<span class="string">&#x27;id&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;potato&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>: <span class="string">&#x27;potato&#x27;</span>, <span class="string">&#x27;price&#x27;</span>: &#123;<span class="string">&#x27;gold&#x27;</span>: <span class="number">20</span>, <span class="string">&#x27;kcoin&#x27;</span>: <span class="number">20</span>&#125;&#125;,</span><br><span class="line">    <span class="string">&#x27;kr&#x27;</span>: &#123;<span class="string">&#x27;id&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;감자&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>:<span class="string">&#x27;감자&#x27;</span>, <span class="string">&#x27;price&#x27;</span>: &#123;<span class="string">&#x27;gold&#x27;</span>: <span class="number">20</span>, <span class="string">&#x27;kcoin&#x27;</span>: <span class="number">20</span>&#125;&#125;,</span><br><span class="line">    <span class="string">&#x27;jp&#x27;</span>: &#123;<span class="string">&#x27;id&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;ジャガイモ&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>: <span class="string">&#x27;ジャガイモ&#x27;</span>, <span class="string">&#x27;price&#x27;</span>: &#123;<span class="string">&#x27;gold&#x27;</span>: <span class="number">20</span>, <span class="string">&#x27;kcoin&#x27;</span>: <span class="number">20</span>&#125;&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>转换后：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">,id,name,desc,gold,kcoin  </span><br><span class="line">cn,1,土豆,土豆,20,20</span><br><span class="line">en,1,potato,potato,20,20</span><br><span class="line">kr,1,감자,감자,20,20</span><br><span class="line">jp,1,ジャガイモ,ジャガイモ,20,20</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有如下所示的日志文件，请用Python程序或Linux命令打印出独立IP并统计数量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">221.228.143.52 - - [23&#x2F;May&#x2F;2019:08:57:42 +0800] &quot;&quot;GET &#x2F;about.html HTTP&#x2F;1.1&quot;&quot; 206 719996</span><br><span class="line">218.79.251.215 - - [23&#x2F;May&#x2F;2019:08:57:44 +0800] &quot;&quot;GET &#x2F;index.html HTTP&#x2F;1.1&quot;&quot; 206 2350253</span><br><span class="line">220.178.150.3 - - [23&#x2F;May&#x2F;2019:08:57:45 +0800] &quot;&quot;GET &#x2F;index.html HTTP&#x2F;1.1&quot;&quot; 200 2350253</span><br><span class="line">218.79.251.215 - - [23&#x2F;May&#x2F;2019:08:57:52 +0800] &quot;&quot;GET &#x2F;index.html HTTP&#x2F;1.1&quot;&quot; 200 2350253</span><br><span class="line">219.140.190.130 - - [23&#x2F;May&#x2F;2019:08:57:59 +0800] &quot;&quot;GET &#x2F;index.html HTTP&#x2F;1.1&quot;&quot; 200 2350253</span><br><span class="line">221.228.143.52 - - [23&#x2F;May&#x2F;2019:08:58:08 +0800] &quot;&quot;GET &#x2F;about.html HTTP&#x2F;1.1&quot;&quot; 206 719996</span><br><span class="line">221.228.143.52 - - [23&#x2F;May&#x2F;2019:08:58:08 +0800] &quot;&quot;GET &#x2F;news.html HTTP&#x2F;1.1&quot;&quot; 206 713242</span><br><span class="line">221.228.143.52 - - [23&#x2F;May&#x2F;2019:08:58:09 +0800] &quot;&quot;GET &#x2F;products.html HTTP&#x2F;1.1&quot;&quot; 206 1200250</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>请写出从HTML页面源代码中获取a标签href属性的正则表达式。</p>
-<p>答：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">    </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>正则表达式对象的<code>search</code>和<code>match</code>方法有什么区别？</p>
-<p>答：</p>
-</li>
-<li><p>当做个线程竞争一个对象且该对象并非线程安全的时候应该怎么办？</p>
-<p>答：</p>
-</li>
-<li><p>说一下死锁产生的条件以及如何避免死锁的发生。</p>
-<p>答：</p>
-</li>
-<li><p>请阐述TCP的优缺点。</p>
-<p>答：</p>
-</li>
-<li><p>HTTP请求的GET和POST有什么区别？</p>
-<p>答：</p>
-</li>
-<li><p>说一些你知道的HTTP响应状态码。</p>
-<p>答：</p>
-</li>
-<li><p>简单阐述HTTPS的工作原理。</p>
-<p>答：</p>
-</li>
-<li><p>阐述Django项目中一个请求的生命周期。</p>
-<p>答：</p>
-</li>
-<li><p>Django项目中实现数据接口时如何解决跨域问题。</p>
-<p>答：</p>
-</li>
-<li><p>Django项目中如何对接Redis高速缓存服务。</p>
-<p>答：</p>
-</li>
-<li><p>请说明Cookie和Session之间的关系。</p>
-<p>答：</p>
-</li>
-<li><p>说一下索引的原理和作用。</p>
-<p>答：</p>
-</li>
-<li><p>是否使用过Nginx实现负载均衡？用过哪些负载均衡算法？</p>
-<p>答：</p>
-</li>
-<li><p>一个保存整数（int）的数组，除了一个元素出现过1次外，其他元素都出现过两次，请找出这个元素。</p>
-<p>答：</p>
-</li>
-<li><p>有12个外观相同的篮球，其中1个的重要和其他11个的重量不同（有可能轻有可能重），现在有一个天平可以使用，怎样才能通过最少的称重次数找出这颗与众不同的球。 </p>
-<p>答：</p>
-</li>
+          <h2 id="机器学习基础"><a href="#机器学习基础" class="headerlink" title="机器学习基础"></a>机器学习基础</h2><p>所谓“机器学习”就是利用计算机将纷繁复杂的数据处理成有用的信息，这样就可以发掘出数据带来的意义以及隐藏在数据背后的规律。现如今，“机器学习”和“大数据”可以说是IT行业中最热点的两个词汇，而无论是“机器学习”还是“大数据”最终要解决的问题本质上是一样的，用最为直白的话来说就是用现有的数据去预测将来的状况。</p>
+<p>按照问题的“输入”和“输出”，我们可以将用计算机解决的问题分为四大类：</p>
+<ol>
+<li>输入的信息是精确的，要求输出最优解。</li>
+<li>输入的信息是精确的，无法找到最优解。</li>
+<li>输入的信息是模糊的，要求输出最优解。</li>
+<li>输入的信息是模糊的，无法找到最优解。</li>
+</ol>
+<p>在上面的四大类问题中，第1类问题是计算机最擅长解决的，这类问题其实就是“数值计算”和“逻辑推理”方面的问题，而传统意义上的人工智能也就是利用逻辑推理来解决问题（如早期的“人机对弈”）。一直以来，我们都习惯于将计算机称为“电脑”，而基于“冯诺依曼”体系结构的“电脑”实际上只是实现了“人脑”理性思维这部分的功能，而且在这一点上“电脑”通常是优于“人脑”的，而“人脑”在处理输入模糊信息时表现出来的强大的处理能力，在今天看来也不是“电脑”可以完全企及的。所以我们研究人工智能也好，研究机器学习也好，是希望输入模糊信息时，计算机能够给出满意的甚至是最优的答案。</p>
+<p>至此，我们可以给“机器学习”下一个定义：机器学习是一门专门研究计算机怎样模拟或实现人类的学习行为，以获取新的知识或技能，重新组织已有的知识结构使之不断改善自身性能的学科。机器学习目前已经广泛的应用到生产生活的各个领域，以下列举了一些经典的场景：</p>
+<ol>
+<li>搜索引擎：根据搜索和使用习惯，优化下一次搜索的结果。</li>
+<li>电商网站：自动推荐你可能感兴趣的商品。</li>
+<li>贷款申请：通过你最近的金融活动信息进行综合评定。</li>
+<li>图像识别：自动识别图片中有没有不和谐的内容。</li>
+</ol>
+<p>机器学习可以分为监督学习和非监督学习。监督学习是从给定的训练数据集中学习得到一个函数，当新的数据到来时，可以根据这个函数预测结果，监督学习的训练集包括输入和输出，也可以说是特征和目标。监督学习的目标是由人来标注的，而非监督学习的数据没有类别信息，训练集也没有人为标注结果，通过无监督学习可以减少数据特征的维度，以便我们可以使用二维或三维图形更加直观地展示数据信息 。</p>
+<p>实现机器学习的一般步骤：</p>
+<ol>
+<li>数据收集</li>
+<li>数据准备</li>
+<li>数据分析</li>
+<li>训练算法</li>
+<li>测试算法</li>
+<li>应用算法</li>
 </ol>
 
       
@@ -1318,7 +1186,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day91-100/93.MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day76-90/77.Pandas%E7%9A%84%E5%BA%94%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1332,7 +1200,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/Day91-100/93.MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">MySQL性能优化</a>
+            <a href="/2020/09/29/pythonn/Day76-90/77.Pandas%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">Pandas的应用</a>
         </h2>
 
         <div class="post-meta">
@@ -1372,154 +1240,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="MySQL性能优化"><a href="#MySQL性能优化" class="headerlink" title="MySQL性能优化"></a>MySQL性能优化</h2><h3 id="使用索引"><a href="#使用索引" class="headerlink" title="使用索引"></a>使用索引</h3><p>在前面<a href="../Day36-40/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL.md">《关系型数据库MySQL》</a>一文中，我们已经讲到过索引的相关知识，这里我们做一个简单的回顾。</p>
-<h4 id="索引的设计原则"><a href="#索引的设计原则" class="headerlink" title="索引的设计原则"></a>索引的设计原则</h4><ol>
-<li>创建索引的列并不一定是<code>select</code>操作中要查询的列，最适合做索引的列是出现在<code>where</code>子句中经常用作筛选条件或连表子句中作为表连接条件的列。</li>
-<li>具有唯一性的列，索引效果好；重复值较多的列，索引效果差。</li>
-<li>如果为字符串类型创建索引，最好指定一个前缀长度，创建短索引。短索引可以减少磁盘I/O而且在做比较时性能也更好，更重要的是MySQL底层的高速索引缓存能够缓存更多的键值。</li>
-<li>创建一个包含N列的复合索引（多列索引）时，相当于是创建了N个索引，此时应该利用最左前缀进行匹配。</li>
-<li>不要过度使用索引。索引并不是越多越好，索引需要占用额外的存储空间而且会影响写操作的性能（插入、删除、更新数据时索引也需要更新）。MySQL在生成执行计划时，要考虑各个索引的使用，这个也是需要耗费时间的。</li>
-<li>要注意可能使索引失效的场景，例如：模糊查询使用了前置通配符、使用负向条件进行查询等。</li>
-</ol>
-<h3 id="使用过程"><a href="#使用过程" class="headerlink" title="使用过程"></a>使用过程</h3><p>过程，通常也称之为存储过程，它是事先编译好存储在数据库中的一组SQL的集合。调用存储过程可以简化应用程序开发人员的工作，减少与数据库服务器之间的通信，对于提升数据操作的性能是有帮助的，这些我们在之前的<a href="../Day36-40/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL.md">《关系型数据库MySQL》</a>一文中已经提到过。</p>
-<h3 id="数据分区"><a href="#数据分区" class="headerlink" title="数据分区"></a>数据分区</h3><p>MySQL支持做数据分区，通过分区可以存储更多的数据、优化查询，获得更大的吞吐量并快速删除过期的数据。关于这个知识点建议大家看看MySQL的<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/partitioning-overview.html">官方文档</a>。数据分区有以下几种类型：</p>
-<ol>
-<li><p>RANGE分区：基于连续区间范围，把数据分配到不同的分区。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> tb_emp (</span><br><span class="line">    eno <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    ename <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    job <span class="built_in">VARCHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    hiredate <span class="built_in">DATE</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    dno <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">RANGE</span>( <span class="keyword">YEAR</span>(hiredate) ) (</span><br><span class="line">    <span class="keyword">PARTITION</span> p0 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1960</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p1 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1970</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p2 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1980</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p3 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1990</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p4 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> MAXVALUE</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>LIST分区：基于枚举值的范围，把数据分配到不同的分区。</p>
-</li>
-<li><p>HASH分区 / KEY分区：基于分区个数，把数据分配到不同的分区。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> tb_emp (</span><br><span class="line">    eno <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    ename <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    job <span class="built_in">VARCHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    hiredate <span class="built_in">DATE</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    dno <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">HASH</span>(dno)</span><br><span class="line"><span class="keyword">PARTITIONS</span> <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h3><ol>
-<li><p>定位低效率的SQL语句 - 慢查询日志。</p>
-<ul>
-<li><p>查看慢查询日志相关配置</p>
- <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &#x27;slow_query%&#x27;;</span><br><span class="line">+<span class="comment">---------------------------+----------------------------------+</span></span><br><span class="line">| Variable_name             | Value                            |</span><br><span class="line">+<span class="comment">---------------------------+----------------------------------+</span></span><br><span class="line">| slow_query_log            | OFF                              |</span><br><span class="line">| slow_query_log_file       | /mysql/data/localhost-slow.log   |</span><br><span class="line">+<span class="comment">---------------------------+----------------------------------+</span></span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like &#x27;long_query_time&#x27;;</span><br><span class="line">+<span class="comment">-----------------+-----------+</span></span><br><span class="line">| Variable_name   | Value     |</span><br><span class="line">+<span class="comment">-----------------+-----------+</span></span><br><span class="line">| long_query_time | 10.000000 |</span><br><span class="line">+<span class="comment">-----------------+-----------+</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改全局慢查询日志配置。</p>
- <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set global slow_query_log=&#x27;ON&#x27;; </span><br><span class="line">mysql&gt; set global long_query_time=1;</span><br></pre></td></tr></table></figure>
-
-<p> 或者直接修改MySQL配置文件启用慢查询日志。</p>
- <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">slow_query_log</span>=<span class="literal">ON</span></span><br><span class="line"><span class="attr">slow_query_log_file</span>=/usr/local/mysql/data/slow.log</span><br><span class="line"><span class="attr">long_query_time</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>通过<code>explain</code>了解SQL的执行计划。例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> ename, job, sal <span class="keyword">from</span> tb_emp <span class="keyword">where</span> dno=<span class="number">20</span>\G</span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">           <span class="keyword">id</span>: <span class="number">1</span></span><br><span class="line">  select_type: SIMPLE</span><br><span class="line">        <span class="keyword">table</span>: tb_emp</span><br><span class="line">         <span class="keyword">type</span>: <span class="keyword">ref</span></span><br><span class="line">possible_keys: fk_emp_dno</span><br><span class="line">          <span class="keyword">key</span>: fk_emp_dno</span><br><span class="line">      key_len: <span class="number">5</span></span><br><span class="line">          <span class="keyword">ref</span>: const</span><br><span class="line">         <span class="keyword">rows</span>: <span class="number">7</span></span><br><span class="line">        Extra: <span class="literal">NULL</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>select_type</code>：查询类型（SIMPLE - 简单查询、PRIMARY - 主查询、UNION - 并集、SUBQUERY - 子查询）。</li>
-<li><code>table</code>：输出结果集的表。</li>
-<li><code>type</code>：访问类型（ALL - 全表查询性能最差、index、range、ref、eq_ref、const、NULL）。</li>
-<li><code>possible_keys</code>：查询时可能用到的索引。</li>
-<li><code>key</code>：实际使用的索引。</li>
-<li><code>key_len</code>：索引字段的长度。</li>
-<li><code>rows</code>：扫描的行数，行数越少肯定性能越好。</li>
-<li><code>extra</code>：额外信息。</li>
-</ul>
-</li>
-<li><p>通过<code>show profiles</code>和<code>show profile for query</code>分析SQL。</p>
-<p>MySQL从5.0.37开始支持剖面系统来帮助用户了解SQL执行性能的细节，可以通过下面的方式来查看MySQL是否支持和开启了剖面系统。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> @@have_profiling;</span><br><span class="line"><span class="keyword">select</span> @@profiling;</span><br></pre></td></tr></table></figure>
-
-<p>如果没有开启剖面系统，可以通过下面的SQL来打开它。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> profiling=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>接下来就可以通过剖面系统来了解SQL的执行性能，例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select count(*) from tb_emp;</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">| count(*) |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">|       14 |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">profiles</span>;</span><br><span class="line">+<span class="comment">----------+------------+-----------------------------+</span></span><br><span class="line">| Query_ID | Duration   | Query                       |</span><br><span class="line">+<span class="comment">----------+------------+-----------------------------+</span></span><br><span class="line">|        1 | 0.00029600 | <span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> tb_emp |</span><br><span class="line">+<span class="comment">----------+------------+-----------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;</span><br><span class="line">+<span class="comment">----------------------+----------+</span></span><br><span class="line">| Status               | Duration |</span><br><span class="line">+<span class="comment">----------------------+----------+</span></span><br><span class="line">| starting             | 0.000076 |</span><br><span class="line">| checking permissions | 0.000007 |</span><br><span class="line">| Opening tables       | 0.000016 |</span><br><span class="line">| init                 | 0.000013 |</span><br><span class="line">| System <span class="keyword">lock</span>          | <span class="number">0.000007</span> |</span><br><span class="line">| optimizing           | <span class="number">0.000005</span> |</span><br><span class="line">| <span class="keyword">statistics</span>           | <span class="number">0.000012</span> |</span><br><span class="line">| preparing            | <span class="number">0.000010</span> |</span><br><span class="line">| executing            | <span class="number">0.000003</span> |</span><br><span class="line">| Sending <span class="keyword">data</span>         | <span class="number">0.000070</span> |</span><br><span class="line">| <span class="keyword">end</span>                  | <span class="number">0.000012</span> |</span><br><span class="line">| <span class="keyword">query</span> <span class="keyword">end</span>            | <span class="number">0.000008</span> |</span><br><span class="line">| closing <span class="keyword">tables</span>       | <span class="number">0.000012</span> |</span><br><span class="line">| freeing items        | <span class="number">0.000032</span> |</span><br><span class="line">| cleaning up          | <span class="number">0.000013</span> |</span><br><span class="line">+<span class="comment">----------------------+----------+</span></span><br><span class="line"><span class="number">15</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>优化CRUD操作。</p>
-<ul>
-<li><p>优化<code>insert</code>语句</p>
-<ul>
-<li>在<code>insert</code>语句后面跟上多组值进行插入在性能上优于分开<code>insert</code>。</li>
-<li>如果有多个连接向同一个表插入数据，使用<code>insert delayed</code>可以获得更好的性能。</li>
-<li>如果要从一个文本文件装载数据到表时，使用<code>load data infile</code>比<code>insert</code>性能好得多。</li>
-</ul>
-</li>
-<li><p>优化<code>order by</code>语句</p>
-<ul>
-<li>如果<code>where</code>子句的条件和<code>order by</code>子句的条件相同，而且排序的顺序与索引的顺序相同，如果还同时满足排序字段都是升序或者降序，那么只靠索引就能完成排序。</li>
-</ul>
-</li>
-<li><p>优化<code>group by</code>语句</p>
-<ul>
-<li>在使用<code>group by</code>子句分组时，如果希望避免排序带来的开销，可以用<code>order by null</code>禁用排序。</li>
-</ul>
-</li>
-<li><p>优化嵌套查询</p>
-<ul>
-<li>MySQL从4.1开始支持嵌套查询（子查询），这使得可以将一个查询的结果当做另一个查询的一部分来使用。在某些情况下，子查询可以被更有效率的连接查询取代，因为在连接查询时MySQL不需要在内存中创建临时表来完成这个逻辑上需要多个步骤才能完成的查询。</li>
-</ul>
-</li>
-<li><p>优化or条件</p>
-<ul>
-<li>如果条件之间是<code>or</code>关系，则只有在所有条件都用到索引的情况下索引才会生效。</li>
-</ul>
-</li>
-<li><p>优化分页查询</p>
-<ul>
-<li><p>分页查询时，一个比较头疼的事情是如同<code>limit 1000, 20</code>，此时MySQL已经排序出前1020条记录但是仅仅返回第1001到1020条记录，前1000条实际都用不上，查询和排序的代价非常高。一种常见的优化思路是在索引上完成排序和分页的操作，然后根据返回的结果做表连接操作来得到最终的结果，这样可以避免出现全表查询，也避免了外部排序。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tb_emp <span class="keyword">order</span> <span class="keyword">by</span> ename <span class="keyword">limit</span> <span class="number">1000</span>, <span class="number">20</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> tb_emp t1 <span class="keyword">inner</span> <span class="keyword">join</span> (<span class="keyword">select</span> eno <span class="keyword">from</span> tb_emp <span class="keyword">order</span> <span class="keyword">by</span> ename <span class="keyword">limit</span> <span class="number">1000</span>, <span class="number">20</span>) t2 <span class="keyword">on</span> t1.eno=t2.eno;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码中，第2行SQL是优于第1行SQL的，当然我们的前提是已经在<code>ename</code>字段上创建了索引。</p>
-</li>
-</ul>
-</li>
-<li><p>使用SQL提示</p>
-<ul>
-<li>USE INDEX：建议MySQL使用指定的索引。</li>
-<li>IGNORE INDEX：建议MySQL忽略掉指定的索引。</li>
-<li>FORCE INDEX：强制MySQL使用指定的索引。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="配置优化"><a href="#配置优化" class="headerlink" title="配置优化"></a>配置优化</h3><p>可以使用下面的命令来查看MySQL服务器配置参数的默认值。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">&#x27;key_%&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">&#x27;%cache%&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">&#x27;innodb_buffer_pool_size&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>通过下面的命令可以了解MySQL服务器运行状态值。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">status</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">&#x27;com_%&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">&#x27;innodb_%&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">&#x27;connections&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">&#x27;slow_queries&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>调整<code>max_connections</code>：MySQL最大连接数量，默认151。在Linux系统上，如果内存足够且不考虑用户等待响应时间这些问题，MySQL理论上可以支持到万级连接，但是通常情况下，这个值建议控制在1000以内。</li>
-<li>调整<code>back_log</code>：TCP连接的积压请求队列大小，通常是max_connections的五分之一，最大不能超过900。</li>
-<li>调整<code>table_open_cache</code>：这个值应该设置为max_connections的N倍，其中N代表每个连接在查询时打开的表的最大个数。</li>
-<li>调整<code>innodb_lock_wait_timeout</code>：该参数可以控制InnoDB事务等待行锁的时间，默认值是50ms，对于反馈响应要求较高的应用，可以将这个值调小避免事务长时间挂起；对于后台任务，可以将这个值调大来避免发生大的回滚操作。</li>
-<li>调整<code>innodb_buffer_pool_size</code>：InnoDB数据和索引的内存缓冲区大小，以字节为单位，这个值设置得越高，访问表数据需要进行的磁盘I/O操作就越少，如果可能甚至可以将该值设置为物理内存大小的80%。</li>
-</ol>
-<h3 id="架构优化"><a href="#架构优化" class="headerlink" title="架构优化"></a>架构优化</h3><ol>
-<li><p>通过拆分提高表的访问效率。</p>
-<ul>
-<li>垂直拆分</li>
-<li>水平拆分</li>
-</ul>
-</li>
-<li><p>逆范式理论。数据表设计的规范程度称之为范式（Normal Form），要提升表的规范程度通常需要将大表拆分为更小的表，范式级别越高数据冗余越小，而且在插入、删除、更新数据时出问题的可能性会大幅度降低，但是节省了空间就意味着查询数据时可能花费更多的时间，原来的单表查询可能会变成连表查询。为此，项目实践中我们通常会进行逆范式操作，故意降低范式级别增加冗余来减少查询的时间开销。</p>
-<ul>
-<li>1NF：列不能再拆分</li>
-<li>2NF：所有的属性都依赖于主键</li>
-<li>3NF：所有的属性都直接依赖于主键（消除传递依赖）</li>
-<li>BCNF：消除非平凡多值依赖</li>
-</ul>
-</li>
-<li><p>使用中间表提高统计查询速度。</p>
-<p>使用<code>insert into 中间表 select ... where ...</code>这样的语句先将需要的数据筛选出来放到中间表中，然后再对中间表进行统计，避免不必要的运算和处理。</p>
-</li>
-<li><p>主从复制和读写分离，具体内容请参考<a href="./98.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E4%B8%8A%E7%BA%BF%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98.md">《项目部署上线和性能调优》</a>。</p>
-</li>
-<li><p>配置MySQL集群。</p>
-</li>
-</ol>
-<blockquote>
-<p><strong>说明</strong>：本章内容参考了网易出品的《深入浅出MySQL》一书，该书和《高性能MySQL》一样，都对MySQL进行了深入细致的讲解，虽然总体感觉后者更加高屋建瓴，但是前者也算得上是提升MySQL技能的佳作（作者的文字功底稍显粗糙，深度也不及后者），建议有兴趣的读者可以阅读这两本书。</p>
-</blockquote>
-
+          <h2 id="Pandas的应用"><a href="#Pandas的应用" class="headerlink" title="Pandas的应用"></a>Pandas的应用</h2><h3 id="1、Pandas入门"><a href="#1、Pandas入门" class="headerlink" title="1、Pandas入门"></a>1、Pandas入门</h3><h3 id="2、Pandas索引"><a href="#2、Pandas索引" class="headerlink" title="2、Pandas索引"></a>2、Pandas索引</h3><h3 id="3、Pandas数据清洗之空数据"><a href="#3、Pandas数据清洗之空数据" class="headerlink" title="3、Pandas数据清洗之空数据"></a>3、Pandas数据清洗之空数据</h3><h3 id="4、Pandas多层索引"><a href="#4、Pandas多层索引" class="headerlink" title="4、Pandas多层索引"></a>4、Pandas多层索引</h3><h3 id="5、Pandas多层索引计算"><a href="#5、Pandas多层索引计算" class="headerlink" title="5、Pandas多层索引计算"></a>5、Pandas多层索引计算</h3><h3 id="6、Pandas数据集成concat"><a href="#6、Pandas数据集成concat" class="headerlink" title="6、Pandas数据集成concat"></a>6、Pandas数据集成concat</h3><h3 id="7、Pandas数据集成merge"><a href="#7、Pandas数据集成merge" class="headerlink" title="7、Pandas数据集成merge"></a>7、Pandas数据集成merge</h3><h3 id="8、Pandas分组聚合操作"><a href="#8、Pandas分组聚合操作" class="headerlink" title="8、Pandas分组聚合操作"></a>8、Pandas分组聚合操作</h3><h3 id="9、Pandas数据集成实战"><a href="#9、Pandas数据集成实战" class="headerlink" title="9、Pandas数据集成实战"></a>9、Pandas数据集成实战</h3><h3 id="10、美国大选项目"><a href="#10、美国大选项目" class="headerlink" title="10、美国大选项目"></a>10、美国大选项目</h3>
       
     </div>
 
@@ -1538,7 +1259,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day91-100/94.%E7%BD%91%E7%BB%9CAPI%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/Day76-90/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1552,7 +1273,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/Day91-100/94.%E7%BD%91%E7%BB%9CAPI%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1/" class="post-title-link" itemprop="url">网络API接口设计</a>
+            <a href="/2020/09/29/pythonn/Day76-90/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">NumPy和SciPy的应用</a>
         </h2>
 
         <div class="post-meta">
@@ -1592,190 +1313,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="网络API接口设计"><a href="#网络API接口设计" class="headerlink" title="网络API接口设计"></a>网络API接口设计</h2><p>目前许多的Web应用和移动应用都使用了前后端分离的开发模式，前后端分离简单的说就是前端或移动端通过网络API接口和后台进行交互，获得接口中提供的数据并负责用户界面的渲染。API是应用程序的编程接口的缩写，网络API通常指的是基于一个URL（统一资源定位符）可以访问到的资源，也就是说通过这个URL我们就可以请求服务器对某个资源进行操作并返回操作的结果。大家可以想想，网络API接口不也是一种封装吗，简单的说就是将复杂的业务逻辑隐藏在简单的API接口中。</p>
-<p>URL的通用格式如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议:&#x2F;&#x2F;用户名:口令@主机:端口&#x2F;路径1&#x2F;...&#x2F;路径N&#x2F;资源名</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>说明</strong>：URL中的用户名（有可能不需要提供用户名）、口令（有可能不需要提供口令）、端口（有可能使用默认端口）、路径（资源有可能直接位于根路径<code>/</code>下）并不是必需的部分，可以根据需要进行设置。</p>
-</blockquote>
-<p>网络API通常基于HTTP或HTTPS进行访问，基于HTTP/HTTPS最大的好处就在于访问起来非常的简单方便，而且可以跨语言、跨应用进行访问和互操作。</p>
-<h3 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h3><h4 id="关键问题"><a href="#关键问题" class="headerlink" title="关键问题"></a>关键问题</h4><p>为移动端或者PC端设计网络API接口一个非常重要的原则是：<strong>根据业务实体而不是用户界面或操作来设计API接口</strong>。如果API接口的设计是根据用户的操作或者界面上的功能设置来设计，随着需求的变更，用户界面也会进行调整，需要的数据也在发生变化，那么后端开发者就要不停的调整API，或者给一个API设计出多个版本，这些都会使项目的开发和维护成本增加。我们可以将业务实体理解为服务器提供的资源，而URL就是资源的定位符（标识符），这种方式是最为简单自然的。对于相对复杂的用户操作，我们可以提供一个“门面”（设计模式中的“门面模式”），通过该“门面”把多个接口的功能组装起来即可。</p>
-<p>下面是某个网站开放API的接口，可以看出API的设计是围绕业务实体来进行的，而且都做到了“见名知意”。</p>
-<table>
-<thead>
-<tr>
-<th>评论</th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>comments/show</td>
-<td>获取某条微博的评论列表</td>
-</tr>
-<tr>
-<td>comments/by_me</td>
-<td>自己的评论列表</td>
-</tr>
-<tr>
-<td>comments/to_me</td>
-<td>收到的评论列表</td>
-</tr>
-<tr>
-<td>comments/mentions</td>
-<td>@了自己的评论列表</td>
-</tr>
-<tr>
-<td>comments/create</td>
-<td>创建一条评论</td>
-</tr>
-<tr>
-<td>comments/destroy</td>
-<td>删除一条评论</td>
-</tr>
-<tr>
-<td>comments/reply</td>
-<td>回复一条评论</td>
-</tr>
-</tbody></table>
-<p>需要说明的是，<strong>上面的API接口并不是REST风格的</strong>。REST是一种网络应用架构风格，被认为最适合分布式的网络应用。关于REST的知识，可以阅读阮一峰的<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/09/restful.html">《理解RESTful架构》</a>以及<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html">《RESTful API设计指南》</a>，当然这两篇文章大家也要批判的阅读，因为上面阐述的观点并不完全正确，有些内容甚至是自相矛盾的。</p>
-<p>API接口返回的数据通常都是<strong>JSON</strong>或<strong>XML</strong>格式，XML这种数据格式目前基本已经被弃用了。对于JSON格式的数据，我们需要做到不要返回null这的值，因为这样的值一旦处置失当，会给前端和移动端开发带来不必要的麻烦（因为开发者有可能会使用强类型语言）。要解决这个问题可以从源头入手，在设计数据库的时候，尽量给每个字段都加上“not null”约束或者设置合理的默认值约束。</p>
-<h4 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h4><ol>
-<li>更新提示问题：设计一个每次使用系统首先要访问的API，该API会向移动端返回系统更新的相关信息，这样就可以提升用户更新App了。</li>
-<li>版本升级问题：API版本升级时应该考虑对低版本的兼容，同时要让新版本和旧版本都能够被访问，可以在URL中包含版本信息或者在将版本号放在HTTP(S)协议头部，关于这个问题有很多的争论，有兴趣的可以看看<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/972226/how-to-version-rest-uris">stack overflow</a>上面对这个问题的讨论。</li>
-<li>图片尺寸问题：移动端对于一张图片可能需要不同的尺寸，可以在获取图片时传入尺寸参数并获取对应的资源；更好的做法是直接使用云存储或CDN（直接提供了图片缩放的功能），这样可以加速对资源的访问。</li>
-</ol>
-<h3 id="文档撰写"><a href="#文档撰写" class="headerlink" title="文档撰写"></a>文档撰写</h3><p>下面以设计评论接口为例，简单说明接口文档应该如何撰写。</p>
-<p>首先，我们可以定义全局返回状态码。</p>
-<table>
-<thead>
-<tr>
-<th>返回码</th>
-<th>返回信息</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>10000</td>
-<td>获取评论成功</td>
-<td></td>
-</tr>
-<tr>
-<td>10001</td>
-<td>创建评论成功</td>
-<td></td>
-</tr>
-<tr>
-<td>10002</td>
-<td>无法创建评论</td>
-<td>创建评论时因违反审核机制而无法创建</td>
-</tr>
-<tr>
-<td>10003</td>
-<td>评论已被删除</td>
-<td>查看评论时评论因不和谐因素已被删除</td>
-</tr>
-<tr>
-<td>10004</td>
-<td>……</td>
-<td>……</td>
-</tr>
-</tbody></table>
-<ol>
-<li><p>获取文章评论。</p>
-<p><strong>GET</strong> <code>/articles/&#123;article-id&#125;/comments/</code></p>
-<p>开发者：王大锤</p>
-<p>最后更新时间：2018年8月10日</p>
-<p>标签：v 1.0</p>
-<p>接口说明：获取指定文章的所有评论</p>
-<p>使用帮助：默认返回20条数据，需要在请求头中设置身份标识（key）</p>
-<p>请求参数：</p>
-<table>
-<thead>
-<tr>
-<th>参数名</th>
-<th>类型</th>
-<th>是否必填</th>
-<th>参数位置</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>page</td>
-<td>整数</td>
-<td>否</td>
-<td>查询参数</td>
-<td>页码，默认值1</td>
-</tr>
-<tr>
-<td>size</td>
-<td>整数</td>
-<td>否</td>
-<td>查询参数</td>
-<td>每次获取评论数量（10~100），默认值20</td>
-</tr>
-<tr>
-<td>key</td>
-<td>字符串</td>
-<td>是</td>
-<td>请求头</td>
-<td>用户的身份标识</td>
-</tr>
-</tbody></table>
-<p>响应信息：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">10000</span>,</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;获取评论成功&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;page&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;size&quot;</span>: <span class="number">10</span>,</span><br><span class="line">    <span class="attr">&quot;totalPage&quot;</span>: <span class="number">35</span>,</span><br><span class="line">    <span class="attr">&quot;contents&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;userId&quot;</span>: <span class="number">1700095</span>,</span><br><span class="line">            <span class="attr">&quot;nickname&quot;</span>: <span class="string">&quot;王大锤&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;pubDate&quot;</span>: <span class="string">&quot;2018年7月31日&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;content&quot;</span>: <span class="string">&quot;小编是不是有病呀&quot;</span>,</span><br><span class="line">            <span class="comment">/* ... */</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">        	&quot;userId&quot;, 1995322,</span><br><span class="line">            &quot;nickname&quot;: &quot;白元芳&quot;,</span><br><span class="line">            &quot;pubDate&quot;: &quot;2018年8月2日&quot;,</span><br><span class="line">            &quot;content&quot;: &quot;楼上说得好&quot;,</span><br><span class="line">            <span class="comment">/* ... */</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>新增文章评论。</p>
-<p><strong>POST</strong> <code>/articles/&#123;article-id&#125;/comments</code></p>
-<p>开发者：王大锤</p>
-<p>最后更新时间：2018年8月10日</p>
-<p>标签：v 1.0</p>
-<p>接口说明：为指定的文章创建评论</p>
-<p>使用帮助：暂无</p>
-<p>请求参数：</p>
-<table>
-<thead>
-<tr>
-<th>参数名</th>
-<th>类型</th>
-<th>是否必填</th>
-<th>参数位置</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>userId</td>
-<td>字符串</td>
-<td>是</td>
-<td>消息体</td>
-<td>用户ID</td>
-</tr>
-<tr>
-<td>key</td>
-<td>字符串</td>
-<td>是</td>
-<td>请求头</td>
-<td>用户的令牌</td>
-</tr>
-<tr>
-<td>content</td>
-<td>字符串</td>
-<td>是</td>
-<td>消息体</td>
-<td>评论的内容</td>
-</tr>
-</tbody></table>
-<p>响应信息：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">10001</span>,</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;创建评论成功&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;comment&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;pubDate&quot;</span>: <span class="string">&quot;2018年7月31日&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;content&quot;</span>: <span class="string">&quot;小编是不是有病呀&quot;</span></span><br><span class="line">        <span class="comment">/* ... */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ol>
-<blockquote>
-<p><strong>提示</strong>：如果没有接口文档撰写经验，可以使用在线接口文档编辑平台<a target="_blank" rel="noopener" href="http://rap2.taobao.org/">RAP2</a>或<a target="_blank" rel="noopener" href="http://yapi.demo.qunar.com/">YAPI</a>来进行接口文档撰写。</p>
-</blockquote>
-
+          <h2 id="NumPy和SciPy的应用"><a href="#NumPy和SciPy的应用" class="headerlink" title="NumPy和SciPy的应用"></a>NumPy和SciPy的应用</h2>
       
     </div>
 
@@ -1866,7 +1404,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
