@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"halomzh.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="网络爬虫和相关工具网络爬虫的概念网络爬虫（web crawler），以前经常称之为网络蜘蛛（spider），是按照一定的规则自动浏览万维网并获取信息的机器人程序（或脚本），曾经被广泛的应用于互联网搜索引擎。使用过互联网和浏览器的人都知道，网页中除了供用户阅读的文字信息之外，还包含一些超链接。网络爬虫系统正是通过网页中的超链接信息不断获得网络上的其它页面。正因如此，网络数据采集的过程就像一个爬虫或者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络爬虫和相关工具">
+<meta property="og:url" content="https://halomzh.github.io/2020/09/29/pythonn/66.%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="halomzh.github.io">
+<meta property="og:description" content="网络爬虫和相关工具网络爬虫的概念网络爬虫（web crawler），以前经常称之为网络蜘蛛（spider），是按照一定的规则自动浏览万维网并获取信息的机器人程序（或脚本），曾经被广泛的应用于互联网搜索引擎。使用过互联网和浏览器的人都知道，网页中除了供用户阅读的文字信息之外，还包含一些超链接。网络爬虫系统正是通过网页中的超链接信息不断获得网络上的其它页面。正因如此，网络数据采集的过程就像一个爬虫或者">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936bpllpj31290u0tf9.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936ut51fj30p00740sl.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936xf9dlj30p008pa9x.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj937fuowdj31jq0u0acp.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj937jcgbbj31hc0u0tim.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj93e0im9xj312g0hmdh2.jpg">
+<meta property="article:published_time" content="2020-09-29T06:02:18.000Z">
+<meta property="article:modified_time" content="2020-09-30T17:42:56.410Z">
+<meta property="article:author" content="halomzh">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Python100天">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936bpllpj31290u0tf9.jpg">
+
+<link rel="canonical" href="https://halomzh.github.io/2020/09/29/pythonn/66.%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>网络爬虫和相关工具 | halomzh.github.io</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="halomzh.github.io" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">halomzh.github.io</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/66.%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络爬虫和相关工具
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 01:42:56" itemprop="dateModified" datetime="2020-10-01T01:42:56+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">Python入门</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="网络爬虫和相关工具"><a href="#网络爬虫和相关工具" class="headerlink" title="网络爬虫和相关工具"></a>网络爬虫和相关工具</h2><h3 id="网络爬虫的概念"><a href="#网络爬虫的概念" class="headerlink" title="网络爬虫的概念"></a>网络爬虫的概念</h3><p>网络爬虫（web crawler），以前经常称之为网络蜘蛛（spider），是按照一定的规则自动浏览万维网并获取信息的机器人程序（或脚本），曾经被广泛的应用于互联网搜索引擎。使用过互联网和浏览器的人都知道，网页中除了供用户阅读的文字信息之外，还包含一些超链接。网络爬虫系统正是通过网页中的超链接信息不断获得网络上的其它页面。正因如此，网络数据采集的过程就像一个爬虫或者蜘蛛在网络上漫游，所以才被形象的称为网络爬虫或者网络蜘蛛。</p>
+<h4 id="爬虫的应用领域"><a href="#爬虫的应用领域" class="headerlink" title="爬虫的应用领域"></a>爬虫的应用领域</h4><p>在理想的状态下，所有ICP（Internet Content Provider）都应该为自己的网站提供API接口来共享它们允许其他程序获取的数据，在这种情况下爬虫就不是必需品，国内比较有名的电商平台（如淘宝、京东等）、社交平台（如腾讯微博等）等网站都提供了自己的Open API，但是这类Open API通常会对可以抓取的数据以及抓取数据的频率进行限制。对于大多数的公司而言，及时的获取行业相关数据是企业生存的重要环节之一，然而大部分企业在行业数据方面的匮乏是其与生俱来的短板，合理的利用爬虫来获取数据并从中提取出有商业价值的信息是至关重要的。当然爬虫还有很多重要的应用领域，下面列举了其中的一部分：</p>
+<ol>
+<li>搜索引擎</li>
+<li>新闻聚合</li>
+<li>社交应用</li>
+<li>舆情监控</li>
+<li>行业数据</li>
+</ol>
+<h3 id="合法性和背景调研"><a href="#合法性和背景调研" class="headerlink" title="合法性和背景调研"></a>合法性和背景调研</h3><h4 id="爬虫合法性探讨"><a href="#爬虫合法性探讨" class="headerlink" title="爬虫合法性探讨"></a>爬虫合法性探讨</h4><ol>
+<li>网络爬虫领域目前还属于拓荒阶段，虽然互联网世界已经通过自己的游戏规则建立起一定的道德规范(Robots协议，全称是“网络爬虫排除标准”)，但法律部分还在建立和完善中，也就是说，现在这个领域暂时还是灰色地带。</li>
+<li>“法不禁止即为许可”，如果爬虫就像浏览器一样获取的是前端显示的数据（网页上的公开信息）而不是网站后台的私密敏感信息，就不太担心法律法规的约束，因为目前大数据产业链的发展速度远远超过了法律的完善程度。</li>
+<li>在爬取网站的时候，需要限制自己的爬虫遵守Robots协议，同时控制网络爬虫程序的抓取数据的速度；在使用数据的时候，必须要尊重网站的知识产权（从Web 2.0时代开始，虽然Web上的数据很多都是由用户提供的，但是网站平台是投入了运营成本的，当用户在注册和发布内容时，平台通常就已经获得了对数据的所有权、使用权和分发权）。如果违反了这些规定，在打官司的时候败诉几率相当高。</li>
+</ol>
+<h4 id="Robots-txt文件"><a href="#Robots-txt文件" class="headerlink" title="Robots.txt文件"></a>Robots.txt文件</h4><p>大多数网站都会定义robots.txt文件，下面以淘宝的<a target="_blank" rel="noopener" href="http://www.taobao.com/robots.txt">robots.txt</a>文件为例，看看该网站对爬虫有哪些限制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">User-agent:  Baiduspider</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Disallow:  &#x2F;product&#x2F;</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  Googlebot</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Allow:  &#x2F;product</span><br><span class="line">Allow:  &#x2F;spu</span><br><span class="line">Allow:  &#x2F;dianpu</span><br><span class="line">Allow:  &#x2F;oversea</span><br><span class="line">Allow:  &#x2F;list</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-agent:  Bingbot</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Allow:  &#x2F;product</span><br><span class="line">Allow:  &#x2F;spu</span><br><span class="line">Allow:  &#x2F;dianpu</span><br><span class="line">Allow:  &#x2F;oversea</span><br><span class="line">Allow:  &#x2F;list</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  360Spider</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  Yisouspider</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  Sogouspider</span><br><span class="line">Allow:  &#x2F;article</span><br><span class="line">Allow:  &#x2F;oshtml</span><br><span class="line">Allow:  &#x2F;product</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  Yahoo!  Slurp</span><br><span class="line">Allow:  &#x2F;product</span><br><span class="line">Allow:  &#x2F;spu</span><br><span class="line">Allow:  &#x2F;dianpu</span><br><span class="line">Allow:  &#x2F;oversea</span><br><span class="line">Allow:  &#x2F;list</span><br><span class="line">Disallow:  &#x2F;</span><br><span class="line"></span><br><span class="line">User-Agent:  *</span><br><span class="line">Disallow:  &#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>注意上面robots.txt第一段的最后一行，通过设置“Disallow: /”禁止百度爬虫访问除了“Allow”规定页面外的其他所有页面。因此当你在百度搜索“淘宝”的时候，搜索结果下方会出现：“由于该网站的robots.txt文件存在限制指令（限制搜索引擎抓取），系统无法提供该页面的内容描述”。百度作为一个搜索引擎，至少在表面上遵守了淘宝网的robots.txt协议，所以用户不能从百度上搜索到淘宝内部的产品信息。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936bpllpj31290u0tf9.jpg"> </p>
+<h3 id="相关工具介绍"><a href="#相关工具介绍" class="headerlink" title="相关工具介绍"></a>相关工具介绍</h3><h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h4><p>在开始讲解爬虫之前，我们稍微对HTTP（超文本传输协议）做一些回顾，因为我们在网页上看到的内容通常是浏览器执行HTML语言得到的结果，而HTTP就是传输HTML数据的协议。HTTP和其他很多应用级协议一样是构建在TCP（传输控制协议）之上的，它利用了TCP提供的可靠的传输服务实现了Web应用中的数据交换。按照维基百科上的介绍，设计HTTP最初的目的是为了提供一种发布和接收<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTML">HTML</a>页面的方法，也就是说这个协议是浏览器和Web服务器之间传输的数据的载体。关于这个协议的详细信息以及目前的发展状况，大家可以阅读阮一峰老师的<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/08/http.html">《HTTP 协议入门》</a>、<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html">《互联网协议入门》</a>系列以及<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">《图解HTTPS协议》</a>进行了解，下图是我在四川省网络通信技术重点实验室工作期间用开源协议分析工具Ethereal（抓包工具WireShark的前身）截取的访问百度首页时的HTTP请求和响应的报文（协议数据），由于Ethereal截取的是经过网络适配器的数据，因此可以清晰的看到从物理链路层到应用层的协议数据。</p>
+<p>HTTP请求（请求行+请求头+空行+[消息体]）：</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936ut51fj30p00740sl.jpg"></p>
+<p>HTTP响应（响应行+响应头+空行+消息体）：</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj936xf9dlj30p008pa9x.jpg"></p>
+<blockquote>
+<p>说明：但愿这两张如同泛黄照片般的截图帮助你大概的了解到HTTP是一个怎样的协议。 </p>
+</blockquote>
+<h4 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h4><ol>
+<li><p>Chrome Developer Tools：谷歌浏览器内置的开发者工具。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj937fuowdj31jq0u0acp.jpg"></p>
+</li>
+<li><p>Postman：功能强大的网页调试与RESTful请求工具。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj937jcgbbj31hc0u0tim.jpg"></p>
+</li>
+<li><p>HTTPie：命令行HTTP客户端。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install httpie</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">http --header http://www.scu.edu.cn</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Cache-Control: private, max-age=600</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Content-Encoding: gzip</span><br><span class="line">Content-Language: zh-CN</span><br><span class="line">Content-Length: 14403</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Date: Sun, 27 May 2018 15:38:25 GMT</span><br><span class="line">ETag: <span class="string">&quot;e6ec-56d3032d70a32-gzip&quot;</span></span><br><span class="line">Expires: Sun, 27 May 2018 15:48:25 GMT</span><br><span class="line">Keep-Alive: timeout=5, max=100</span><br><span class="line">Last-Modified: Sun, 27 May 2018 13:44:22 GMT</span><br><span class="line">Server: VWebServer</span><br><span class="line">Vary: User-Agent,Accept-Encoding</span><br><span class="line">X-Frame-Options: SAMEORIGIN</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>builtwith</code>库：识别网站所用技术的工具。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install builtwith</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> builtwith</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builtwith.parse(<span class="string">&#x27;http://www.bootcss.com/&#x27;</span>)</span><br><span class="line">&#123;<span class="string">&#x27;web-servers&#x27;</span>: [<span class="string">&#x27;Nginx&#x27;</span>], <span class="string">&#x27;font-scripts&#x27;</span>: [<span class="string">&#x27;Font Awesome&#x27;</span>], <span class="string">&#x27;javascript-frameworks&#x27;</span>: [<span class="string">&#x27;Lo-dash&#x27;</span>, <span class="string">&#x27;Underscore.js&#x27;</span>, <span class="string">&#x27;Vue.js&#x27;</span>, <span class="string">&#x27;Zepto&#x27;</span>, <span class="string">&#x27;jQuery&#x27;</span>], <span class="string">&#x27;web-frameworks&#x27;</span>: [<span class="string">&#x27;Twitter Bootstrap&#x27;</span>]&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> ssl</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ssl._create_default_https_context = ssl._create_unverified_context</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builtwith.parse(<span class="string">&#x27;https://www.jianshu.com/&#x27;</span>)</span><br><span class="line">&#123;<span class="string">&#x27;web-servers&#x27;</span>: [<span class="string">&#x27;Tengine&#x27;</span>], <span class="string">&#x27;web-frameworks&#x27;</span>: [<span class="string">&#x27;Twitter Bootstrap&#x27;</span>, <span class="string">&#x27;Ruby on Rails&#x27;</span>], <span class="string">&#x27;programming-languages&#x27;</span>: [<span class="string">&#x27;Ruby&#x27;</span>]&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>python-whois</code>库：查询网站所有者的工具。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install python-whois</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> whois</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>whois.whois(<span class="string">&#x27;baidu.com&#x27;</span>)</span><br><span class="line">&#123;<span class="string">&#x27;domain_name&#x27;</span>: [<span class="string">&#x27;BAIDU.COM&#x27;</span>, <span class="string">&#x27;baidu.com&#x27;</span>], <span class="string">&#x27;registrar&#x27;</span>: <span class="string">&#x27;MarkMonitor, Inc.&#x27;</span>, <span class="string">&#x27;whois_server&#x27;</span>: <span class="string">&#x27;whois.markmonitor.com&#x27;</span>, <span class="string">&#x27;referral_url&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;updated_date&#x27;</span>: [datetime.datetime(<span class="number">2017</span>, <span class="number">7</span>, <span class="number">28</span>, <span class="number">2</span>, <span class="number">36</span>, <span class="number">28</span>), datetime.datetime(<span class="number">2017</span>, <span class="number">7</span>, <span class="number">27</span>, <span class="number">19</span>, <span class="number">36</span>, <span class="number">28</span>)], <span class="string">&#x27;creation_date&#x27;</span>: [datetime.datetime(<span class="number">1999</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">5</span>, <span class="number">17</span>), datetime.datetime(<span class="number">1999</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">17</span>)], <span class="string">&#x27;expiration_date&#x27;</span>: [datetime.datetime(<span class="number">2026</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">5</span>, <span class="number">17</span>), datetime.datetime(<span class="number">2026</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">0</span>, <span class="number">0</span>)], <span class="string">&#x27;name_servers&#x27;</span>: [<span class="string">&#x27;DNS.BAIDU.COM&#x27;</span>, <span class="string">&#x27;NS2.BAIDU.COM&#x27;</span>, <span class="string">&#x27;NS3.BAIDU.COM&#x27;</span>, <span class="string">&#x27;NS4.BAIDU.COM&#x27;</span>, <span class="string">&#x27;NS7.BAIDU.COM&#x27;</span>, <span class="string">&#x27;dns.baidu.com&#x27;</span>, <span class="string">&#x27;ns4.baidu.com&#x27;</span>, <span class="string">&#x27;ns3.baidu.com&#x27;</span>, <span class="string">&#x27;ns7.baidu.com&#x27;</span>, <span class="string">&#x27;ns2.baidu.com&#x27;</span>], <span class="string">&#x27;status&#x27;</span>: [<span class="string">&#x27;clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited&#x27;</span>, <span class="string">&#x27;clientTransferProhibited https://icann.org/epp#clientTransferProhibited&#x27;</span>, <span class="string">&#x27;clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited&#x27;</span>, <span class="string">&#x27;serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited&#x27;</span>, <span class="string">&#x27;serverTransferProhibited https://icann.org/epp#serverTransferProhibited&#x27;</span>, <span class="string">&#x27;serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited&#x27;</span>, <span class="string">&#x27;clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)&#x27;</span>, <span class="string">&#x27;clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)&#x27;</span>, <span class="string">&#x27;clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)&#x27;</span>, <span class="string">&#x27;serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)&#x27;</span>, <span class="string">&#x27;serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)&#x27;</span>, <span class="string">&#x27;serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)&#x27;</span>], <span class="string">&#x27;emails&#x27;</span>: [<span class="string">&#x27;abusecomplaints@markmonitor.com&#x27;</span>, <span class="string">&#x27;whoisrelay@markmonitor.com&#x27;</span>], <span class="string">&#x27;dnssec&#x27;</span>: <span class="string">&#x27;unsigned&#x27;</span>, <span class="string">&#x27;name&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;org&#x27;</span>: <span class="string">&#x27;Beijing Baidu Netcom Science Technology Co., Ltd.&#x27;</span>, <span class="string">&#x27;address&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;city&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;state&#x27;</span>: <span class="string">&#x27;Beijing&#x27;</span>, <span class="string">&#x27;zipcode&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;country&#x27;</span>: <span class="string">&#x27;CN&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>robotparser</code>模块：解析<code>robots.txt</code>的工具。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> urllib <span class="keyword">import</span> robotparser</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser = robotparser.RobotFileParser()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser.set_url(<span class="string">&#x27;https://www.taobao.com/robots.txt&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser.read()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser.can_fetch(<span class="string">&#x27;Baiduspider&#x27;</span>, <span class="string">&#x27;http://www.taobao.com/article&#x27;</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser.can_fetch(<span class="string">&#x27;Baiduspider&#x27;</span>, <span class="string">&#x27;http://www.taobao.com/product&#x27;</span>)</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="一个简单的爬虫"><a href="#一个简单的爬虫" class="headerlink" title="一个简单的爬虫"></a>一个简单的爬虫</h3><p>一个基本的爬虫通常分为数据采集（网页下载）、数据处理（网页解析）和数据存储（将有用的信息持久化）三个部分的内容，当然更为高级的爬虫在数据采集和处理时会使用并发编程或分布式技术，这就需要有调度器（安排线程或进程执行对应的任务）、后台管理程序（监控爬虫的工作状态以及检查数据抓取的结果）等的参与。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj93e0im9xj312g0hmdh2.jpg"></p>
+<p>一般来说，爬虫的工作流程包括以下几个步骤：</p>
+<ol>
+<li>设定抓取目标（种子页面/起始页面）并获取网页。</li>
+<li>当服务器无法访问时，按照指定的重试次数尝试重新下载页面。</li>
+<li>在需要的时候设置用户代理或隐藏真实IP，否则可能无法访问页面。</li>
+<li>对获取的页面进行必要的解码操作然后抓取出需要的信息。</li>
+<li>在获取的页面中通过某种方式（如正则表达式）抽取出页面中的链接信息。</li>
+<li>对链接进行进一步的处理（获取页面并重复上面的动作）。</li>
+<li>将有用的信息进行持久化以备后续的处理。</li>
+</ol>
+<p>下面的例子给出了一个从“搜狐体育”上获取NBA新闻标题和链接的爬虫。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">LI_A_PATTERN = re.compile(<span class="string">r&#x27;&lt;li class=&quot;item&quot;&gt;.*?&lt;/li&gt;&#x27;</span>)</span><br><span class="line">A_TEXT_PATTERN = re.compile(<span class="string">r&#x27;&lt;a\s+[^&gt;]*?&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">A_HREF_PATTERN = re.compile(<span class="string">r&#x27;&lt;a\s+[^&gt;]*?href=&quot;(.*?)&quot;\s*[^&gt;]*?&gt;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decode_page</span>(<span class="params">page_bytes, charsets</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;通过指定的字符集对页面进行解码&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> charset <span class="keyword">in</span> charsets:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> page_bytes.decode(charset)</span><br><span class="line">        <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_matched_parts</span>(<span class="params">content_string, pattern</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;从字符串中提取所有跟正则表达式匹配的内容&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> pattern.findall(content_string, re.I) \</span><br><span class="line">        <span class="keyword">if</span> content_string <span class="keyword">else</span> []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_matched_part</span>(<span class="params">content_string, pattern, group_no=<span class="number">1</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;从字符串中提取跟正则表达式匹配的内容&quot;&quot;&quot;</span></span><br><span class="line">    match = pattern.search(content_string)</span><br><span class="line">    <span class="keyword">if</span> match:</span><br><span class="line">        <span class="keyword">return</span> match.group(group_no)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_page_html</span>(<span class="params">seed_url, *, charsets=(<span class="params"><span class="string">&#x27;utf-8&#x27;</span>, </span>)</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取页面的HTML代码&quot;&quot;&quot;</span></span><br><span class="line">    resp = requests.get(seed_url)</span><br><span class="line">    <span class="keyword">if</span> resp.status_code == <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">return</span> decode_page(resp.content, charsets)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repair_incorrect_href</span>(<span class="params">current_url, href</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;修正获取的href属性&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> href.startswith(<span class="string">&#x27;//&#x27;</span>):</span><br><span class="line">        href = urljoin(<span class="string">&#x27;http://&#x27;</span>, href)</span><br><span class="line">    <span class="keyword">elif</span> href.startswith(<span class="string">&#x27;/&#x27;</span>):</span><br><span class="line">        href = urljoin(current_url, href)</span><br><span class="line">    <span class="keyword">return</span> href <span class="keyword">if</span> href.startswith(<span class="string">&#x27;http&#x27;</span>) <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_crawl</span>(<span class="params">seed_url, pattern, *, max_depth=<span class="number">-1</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;开始爬取数据&quot;&quot;&quot;</span></span><br><span class="line">    new_urls, visited_urls = deque(), set()</span><br><span class="line">    new_urls.append((seed_url, <span class="number">0</span>))</span><br><span class="line">    <span class="keyword">while</span> new_urls:</span><br><span class="line">        current_url, depth = new_urls.popleft()</span><br><span class="line">        <span class="keyword">if</span> depth != max_depth:</span><br><span class="line">            page_html = get_page_html(current_url, charsets=(<span class="string">&#x27;utf-8&#x27;</span>, <span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line">            contents = get_matched_parts(page_html, pattern)</span><br><span class="line">            <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">                text = get_matched_part(content, A_TEXT_PATTERN)</span><br><span class="line">                href = get_matched_part(content, A_HREF_PATTERN)</span><br><span class="line">                <span class="keyword">if</span> href:</span><br><span class="line">                    href = repair_incorrect_href(href)</span><br><span class="line">                print(text, href)</span><br><span class="line">                <span class="keyword">if</span> href <span class="keyword">and</span> href <span class="keyword">not</span> <span class="keyword">in</span> visited_urls:</span><br><span class="line">                    new_urls.append((href, depth + <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;主函数&quot;&quot;&quot;</span></span><br><span class="line">    start_crawl(</span><br><span class="line">        seed_url=<span class="string">&#x27;http://sports.sohu.com/nba_a.shtml&#x27;</span>,</span><br><span class="line">        pattern=LI_A_PATTERN,</span><br><span class="line">        max_depth=<span class="number">2</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="爬虫注意事项"><a href="#爬虫注意事项" class="headerlink" title="爬虫注意事项"></a>爬虫注意事项</h3><p>通过上面的例子，我们对爬虫已经有了一个感性的认识，在编写爬虫时有以下一些注意事项：</p>
+<ol>
+<li><p>上面的代码使用了<code>requests</code>三方库来获取网络资源，这是一个非常优质的三方库，关于它的用法可以参考它的<a target="_blank" rel="noopener" href="https://requests.readthedocs.io/zh_CN/latest/">官方文档</a>。</p>
+</li>
+<li><p>上面的代码中使用了双端队列（<code>deque</code>）来保存待爬取的URL。双端队列相当于是使用链式存储结构的<code>list</code>，在双端队列的头尾添加和删除元素性能都比较好，刚好可以用来构造一个FIFO（先进先出）的队列结构。</p>
+</li>
+<li><p>处理相对路径。有的时候我们从页面中获取的链接不是一个完整的绝对链接而是一个相对链接，这种情况下需要将其与URL前缀进行拼接（<code>urllib.parse</code>中的<code>urljoin()</code>函数可以完成此项操作）。</p>
+</li>
+<li><p>设置代理服务。有些网站会限制访问的区域（例如美国的Netflix屏蔽了很多国家的访问），有些爬虫需要隐藏自己的身份，在这种情况下可以设置使用代理服务器，代理服务器有免费的服务器和付费的商业服务器，但后者稳定性和可用性都更好，强烈建议在商业项目中使用付费的商业代理服务器。如果使用<code>requests</code>三方库，可以在请求方法中添加<code>proxies</code>参数来指定代理服务器；如果使用标准库，可以通过修改<code>urllib.request</code>中的<code>ProxyHandler</code>来为请求设置代理服务器。</p>
+</li>
+<li><p>限制下载速度。如果我们的爬虫获取网页的速度过快，可能就会面临被封禁或者产生“损害动产”的风险（这个可能会导致吃官司且败诉），可以在两次获取页面数据之间添加延时从而对爬虫进行限速。</p>
+</li>
+<li><p>避免爬虫陷阱。有些网站会动态生成页面内容，这会导致产生无限多的页面（例如在线万年历通常会有无穷无尽的链接）。可以通过记录到达当前页面经过了多少个链接（链接深度）来解决该问题，当达到事先设定的最大深度时，爬虫就不再像队列中添加该网页中的链接了。</p>
+</li>
+<li><p>避开蜜罐链接。网站上的有些链接是浏览器中不可见的，这种链接通常是故意诱使爬虫去访问的蜜罐，一旦访问了这些链接，服务器就会判定请求是来自于爬虫的，这样可能会导致被服务器封禁IP地址。如何避开这些蜜罐链接我们在后面为大家进行讲解。</p>
+</li>
+<li><p>SSL相关问题。如果使用标准库的<code>urlopen</code>打开一个HTTPS链接时会验证一次SSL证书，如果不做出处理会产生错误提示“SSL: CERTIFICATE_VERIFY_FAILED”，可以通过以下两种方式加以解决：</p>
+<ul>
+<li><p>使用未经验证的上下文</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line"></span><br><span class="line">request = urllib.request.Request(url=<span class="string">&#x27;...&#x27;</span>, headers=&#123;...&#125;) </span><br><span class="line">context = ssl._create_unverified_context()</span><br><span class="line">web_page = urllib.request.urlopen(request, context=context)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置全局性取消证书验证</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line"></span><br><span class="line">ssl._create_default_https_context = ssl._create_unverified_context</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Python100%E5%A4%A9/" rel="tag"># Python100天</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/29/pythonn/91.%E5%9B%A2%E9%98%9F%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="prev" title="团队项目开发的问题和解决方案">
+      <i class="fa fa-chevron-left"></i> 团队项目开发的问题和解决方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/29/pythonn/49.RESTful%E6%9E%B6%E6%9E%84%E5%92%8CDRF%E5%85%A5%E9%97%A8/" rel="next" title="RESTful架构和DRF入门">
+      RESTful架构和DRF入门 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">网络爬虫和相关工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">网络爬虫的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%88%AC%E8%99%AB%E7%9A%84%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-number">1.1.1.</span> <span class="nav-text">爬虫的应用领域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E6%B3%95%E6%80%A7%E5%92%8C%E8%83%8C%E6%99%AF%E8%B0%83%E7%A0%94"><span class="nav-number">1.2.</span> <span class="nav-text">合法性和背景调研</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%88%AC%E8%99%AB%E5%90%88%E6%B3%95%E6%80%A7%E6%8E%A2%E8%AE%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">爬虫合法性探讨</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Robots-txt%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">Robots.txt文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">相关工具介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.3.1.</span> <span class="nav-text">HTTP协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.2.</span> <span class="nav-text">相关工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%88%AC%E8%99%AB"><span class="nav-number">1.4.</span> <span class="nav-text">一个简单的爬虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%88%AC%E8%99%AB%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.5.</span> <span class="nav-text">爬虫注意事项</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">halomzh</p>
+  <div class="site-description" itemprop="description">学习记录</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">halomzh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
