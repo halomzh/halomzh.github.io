@@ -186,7 +186,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/98.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E4%B8%8A%E7%BA%BF%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/16-20.Python%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -200,7 +200,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/98.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E4%B8%8A%E7%BA%BF%E5%92%8C%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/" class="post-title-link" itemprop="url">项目部署上线指南</a>
+            <a href="/2020/09/29/python/16-20.Python%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/" class="post-title-link" itemprop="url">16-20、Python语言进阶</a>
         </h2>
 
         <div class="post-meta">
@@ -217,401 +217,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="项目部署上线指南"><a href="#项目部署上线指南" class="headerlink" title="项目部署上线指南"></a>项目部署上线指南</h2><h3 id="准备上线"><a href="#准备上线" class="headerlink" title="准备上线"></a>准备上线</h3><ol>
-<li><p>上线前的检查工作。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py check --deploy</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将DEBUG设置为False并配置ALLOWED_HOSTS。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = <span class="literal">False</span></span><br><span class="line">ALLOWED_HOSTS = [<span class="string">&#x27;*&#x27;</span>]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安全相关的配置。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保持HTTPS连接的时间</span></span><br><span class="line">SECURE_HSTS_SECONDS = <span class="number">3600</span></span><br><span class="line">SECURE_HSTS_INCLUDE_SUBDOMAINS = <span class="literal">True</span></span><br><span class="line">SECURE_HSTS_PRELOAD = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 自动重定向到安全连接</span></span><br><span class="line">SECURE_SSL_REDIRECT = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免浏览器自作聪明推断内容类型</span></span><br><span class="line">SECURE_CONTENT_TYPE_NOSNIFF = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免跨站脚本攻击</span></span><br><span class="line">SECURE_BROWSER_XSS_FILTER = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># COOKIE只能通过HTTPS进行传输</span></span><br><span class="line">SESSION_COOKIE_SECURE = <span class="literal">True</span></span><br><span class="line">CSRF_COOKIE_SECURE = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 防止点击劫持攻击手段 - 修改HTTP协议响应头</span></span><br><span class="line"><span class="comment"># 当前网站是不允许使用&lt;iframe&gt;标签进行加载的</span></span><br><span class="line">X_FRAME_OPTIONS = <span class="string">&#x27;DENY&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>敏感信息放到环境变量或文件中。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SECRET_KEY = os.environ[<span class="string">&#x27;SECRET_KEY&#x27;</span>]</span><br><span class="line"></span><br><span class="line">DB_USER = os.environ[<span class="string">&#x27;DB_USER&#x27;</span>]</span><br><span class="line">DB_PASS = os.environ[<span class="string">&#x27;DB_PASS&#x27;</span>]</span><br><span class="line"></span><br><span class="line">REDIS_AUTH = os.environ[<span class="string">&#x27;REDIS_AUTH&#x27;</span>]</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="更新服务器Python环境到3-x"><a href="#更新服务器Python环境到3-x" class="headerlink" title="更新服务器Python环境到3.x"></a>更新服务器Python环境到3.x</h3><blockquote>
-<p>说明：如果需要清除之前的安装，就删除对应的文件和文件夹即可</p>
-</blockquote>
-<ol>
-<li><p>安装底层依赖库。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel libdb4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载Python源代码。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>验证下载文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5sum Python-3.7.6.tar.xz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解压缩和解归档。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xz -d Python-3.7.6.tar.xz</span><br><span class="line">tar -xvf Python-3.7.6.tar</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行安装前的配置（生成Makefile文件）。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.7.6</span><br><span class="line">./configure --prefix=/usr/local/python37 --enable-optimizations</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>构建和安装。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置PATH环境变量（用户或系统环境变量）并激活。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">... 此处省略上面的代码...</span><br><span class="line"></span><br><span class="line">export PATH=$PATH:/usr/local/python37/bin</span><br><span class="line"></span><br><span class="line">... 此处省略下面的代码...</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注册软链接（符号链接）- 这一步不是必须的，但通常会比较有用。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/python37/bin/python3 /usr/bin/python3</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试Python环境是否更新成功（安装Python 3一定不能破坏原来的Python 2）。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 --version</span><br><span class="line">python --version</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="项目目录结构"><a href="#项目目录结构" class="headerlink" title="项目目录结构"></a>项目目录结构</h3><p>假设项目文件夹为<code>project</code>，下面的五个子目录分别是：<code>code</code>、<code>conf</code>、<code>logs</code>、<code>stat</code>和<code>venv</code>分别用来保存项目的代码、配置文件、日志文件、静态资源和虚拟环境。其中，<code>conf</code>目录下的子目录<code>cert</code>中保存了配置HTTPS需要使用的证书和密钥；<code>code</code>目录下的项目代码可以通过版本控制工具从代码仓库中检出；虚拟环境可以通过工具（如：venv、virtualenv、pyenv等）进行创建。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">project</span><br><span class="line">├── code</span><br><span class="line">│   └── fangtx</span><br><span class="line">│       ├── api</span><br><span class="line">│       ├── common</span><br><span class="line">│       ├── fangtx</span><br><span class="line">│       ├── forum</span><br><span class="line">│       ├── rent</span><br><span class="line">│       ├── user</span><br><span class="line">│       ├── manage.py</span><br><span class="line">│       ├── README.md</span><br><span class="line">│       ├── static</span><br><span class="line">│       └── templates</span><br><span class="line">├── conf</span><br><span class="line">│   ├── cert</span><br><span class="line">│   │   ├── 214915882850706.key</span><br><span class="line">│   │   └── 214915882850706.pem</span><br><span class="line">│   ├── nginx.conf</span><br><span class="line">│   └── uwsgi.ini</span><br><span class="line">├── logs</span><br><span class="line">│   ├── access.log</span><br><span class="line">│   ├── error.log</span><br><span class="line">│   └── uwsgi.log</span><br><span class="line">├── stat</span><br><span class="line">│   └── css</span><br><span class="line">│   └── images</span><br><span class="line">│   └── js</span><br><span class="line">└── venv</span><br><span class="line">    ├── bin</span><br><span class="line">    │   ├── activate</span><br><span class="line">    │   ├── activate.csh</span><br><span class="line">    │   ├── activate.fish</span><br><span class="line">    │   ├── celery</span><br><span class="line">    │   ├── celerybeat</span><br><span class="line">    │   ├── celeryd</span><br><span class="line">    │   ├── celeryd-multi</span><br><span class="line">    │   ├── coverage</span><br><span class="line">    │   ├── coverage3</span><br><span class="line">    │   ├── coverage-3.7</span><br><span class="line">    │   ├── django-admin</span><br><span class="line">    │   ├── django-admin.py</span><br><span class="line">    │   ├── easy_install</span><br><span class="line">    │   ├── easy_install-3.7</span><br><span class="line">    │   ├── pip</span><br><span class="line">    │   ├── pip3</span><br><span class="line">    │   ├── pip3.7</span><br><span class="line">    │   ├── __pycache__</span><br><span class="line">    │   ├── pyrsa-decrypt</span><br><span class="line">    │   ├── pyrsa-decrypt-bigfile</span><br><span class="line">    │   ├── pyrsa-encrypt</span><br><span class="line">    │   ├── pyrsa-encrypt-bigfile</span><br><span class="line">    │   ├── pyrsa-keygen</span><br><span class="line">    │   ├── pyrsa-priv2pub</span><br><span class="line">    │   ├── pyrsa-sign</span><br><span class="line">    │   ├── pyrsa-verify</span><br><span class="line">    │   ├── python -&gt; python3</span><br><span class="line">    │   ├── python3 -&gt; &#x2F;usr&#x2F;bin&#x2F;python3</span><br><span class="line">    │   └── uwsgi</span><br><span class="line">    ├── include</span><br><span class="line">    ├── lib</span><br><span class="line">    │   └── python3.7</span><br><span class="line">    ├── lib64 -&gt; lib</span><br><span class="line">    ├── pip-selfcheck.json</span><br><span class="line">    └── pyvenv.cfg</span><br></pre></td></tr></table></figure>
-
-<p>下面以阿里云为例，简单说明如何为项目注册域名、解析域名以及购买权威机构颁发的证书。</p>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://wanwang.aliyun.com/domain/">注册域名</a>。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj94ivvkwrj317w0r8goi.jpg"></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://beian.aliyun.com/">域名备案</a>。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj94j26mcfj31fe0csq3v.jpg"></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://dns.console.aliyun.com/#/dns/domainList">域名解析</a>。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj94j7cgjyj31h20mswgo.jpg"></p>
-<p><img src="./res/aliyun-resolve-settings.png"></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://www.aliyun.com/product/cas">购买证书</a>。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj94jcyijgj31hl0u0af2.jpg"></p>
-</li>
-</ol>
-<p>可以使用类似于sftp的工具将证书上传到<code>conf/cert</code>目录，然后使用git克隆项目代码到<code>code</code>目录。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd code</span><br><span class="line">git clone &lt;url&gt;</span><br></pre></td></tr></table></figure>
-
-<p>回到项目目录，创建并激活虚拟环境。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m venv venv</span><br><span class="line">source venv/bin/activate</span><br></pre></td></tr></table></figure>
-
-<p>重建项目依赖项。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r code/teamproject/requirements.txt</span><br></pre></td></tr></table></figure>
-
-<h3 id="uWSGI的配置"><a href="#uWSGI的配置" class="headerlink" title="uWSGI的配置"></a>uWSGI的配置</h3><ol>
-<li><p>安装uWSGI。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install uwsgi</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改uWSGI的配置文件（<code>/root/project/conf/uwsgi.ini</code>）。</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="comment"># 配置前导路径</span></span><br><span class="line"><span class="attr">base</span>=/root/project</span><br><span class="line"><span class="comment"># 配置项目名称</span></span><br><span class="line"><span class="attr">name</span>=teamproject</span><br><span class="line"><span class="comment"># 守护进程</span></span><br><span class="line"><span class="attr">master</span>=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 进程个数</span></span><br><span class="line"><span class="attr">processes</span>=<span class="number">4</span></span><br><span class="line"><span class="comment"># 虚拟环境</span></span><br><span class="line"><span class="attr">pythonhome</span>=%(base)/venv</span><br><span class="line"><span class="comment"># 项目地址</span></span><br><span class="line"><span class="attr">chdir</span>=%(base)/code/%(name)</span><br><span class="line"><span class="comment"># 指定python解释器</span></span><br><span class="line"><span class="attr">pythonpath</span>=%(pythonhome)/bin/python</span><br><span class="line"><span class="comment"># 指定uwsgi文件</span></span><br><span class="line"><span class="attr">module</span>=%(name).wsgi</span><br><span class="line"><span class="comment"># 通信的地址和端口(自己服务器的IP地址和端口)</span></span><br><span class="line"><span class="attr">socket</span>=<span class="number">172.18</span>.<span class="number">61.250</span>:<span class="number">8000</span></span><br><span class="line"><span class="comment"># 日志文件地址</span></span><br><span class="line"><span class="attr">logto</span>=%(base)/logs/uwsgi.log</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>说明：可以先将“通信的地址和端口”项等号前面改为http来进行测试，如果没有问题再改回    成socket，然后通过Nginx来实现项目的“动静分离”（静态资源交给Nginx处理，动态内容交给    uWSGI处理）。按照下面的方式可以启动uWSGI服务器。</p>
-</blockquote>
-</li>
-<li><p>启动服务器。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup uwsgi --ini conf/uwsgi.ini &amp;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="Nginx的配置"><a href="#Nginx的配置" class="headerlink" title="Nginx的配置"></a>Nginx的配置</h3><ol>
-<li><p>安装Nginx。</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改全局配置文件（<code>/etc/nginx/nginx.conf</code>）。</p>
- <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置用户</span></span><br><span class="line"><span class="attribute">user</span> nginx;</span><br><span class="line"><span class="comment"># 工作进程数(建议跟CPU的核数量一致)</span></span><br><span class="line"><span class="attribute">worker_processes</span> auto;</span><br><span class="line"><span class="comment"># 错误日志</span></span><br><span class="line"><span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line"><span class="comment"># 进程文件</span></span><br><span class="line"><span class="attribute">pid</span> /run/nginx.pid;</span><br><span class="line"><span class="comment"># 包含其他的配置</span></span><br><span class="line"><span class="attribute">include</span> /usr/share/nginx/modules/<span class="regexp">*.conf</span>;</span><br><span class="line"><span class="comment"># 工作模式(多路IO复用方式)和连接上限</span></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;</span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># HTTP服务器相关配置</span></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="comment"># 日志格式</span></span><br><span class="line">    <span class="attribute">log_format</span>  main  <span class="string">&#x27;<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] &quot;<span class="variable">$request</span>&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> &quot;<span class="variable">$http_referer</span>&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;&quot;<span class="variable">$http_user_agent</span>&quot; &quot;<span class="variable">$http_x_forwarded_for</span>&quot;&#x27;</span>;</span><br><span class="line">    <span class="comment"># 访问日志</span></span><br><span class="line">    <span class="attribute">access_log</span>  /var/log/nginx/access.log  main;</span><br><span class="line">    <span class="comment"># 开启高效文件传输模式</span></span><br><span class="line">    <span class="attribute">sendfile</span>            <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 用sendfile传输文件时有利于改善性能</span></span><br><span class="line">    <span class="attribute">tcp_nopush</span>          <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 禁用Nagle来解决交互性问题</span></span><br><span class="line">    <span class="attribute">tcp_nodelay</span>         <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 客户端保持连接时间</span></span><br><span class="line">    <span class="attribute">keepalive_timeout</span>   <span class="number">30</span>;</span><br><span class="line">    <span class="attribute">types_hash_max_size</span> <span class="number">2048</span>;</span><br><span class="line">    <span class="comment"># 包含MIME类型的配置</span></span><br><span class="line">    <span class="attribute">include</span>             /etc/nginx/mime.types;</span><br><span class="line">    <span class="comment"># 默认使用二进制流格式</span></span><br><span class="line">    <span class="attribute">default_type</span>        application/octet-stream;</span><br><span class="line">    <span class="comment"># 包含其他配置文件</span></span><br><span class="line">    <span class="attribute">include</span> /etc/nginx/conf.d/<span class="regexp">*.conf</span>;</span><br><span class="line">    <span class="comment"># 包含项目的Nginx配置文件</span></span><br><span class="line">    <span class="attribute">include</span> /root/project/conf/<span class="regexp">*.conf</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编辑局部配置文件（<code>/root/project/conf/nginx.conf</code>）。</p>
- <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>      <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> _;</span><br><span class="line">    <span class="attribute">access_log</span> /root/project/logs/access.log;</span><br><span class="line">    <span class="attribute">error_log</span> /root/project/logs/error.log;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">include</span> uwsgi_params;</span><br><span class="line">        <span class="attribute">uwsgi_pass</span> <span class="number">172.18.61.250:8000</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">location</span> /static/ &#123;</span><br><span class="line">        <span class="attribute">alias</span> /root/project/stat/;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>      <span class="number">443</span>;</span><br><span class="line">    <span class="attribute">server_name</span> _;</span><br><span class="line">    <span class="attribute">ssl</span>         <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">access_log</span> /root/project/logs/access.log;</span><br><span class="line">    <span class="attribute">error_log</span> /root/project/logs/error.log;</span><br><span class="line">    <span class="attribute">ssl_certificate</span>     /root/project/conf/cert/<span class="number">214915882850706</span>.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /root/project/conf/cert/<span class="number">214915882850706</span>.key;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">5m</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span> ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">include</span> uwsgi_params;</span><br><span class="line">        <span class="attribute">uwsgi_pass</span> <span class="number">172.18.61.250:8000</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">location</span> /static/ &#123;</span><br><span class="line">        <span class="attribute">alias</span> /root/project/static/;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> 到此为止，我们可以启动Nginx来访问我们的应用程序，HTTP和HTTPS都是没有问题的，如果Nginx已经运行，在修改配置文件后，我们可以用下面的命令重新启动Nginx。</p>
-</li>
-<li><p>重启Nginx服务器。</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
-
-<p> 或</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart nginx</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<blockquote>
-<p>说明：可以对Django项目使用<code>python manage.py collectstatic</code>命令将静态资源收集到指定目录下，要做到这点只需要在项目的配置文件<code>settings.py</code>中添加<code>STATIC_ROOT</code>配置即可。</p>
-</blockquote>
-<h4 id="负载均衡配置"><a href="#负载均衡配置" class="headerlink" title="负载均衡配置"></a>负载均衡配置</h4><p>下面的配置中我们使用Nginx实现负载均衡，为另外的三个Nginx服务器（通过Docker创建）提供反向代理服务。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 801:80 --name nginx1 nginx:latest</span><br><span class="line">docker run -d -p 802:80 --name nginx2 nginx:latest</span><br><span class="line">docker run -d -p 803:80 --name nginx3 nginx:latest</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span> root;</span><br><span class="line"><span class="attribute">worker_processes</span> auto;</span><br><span class="line"><span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line"><span class="attribute">pid</span> /run/nginx.pid;</span><br><span class="line"></span><br><span class="line"><span class="attribute">include</span> /usr/share/nginx/modules/<span class="regexp">*.conf</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为HTTP服务配置负载均衡</span></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">	<span class="attribute">upstream</span> xx &#123;</span><br><span class="line">		<span class="attribute">server</span> <span class="number">192.168.1.100</span> weight=<span class="number">2</span>;</span><br><span class="line">		<span class="attribute">server</span> <span class="number">192.168.1.101</span> weight=<span class="number">1</span>;</span><br><span class="line">		<span class="attribute">server</span> <span class="number">192.168.1.102</span> weight=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="section">server</span> &#123;</span><br><span class="line">		<span class="attribute">listen</span>       <span class="number">80</span> default_server;</span><br><span class="line">		<span class="attribute">listen</span>       [::]:<span class="number">80</span> default_server;</span><br><span class="line">		<span class="attribute">listen</span>       <span class="number">443</span> ssl;</span><br><span class="line">		<span class="attribute">listen</span>       [::]:<span class="number">443</span> ssl;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl</span> <span class="literal">on</span>;</span><br><span class="line">		<span class="attribute">access_log</span> /root/project/logs/access.log;</span><br><span class="line">		<span class="attribute">error_log</span> /root/project/logs/error.log;</span><br><span class="line">		<span class="attribute">ssl_certificate</span> /root/project/conf/cert/<span class="number">214915882850706</span>.pem;</span><br><span class="line">		<span class="attribute">ssl_certificate_key</span> /root/project/conf/cert/<span class="number">214915882850706</span>.key;</span><br><span class="line">		<span class="attribute">ssl_session_timeout</span> <span class="number">5m</span>;</span><br><span class="line">		<span class="attribute">ssl_ciphers</span> ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">		<span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">		<span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">		<span class="attribute">location</span> / &#123;</span><br><span class="line">			<span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">			<span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$remote_addr</span>;</span><br><span class="line">			<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">			<span class="comment"># proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span></span><br><span class="line">			<span class="attribute">proxy_buffering</span> <span class="literal">off</span>;</span><br><span class="line">			<span class="attribute">proxy_pass</span> http://fangtx;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>说明：Nginx在配置负载均衡时，默认使用WRR（加权轮询算法），除此之外还支持ip_hash、fair（需要安装upstream_fair模块）和url_hash算法。此外，在配置upstream模块时可以指定服务器的状态值，包括：backup（备份机器，其他服务器不可用时才将请求分配到该机器）、down、fail_timeout（请求失败达到max_fails后的暂停服务时间）、max_fails（允许请求失败的次数）和weight（轮询的权重）。</p>
-</blockquote>
-<h3 id="Keepalived"><a href="#Keepalived" class="headerlink" title="Keepalived"></a>Keepalived</h3><p>当使用Nginx进行负载均衡配置时，要考虑负载均衡服务器宕机的情况。为此可以使用Keepalived来实现负载均衡主机和备机的热切换，从而保证系统的高可用性。Keepalived的配置还是比较复杂，通常由专门做运维的人进行配置，一个基本的配置可以参照<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dd93bc6d45f5">《Keepalived的配置和使用》</a>。</p>
-<h3 id="MySQL主从复制"><a href="#MySQL主从复制" class="headerlink" title="MySQL主从复制"></a>MySQL主从复制</h3><p>下面还是基于Docker来演示如何配置MySQL主从复制。我们事先准备好MySQL的配置文件以及保存MySQL数据和运行日志的目录，然后通过Docker的数据卷映射来指定容器的配置、数据和日志文件的位置。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root</span><br><span class="line">└── mysql</span><br><span class="line">    ├── master</span><br><span class="line">    │   ├── conf</span><br><span class="line">    |	└── data</span><br><span class="line">    └── slave-1</span><br><span class="line">    |	├── conf</span><br><span class="line">    |	└── data</span><br><span class="line">    └── slave-2</span><br><span class="line">    |	├── conf</span><br><span class="line">    |	└── data</span><br><span class="line">    └── slave-3</span><br><span class="line">    	├── conf</span><br><span class="line">    	└── data</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p>MySQL的配置文件（master和slave的配置文件需要不同的server-id）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">pid-file&#x3D;&#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.pid</span><br><span class="line">socket&#x3D;&#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock</span><br><span class="line">datadir&#x3D;&#x2F;var&#x2F;lib&#x2F;mysql</span><br><span class="line">log-error&#x3D;&#x2F;var&#x2F;log&#x2F;mysql&#x2F;error.log</span><br><span class="line">server-id&#x3D;1</span><br><span class="line">log-bin&#x3D;&#x2F;var&#x2F;log&#x2F;mysql&#x2F;mysql-bin.log</span><br><span class="line">expire_logs_days&#x3D;30</span><br><span class="line">max_binlog_size&#x3D;256M</span><br><span class="line">symbolic-links&#x3D;0</span><br><span class="line"># slow_query_log&#x3D;ON</span><br><span class="line"># slow_query_log_file&#x3D;&#x2F;var&#x2F;log&#x2F;mysql&#x2F;slow.log</span><br><span class="line"># long_query_time&#x3D;1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建和配置master。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3306:3306 --name mysql-master \</span><br><span class="line">-v /root/mysql/master/conf:/etc/mysql/mysql.conf.d \</span><br><span class="line">-v /root/mysql/master/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 mysql:5.7</span><br><span class="line"></span><br><span class="line">docker exec -it mysql-master /bin/bash</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line">Enter password:</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 1</span><br><span class="line">Server version: 5.7.23-log MySQL Community Server (GPL)</span><br><span class="line">Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line">Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement.</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> grant replication slave on *.* to <span class="string">&#x27;slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified by <span class="string">&#x27;iamslave&#x27;</span>;</span></span><br><span class="line">Query OK, 0 rows affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> flush privileges;</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show master status;</span></span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000003 |      590 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> quit</span></span><br><span class="line">Bye</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-<p>上面创建Docker容器时使用的<code>-v</code>参数（<code>--volume</code>）表示映射数据卷，冒号前是宿主机的目录，冒号后是容器中的目录，这样相当于将宿主机中的目录挂载到了容器中。</p>
-</li>
-<li><p>备份主表中的数据（如果需要的话）。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; flush table with read lock;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u root -p 123456 -A -B &gt; /root/backup/mysql/mybak$(date +<span class="string">&quot;%Y%m%d%H%M%S&quot;</span>).sql</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; unlock table;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建和配置slave。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3308:3306 --name mysql-slave-1 \</span><br><span class="line">-v /root/mysql/slave-1/conf:/etc/mysql/mysql.conf.d \</span><br><span class="line">-v /root/mysql/slave-1/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">--link mysql-master:mysql-master mysql:5.7</span><br><span class="line"></span><br><span class="line">docker run -d -p 3309:3306 --name mysql-slave-2 \</span><br><span class="line">-v /root/mysql/slave-2/conf:/etc/mysql/mysql.conf.d \</span><br><span class="line">-v /root/mysql/slave-2/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">--link mysql-master:mysql-master mysql:5.7</span><br><span class="line"></span><br><span class="line">docker run -d -p 3310:3306 --name mysql-slave-3 \</span><br><span class="line">-v /root/mysql/slave-3/conf:/etc/mysql/mysql.conf.d \</span><br><span class="line">-v /root/mysql/slave-3/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">--link mysql-master:mysql-master mysql:5.7</span><br><span class="line"></span><br><span class="line">docker exec -it mysql-slave-1 /bin/bash</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line">Enter password:</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 2</span><br><span class="line">Server version: 5.7.23-log MySQL Community Server (GPL)</span><br><span class="line">Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line">Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement.</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> reset slave;</span></span><br><span class="line">Query OK, 0 rows affected (0.02 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> change master to master_host=<span class="string">&#x27;mysql-master&#x27;</span>, master_user=<span class="string">&#x27;slave&#x27;</span>, master_password=<span class="string">&#x27;iamslave&#x27;</span>, master_log_file=<span class="string">&#x27;mysql-bin.000003&#x27;</span>, master_log_pos=590;</span></span><br><span class="line">Query OK, 0 rows affected, 2 warnings (0.03 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> start slave;</span></span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show slave status\G</span></span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Waiting for master to send event</span><br><span class="line">                  Master_Host: mysql57</span><br><span class="line">                  Master_User: slave</span><br><span class="line">                  Master_Port: 3306</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: mysql-bin.000001</span><br><span class="line">          Read_Master_Log_Pos: 590</span><br><span class="line">               Relay_Log_File: f352f05eb9d0-relay-bin.000002</span><br><span class="line">                Relay_Log_Pos: 320</span><br><span class="line">        Relay_Master_Log_File: mysql-bin.000001</span><br><span class="line">             Slave_IO_Running: Yes</span><br><span class="line">            Slave_SQL_Running: Yes</span><br><span class="line">             Replicate_Do_DB:</span><br><span class="line">          Replicate_Ignore_DB:</span><br><span class="line">           Replicate_Do_Table:</span><br><span class="line">       Replicate_Ignore_Table:</span><br><span class="line">      Replicate_Wild_Do_Table:</span><br><span class="line">  Replicate_Wild_Ignore_Table:</span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error:</span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 590</span><br><span class="line">              Relay_Log_Space: 534</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File:</span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File:</span><br><span class="line">           Master_SSL_CA_Path:</span><br><span class="line">              Master_SSL_Cert:</span><br><span class="line">            Master_SSL_Cipher:</span><br><span class="line">               Master_SSL_Key:</span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error:</span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error:</span><br><span class="line">  Replicate_Ignore_Server_Ids:</span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">                  Master_UUID: 30c38043-ada1-11e8-8fa1-0242ac110002</span><br><span class="line">             Master_Info_File: /var/lib/mysql/master.info</span><br><span class="line">                    SQL_Delay: 0</span><br><span class="line">          SQL_Remaining_Delay: NULL</span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates</span><br><span class="line">           Master_Retry_Count: 86400</span><br><span class="line">                  Master_Bind:</span><br><span class="line">      Last_IO_Error_Timestamp:</span><br><span class="line">     Last_SQL_Error_Timestamp:</span><br><span class="line">               Master_SSL_Crl:</span><br><span class="line">           Master_SSL_Crlpath:</span><br><span class="line">           Retrieved_Gtid_Set:</span><br><span class="line">            Executed_Gtid_Set:</span><br><span class="line">                Auto_Position: 0</span><br><span class="line">         Replicate_Rewrite_DB:</span><br><span class="line">                 Channel_Name:</span><br><span class="line">           Master_TLS_Version:</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> quit</span></span><br><span class="line">Bye</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-<p>接下来可以如法炮制配置出slave2和slave3，这样就可以搭建起一个“一主带三从”的主从复制环境。上面创建创建容器时使用的<code>--link</code>参数用来配置容器在网络上的主机名（网络地址别名）。</p>
-</li>
-</ol>
-<p>配置好主从复制后，写数据的操作应该master上执行，而读数据的操作应该在slave上完成。为此，在Django项目中需要配置DATABASE_ROUTERS并通过自定义的主从复制路由类来实现读写分离操作，如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DATABASE_ROUTERS = [</span><br><span class="line">    <span class="comment"># 此处省略其他配置</span></span><br><span class="line">    <span class="string">&#x27;common.routers.MasterSlaveRouter&#x27;</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MasterSlaveRouter</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;主从复制路由&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">db_for_read</span>(<span class="params">model, **hints</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Attempts to read auth models go to auth_db.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> random.choice((<span class="string">&#x27;slave1&#x27;</span>, <span class="string">&#x27;slave2&#x27;</span>, <span class="string">&#x27;slave3&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">db_for_write</span>(<span class="params">model, **hints</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Attempts to write auth models go to auth_db.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;default&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allow_relation</span>(<span class="params">obj1, obj2, **hints</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Allow relations if a model in the auth app is involved.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allow_migrate</span>(<span class="params">db, app_label, model_name=None, **hints</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Make sure the auth app only appears in the &#x27;auth_db&#x27;</span></span><br><span class="line"><span class="string">        database.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<p>上面的内容参考了Django官方文档的<a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/2.1/topics/db/multi-db/#topics-db-multi-db-routing">DATABASE_ROUTERS配置</a>，对代码进行了适当的调整。</p>
-<h3 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h3><p>事实上，项目上线中最为麻烦的事情就是配置软件运行环境，环境的差异会给软件的安装和部署带来诸多的麻烦，而Docker正好可以解决这个问题。关于Docker在之前的文档中我们已经介绍过了，接下来我们对Docker的知识做一些必要的补充。</p>
-<ol>
-<li><p>创建镜像文件。</p>
-<p>将容器保存成镜像：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m &quot;...&quot; -a &quot;jackfrued&quot; &lt;container-name&gt; jackfrued/&lt;image-name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>使用Dockerfile构建镜像：</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定基础镜像文件</span></span><br><span class="line"><span class="keyword">FROM</span> centos:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定维护者信息</span></span><br><span class="line"><span class="keyword">MAINTAINER</span> jackfrued</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行命令</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> yum -y install gcc</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">cd</span> ~</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> mkdir -p project/code</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> mkdir -p project/logs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 拷贝文件</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在容器启动时执行命令</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> ~/init.sh</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t jackfrued/&lt;image-name&gt; .</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>镜像的导入和导出。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker save -o &lt;file-name&gt;.tar &lt;image-name&gt;:&lt;version&gt;</span><br><span class="line">docker load -i &lt;file-name&gt;.tar</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推送到DockerHub服务器。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker tag &lt;image-name&gt;:&lt;version&gt; jackfrued/&lt;name&gt;</span><br><span class="line">docker login</span><br><span class="line">docker push jackfrued/&lt;name&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>容器之间的通信。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --link &lt;container-name&gt;:&lt;alias-name&gt;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-<p>如果我们能够在Docker中完成项目的部署，并且将整个部署好的容器打包成镜像文件进行分发和安装，这样就可以解决项目在多个节点上进行部署时可能遇到的麻烦，而且整个部署可以在很短的时间内完成。</p>
-<h3 id="Supervisor"><a href="#Supervisor" class="headerlink" title="Supervisor"></a>Supervisor</h3><p><a target="_blank" rel="noopener" href="https://github.com/Supervisor/supervisor">Supervisor</a>是一个用Python写的进程管理工具，可以很方便的用来在类Unix系统下启动、重启（自动重启程序）和关闭进程，目前Supervisor暂时还没有提供对Python 3的支持，可以通过Python 2来安装和运行Supervisor，再通过Supervisor来管理Python 3的程序。</p>
-<blockquote>
-<p><strong>提示</strong>：还有一个和Supervisor功能类似的工具名为Circus，支持Python 3。</p>
-</blockquote>
-<ol>
-<li><p>安装Supervisor。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">virtualenv -p /usr/bin/python venv</span><br><span class="line">source venv/bin/activate</span><br><span class="line">pip install supervisor</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看Supervisor的配置文件。</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/supervisord.conf</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; 此处省略上面的代码</span></span><br><span class="line"><span class="comment">; The [include] section can just contain the &quot;files&quot; setting.  This</span></span><br><span class="line"><span class="comment">; setting can list multiple files (separated by whitespace or</span></span><br><span class="line"><span class="comment">; newlines).  It can also contain wildcards.  The filenames are</span></span><br><span class="line"><span class="comment">; interpreted as relative to this file.  Included files *cannot*</span></span><br><span class="line"><span class="comment">; include files themselves.</span></span><br><span class="line"><span class="section">[include]</span></span><br><span class="line"><span class="attr">files</span> = supervisord.d/*.ini</span><br></pre></td></tr></table></figure>
-
-<p> 可以看出自定义的管理配置代码可以放在<code>/etc/supervisord.d</code>目录中，并且文件名以<code>ini</code>作为后缀即可。</p>
-</li>
-<li><p>编写自己的配置文件<code>fangtx.ini</code>并放在<code>/etc/supervisord.d</code>目录中。</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[program:project]</span></span><br><span class="line"><span class="attr">command</span>=uwsgi --ini /root/project/conf/uwsgi.ini</span><br><span class="line"><span class="attr">stopsignal</span>=QUIT</span><br><span class="line"><span class="attr">autostart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">redirect_stderr</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[program:celery]</span></span><br><span class="line"><span class="comment">; Set full path to celery program if using virtualenv</span></span><br><span class="line"><span class="attr">command</span>=/root/project/venv/bin/celery -A fangtx worker</span><br><span class="line"><span class="attr">user</span>=root</span><br><span class="line"><span class="attr">numprocs</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">stdout_logfile</span>=/var/log/supervisor/celery.log</span><br><span class="line"><span class="attr">stderr_logfile</span>=/var/log/supervisor/celery_error.log</span><br><span class="line"><span class="attr">autostart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">startsecs</span>=<span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">; Need to wait for currently executing tasks to finish at shutdown.</span></span><br><span class="line"><span class="comment">; Increase this if you have very long running tasks.</span></span><br><span class="line"><span class="comment">;stopwaitsecs = 600</span></span><br><span class="line"></span><br><span class="line"><span class="comment">; When resorting to send SIGKILL to the program to terminate it</span></span><br><span class="line"><span class="comment">; send SIGKILL to its whole process group instead,</span></span><br><span class="line"><span class="comment">; taking care of its children as well.</span></span><br><span class="line"><span class="attr">killasgroup</span>=<span class="literal">true</span></span><br><span class="line"><span class="comment">; Set Celery priority higher than default (999)</span></span><br><span class="line"><span class="comment">; so, if rabbitmq is supervised, it will start first.</span></span><br><span class="line"><span class="attr">priority</span>=<span class="number">1000</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动Supervisor。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl -c /etc/supervisord.conf</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-<h3 id="其他服务"><a href="#其他服务" class="headerlink" title="其他服务"></a>其他服务</h3><ol>
-<li><p>常用开源软件。</p>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>开源方案</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>版本控制工具</td>
-<td>Git、Mercurial、SVN</td>
-</tr>
-<tr>
-<td>缺陷管理</td>
-<td>Redmine、Mantis</td>
-</tr>
-<tr>
-<td>负载均衡</td>
-<td>Nginx、LVS、HAProxy</td>
-</tr>
-<tr>
-<td>邮件服务</td>
-<td>Postfix、Sendmail</td>
-</tr>
-<tr>
-<td>HTTP服务</td>
-<td>Nginx、Apache</td>
-</tr>
-<tr>
-<td>消息队列</td>
-<td>RabbitMQ、ZeroMQ、Redis、Kafka</td>
-</tr>
-<tr>
-<td>文件系统</td>
-<td>FastDFS</td>
-</tr>
-<tr>
-<td>基于位置服务（LBS）</td>
-<td>MongoDB、Redis</td>
-</tr>
-<tr>
-<td>监控服务</td>
-<td>Nagios、Zabbix</td>
-</tr>
-<tr>
-<td>关系型数据库</td>
-<td>MySQL、PostgreSQL</td>
-</tr>
-<tr>
-<td>非关系型数据库</td>
-<td>MongoDB、Redis、Cassandra、TiDB</td>
-</tr>
-<tr>
-<td>搜索引擎</td>
-<td>ElasticSearch、Solr</td>
-</tr>
-<tr>
-<td>缓存服务</td>
-<td>Mamcached、Redis</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>常用云服务。</p>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>可用的云服务</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>团队协作工具</td>
-<td>Teambition、钉钉</td>
-</tr>
-<tr>
-<td>代码托管平台</td>
-<td>Github、Gitee、CODING</td>
-</tr>
-<tr>
-<td>邮件服务</td>
-<td>SendCloud</td>
-</tr>
-<tr>
-<td>云存储（CDN）</td>
-<td>七牛、OSS、LeanCloud、Bmob、又拍云、S3</td>
-</tr>
-<tr>
-<td>移动端推送</td>
-<td>极光、友盟、百度</td>
-</tr>
-<tr>
-<td>即时通信</td>
-<td>环信、融云</td>
-</tr>
-<tr>
-<td>短信服务</td>
-<td>云片、极光、Luosimao、又拍云</td>
-</tr>
-<tr>
-<td>第三方登录</td>
-<td>友盟、ShareSDK</td>
-</tr>
-<tr>
-<td>网站监控和统计</td>
-<td>阿里云监控、监控宝、百度云观测、小鸟云</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/16-20.Python%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/pythonn/16-20.Python%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/" class="post-title-link" itemprop="url">Python语言进阶</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 09:55:17" itemprop="dateModified" datetime="2020-10-01T09:55:17+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1006,7 +612,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/92.Docker%E5%AE%B9%E5%99%A8%E8%AF%A6%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/92.Docker%E5%AE%B9%E5%99%A8%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1020,7 +626,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/92.Docker%E5%AE%B9%E5%99%A8%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">团队项目开发的问题和解决方案</a>
+            <a href="/2020/09/29/python/92.Docker%E5%AE%B9%E5%99%A8%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">92、团队项目开发的问题和解决方案</a>
         </h2>
 
         <div class="post-meta">
@@ -1037,7 +643,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 10:00:08" itemprop="dateModified" datetime="2020-10-01T10:00:08+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1424,7 +1030,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/java/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1438,7 +1044,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/java/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">分布式总结</a>
+            <a href="/2020/09/29/python/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL/" class="post-title-link" itemprop="url">36-38、关系数据库入门</a>
         </h2>
 
         <div class="post-meta">
@@ -1455,310 +1061,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 01:54:38" itemprop="dateModified" datetime="2020-10-01T01:54:38+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">Java概览</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="分布式总结"><a href="#分布式总结" class="headerlink" title="分布式总结"></a>分布式总结</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1 概念"></a><strong>1 概念</strong></h2><h3 id="1-1-模型"><a href="#1-1-模型" class="headerlink" title="1.1 模型"></a><strong>1.1 模型</strong></h3><h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a><strong>节点</strong></h4><p>在具体的工程项目中，一个节点往往是一个操作系统上的进程。在本文的模型中，认为节点是一个完整的、不可分的整体，如果某个程序进程实际上由若干相对独立部分构成，则在模型中可以将一个进程划分为多个节点。</p>
-<h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a><strong>异常</strong></h4><ol>
-<li><strong>机器宕机</strong>：机器宕机是最常见的异常之一。在大型集群中每日宕机发生的概率为千分之一左右，在实践中，一台宕机的机器恢复的时间通常认为是24 小时，一般需要人工介入重启机器。</li>
-<li><strong>网络异常</strong>：消息丢失，两片节点之间彼此完全无法通信，即出现了“网络分化”；消息乱序，有一定的概率不是按照发送时的顺序依次到达目的节点，考虑使用序列号等机制处理网络消息的乱序问题，使得无效的、过期的网络消息不影响系统的正确性；数据错误；不可靠的TCP，TCP 协议为应用层提供了可靠的、面向连接的传输服务，但在分布式系统的协议设计中不能认为所有网络通信都基于TCP 协议则通信就是可靠的。TCP协议只能保证同一个TCP 链接内的网络消息不乱序，TCP 链接之间的网络消息顺序则无法保证。</li>
-<li><strong>分布式三态</strong>：如果某个节点向另一个节点发起RPC(Remote procedure call)调用，即某个节点A 向另一个节点B 发送一个消息，节点B 根据收到的消息内容完成某些操作，并将操作的结果通过另一个消息返回给节点A，那么这个RPC 执行的结果有三种状态：“成功”、“失败”、“超时（未知）”，称之为分布式系统的三态。</li>
-<li><strong>存储数据丢失</strong>:对于有状态节点来说，数据丢失意味着状态丢失，通常只能从其他节点读取、恢复存储的状态。</li>
-<li><strong>异常处理原则</strong>：被大量工程实践所检验过的异常处理黄金原则是：任何在设计阶段考虑到的异常情况一定会在系统实际运行中发生，但在系统实际运行遇到的异常却很有可能在设计时未能考虑，所以，除非需求指标允许，在系统设计时不能放过任何异常情况。</li>
-</ol>
-<h3 id="1-2-副本"><a href="#1-2-副本" class="headerlink" title="1.2 副本"></a><strong>1.2 副本</strong></h3><p>副本（replica/copy）指在分布式系统中为数据或服务提供的冗余。对于数据副本指在不同的节点上持久化同一份数据，当出现某一个节点的存储的数据丢失时，可以从副本上读到数据。数据副本是分布式系统解决数据丢失异常的唯一手段。另一类副本是服务副本，指数个节点提供某种相同的服务，这种服务一般并不依赖于节点的本地存储，其所需数据一般来自其他节点。</p>
-<p>副本协议是贯穿整个分布式系统的理论核心。</p>
-<h4 id="副本一致性"><a href="#副本一致性" class="headerlink" title="副本一致性"></a><strong>副本一致性</strong></h4><p>分布式系统通过副本控制协议，使得从系统外部读取系统内部各个副本的数据在一定的约束条件下相同，称之为副本一致性(consistency)。副本一致性是针对分布式系统而言的，不是针对某一个副本而言。</p>
-<ol>
-<li>**强一致性(strong consistency)**：任何时刻任何用户或节点都可以读到最近一次成功更新的副本数据。强一致性是程度最高的一致性要求，也是实践中最难以实现的一致性。</li>
-<li>**单调一致性(monotonic consistency)**：任何时刻，任何用户一旦读到某个数据在某次更新后的值，这个用户不会再读到比这个值更旧的值。单调一致性是弱于强一致性却非常实用的一种一致性级别。因为通常来说，用户只关心从己方视角观察到的一致性，而不会关注其他用户的一致性情况。</li>
-<li>**会话一致性(session consistency)**：任何用户在某一次会话内一旦读到某个数据在某次更新后的值，这个用户在这次会话过程中不会再读到比这个值更旧的值。会话一致性通过引入会话的概念，在单调一致性的基础上进一步放松约束，会话一致性只保证单个用户单次会话内数据的单调修改，对于不同用户间的一致性和同一用户不同会话间的一致性没有保障。实践中有许多机制正好对应会话的概念，例如php 中的session 概念。</li>
-<li>**最终一致性(eventual consistency)**：最终一致性要求一旦更新成功，各个副本上的数据最终将达 到完全一致的状态，但达到完全一致状态所需要的时间不能保障。对于最终一致性系统而言，一个用户只要始终读取某一个副本的数据，则可以实现类似单调一致性的效果，但一旦用户更换读取的副本，则无法保障任何一致性。</li>
-<li>**弱一致性(week consistency)**：一旦某个更新成功，用户无法在一个确定时间内读到这次更新的值，且即使在某个副本上读到了新的值，也不能保证在其他副本上可以读到新的值。弱一致性系统一般很难在实际中使用，使用弱一致性系统需要应用方做更多的工作从而使得系统可用。</li>
-</ol>
-<h3 id="1-3-衡量分布式系统的指标"><a href="#1-3-衡量分布式系统的指标" class="headerlink" title="1.3 衡量分布式系统的指标"></a><strong>1.3 衡量分布式系统的指标</strong></h3><ol>
-<li><strong>性能</strong>：系统的吞吐能力，指系统在某一时间可以处理的数据总量，通常可以用系统每秒处理的总的数据量来衡量；系统的响应延迟，指系统完成某一功能需要使用的时间；系统的并发能力，指系统可以同时完成某一功能的能力，通常也用QPS(query per second)来衡量。上述三个性能指标往往会相互制约，追求高吞吐的系统，往往很难做到低延迟；系统平均响应时间较长时，也很难提高QPS。</li>
-<li><strong>可用性</strong>：系统的可用性(availability)指系统在面对各种异常时可以正确提供服务的能力。系统的可用性可以用系统停服务的时间与正常服务的时间的比例来衡量，也可以用某功能的失败次数与成功次数的比例来衡量。可用性是分布式的重要指标，衡量了系统的鲁棒性，是系统容错能力的体现。</li>
-<li><strong>可扩展性</strong>：系统的可扩展性(scalability)指分布式系统通过扩展集群机器规模提高系统性能（吞吐、延迟、并发）、存储容量、计算能力的特性。好的分布式系统总在追求“线性扩展性”，也就是使得系统的某一指标可以随着集群中的机器数量线性增长。</li>
-<li><strong>一致性</strong>：分布式系统为了提高可用性，总是不可避免的使用副本的机制，从而引发副本一致性的问题。越是强的一致的性模型，对于用户使用来说使用起来越简单。</li>
-</ol>
-<h2 id="2-分布式系统原理"><a href="#2-分布式系统原理" class="headerlink" title="2 分布式系统原理"></a><strong>2 分布式系统原理</strong></h2><h3 id="2-1-数据分布方式"><a href="#2-1-数据分布方式" class="headerlink" title="2.1 数据分布方式"></a><strong>2.1 数据分布方式</strong></h3><p>所谓分布式系统顾名思义就是利用多台计算机协同解决单台计算机所不能解决的计算、存储等问题。单机系统与分布式系统的最大的区别在于问题的规模，即计算、存储的数据量的区别。将一个单机问题使用分布式解决，首先要解决的就是如何将问题拆解为可以使用多机分布式解决，使得分布式系统中的每台机器负责原问题的一个子集。由于无论是计算还是存储，其问题输入对象都是数据，所以如何拆解分布式系统的输入数据成为分布式系统的基本问题。</p>
-<h4 id="哈希方式"><a href="#哈希方式" class="headerlink" title="哈希方式"></a><strong>哈希方式</strong></h4><p>哈希分布数据的缺点同样明显，突出表现为可扩展性不高，一旦集群规模需要扩展，则几乎所有的数据需要被迁移并重新分布。工程中，扩展哈希分布数据的系统时，往往使得集群规模成倍扩展，按照数据重新计算哈希，这样原本一台机器上的数据只需迁移一半到另一台对应的机器上即可完成扩展。</p>
-<p>针对哈希方式扩展性差的问题，一种思路是不再简单的将哈希值与机器做除法取模映射，而是将对应关系作为元数据由专门的元数据服务器管理.同时，哈希值取模个数往往大于机器个数，这样同一台机器上需要负责多个哈希取模的余数。但需要以较复杂的机制维护大量的元数据。哈希分布数据的另一个缺点是，一旦某数据特征值的数据严重不均，容易出现“数据倾斜”（data skew）问题。</p>
-<p>哈希分布数据的另一个缺点是，一旦某数据特征值的数据严重不均，容易出现“数据倾斜”（data skew）问题</p>
-<h4 id="按数据范围分布"><a href="#按数据范围分布" class="headerlink" title="按数据范围分布"></a><strong>按数据范围分布</strong></h4><p>按数据范围分布是另一个常见的数据分布式，将数据按特征值的值域范围划分为不同的区间，使得集群中每台（组）服务器处理不同区间的数据。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hj0ojk4j30ik0b4795.jpg" alt="image-20200929140420324"></p>
-<p>工程中，为了数据迁移等负载均衡操作的方便，往往利用动态划分区间的技术，使得每个区间中服务的数据量尽量的一样多。当某个区间的数据量较大时，通过将区间“分裂”的方式拆分为两个区间，使得每个数据区间中的数据量都尽量维持在一个较为固定的阈值之下。</p>
-<p>一般的，往往需要使用专门的服务器在内存中维护数据分布信息，称这种数据的分布信息为一种元信息。甚至对于大规模的集群，由于元信息的规模非常庞大，单台 计算机无法独立维护，需要使用多台机器作为元信息服务器。</p>
-<h4 id="按数据量分布"><a href="#按数据量分布" class="headerlink" title="按数据量分布"></a><strong>按数据量分布</strong></h4><p>数据量分布数据与具体的数据特征无关，而是将数据视为一个顺序增长的文件，并将这个文件按照某一较为固定的大小划分为若干数据块（chunk），不同的数据块分布到不同的服务器上。与按数据范围分布数据的方式类似的是，按数据量分布数据也需要记录数据块的具体分布情况，并将该分布信息作为元数据使用元数据服务器管理。</p>
-<p>由于与具体的数据内容无关，按数据量分布数据的方式一般没有数据倾斜的问题，数据总是被均匀切分并分布到集群中。当集群需要重新负载均衡时，只需通过迁移数据块即可完成。集群扩容也没有太大的限制，只需将部分数据库迁移到新加入的机器上即可以完成扩容。按数据量划分数据的缺点是需要管理较为复杂的元信息，与按范围分布数据的方式类似，当集群规模较大时，元信息的数据量也变得很大，高效的管理元信息成为新的课题。</p>
-<h4 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a><strong>一致性哈希</strong></h4><p>一致性哈希（consistent hashing）是另一个种在工程中使用较为广泛的数据分布方式。一致性哈希最初在P2P 网络中作为分布式哈希表（DHT）的常用数据分布算法。一致性哈希的基本方式是使用一个哈希函数计算数据或数据特征的哈希值，令该哈希函数的输出值域为一个封闭的环，即哈希函数输出的最大值是最小值的前序。将节点随机分布到这个环上，每个节点负责处理从自己开始顺时针至下一个节点的全部哈希值域上的数据。</p>
-<p>使用一致性哈希的方式需要将节点在一致性哈希环上的位置作为元信息加以管理，这点比直接使用哈希分布数据的方式要复杂。然而，节点的位置信息只于集群中的机器规模相关，其元信息的量通常比按数据范围分布数据和按数据量分布数据的元信息量要小很多。</p>
-<p>为此一种常见的改进算法是引入虚节点（virtual node）的概念，系统初始时就创建许多虚节点，虚节点的个数一般远大于未来集群中机器的个数，将虚节点均匀分布到一致性哈希值域环上，其功能与基本一致性哈希算法中的节点相同。为每个节点分配若干虚节点。操作数据时，首先通过数据的哈希值在环上找到对应的虚节点，进而查找元数据找到对应的真实节点。使用虚节点改进有多个优点。首先，一旦某个节点不可用，该节点将使得多个虚节点不可用，从而使得多个相邻的真实节点负载失效节点的压里。同理，一旦加入一个新节点，可以分配多个虚节点，从而使得新节点可以 负载多个原有节点的压力，从全局看，较容易实现扩容时的负载均衡。</p>
-<h4 id="副本与数据分布"><a href="#副本与数据分布" class="headerlink" title="副本与数据分布"></a><strong>副本与数据分布</strong></h4><p>分布式系统容错、提高可用性的基本手段就是使用副本。对于数据副本的分布方式主要影响系统的可扩展性。一种基本的数据副本策略是以机器为单位，若干机器互为副本，副本机器之间的数据完全相同。这种策略适用于上述各种数据分布方式。其优点是非常简单，其缺点是恢复数据的效率不高、可扩展性也不高。</p>
-<p>更合适的做法不是以机器作为副本单位，而是将数据拆为较合理的数据段，以数据段为单位作为副本。实践中，常常使得每个数据段的大小尽量相等且控制在一定的大小以内。数据段有很多不同的称谓，segment，fragment，chunk，partition 等等。数据段的选择与数据分布方式直接相关。对于哈希分数据的方式，每个哈希分桶后的余数可以作为一个数据段，为了控制数据段的大小，常常使得分桶个数大于集群规模。一旦将数据分为数据段，则可以以数据段为单位管理副本，从而副本与机器不再硬相关，每台机器都可以负责一定数据段的副本。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hjo1bi9j30m8092ade.jpg" alt="image-20200929140458068"></p>
-<p>一旦副本分布与机器无关，数据丢失后的恢复效率将非常高。这是因为，一旦某台机器的数据丢失，其上数据段的副本将分布在整个集群的所有机器中，而不是仅在几个副本机器中，从而可以从整个集群同时拷贝恢复数据，而集群中每台数据源机器都可以以非常低的资源做拷贝。作为恢复数据源的机器即使都限速1MB/s，若有100 台机器参与恢复，恢复速度也能达到100MB/s。再者，副本分布与机器无关也利于集群容错。如果出现机器宕机，由于宕机机器上的副本分散于整个集群，其压力也自然分散到整个集群。最后，副本分布与机器无关也利于集群扩展。理论上，设集群规模 为N 台机器，当加入一台新的机器时，只需从各台机器上迁移1/N – 1/N+1 比例的数据段到新机器即实现了新的负载均衡。由于是从集群中各机器迁移数据，与数据恢复同理，效率也较高。工程中，完全按照数据段建立副本会引起需要管理的元数据的开销增大，副本维护的难度也相应增大。一种折中的做法是将某些数据段组成一个数据段分组，按数据段分组为粒度进行副本管理。这样做可以将副本粒度控制在一个较为合适的范围内。</p>
-<h4 id="本地化计算"><a href="#本地化计算" class="headerlink" title="本地化计算"></a><strong>本地化计算</strong></h4><p>在分布式系统中，数据的分布方式也深深影响着计算的分布方式。在分布式系统中计算节点和保存计算数据的存储节点可以在同一台物理机器上，也可以位于不同的物理机器。如果计算节点和存储节点位于不同的物理机器则计算的数据需要通过网络传输，此种方式的开销很大，甚至网络带宽会成为系统的总体瓶颈。另一种思路是，将计算尽量调度到与存储节点在同一台物理机器上的计算节点上进行，这称之为本地化计算。本地化计算是计算调度的一种重要优化，其体现了一种重要的分布式调度思想：“移动数据不如移动计算”。</p>
-<h4 id="数据分布方式的选择"><a href="#数据分布方式的选择" class="headerlink" title="数据分布方式的选择"></a><strong>数据分布方式的选择</strong></h4><p>在实际工程实践中，可以根据需求及实施复杂度合理选择数据分布方式。另外，数据分布方式是可以灵活组合使用的，往往可以兼备各种方式的优点，收到较好的综合效果。</p>
-<p>例：数据倾斜问题，在按哈希分数据的基础上引入按数据量分布数据的方式，解决该数据倾斜问题。按用户id 的哈希值分数据，当某个用户id 的数据量特别大时，该用户的数据始终落在某一台机器上。此时，引入按数据量分布数据的方式，统计用户的数据量，并按某一阈值将用户的数据切为多个均匀的数据段，将这些数据段分布到集群中去。由于大部分用户的数据量不会超过阈值，所以元数据中仅仅保存超过阈值的用户的数据段分布信息，从而可以控制元数据的规模。这种哈希分布数据方式与按数据量分布数据方式组合使用的方案，在某真实系统中使用，取得了较好的效果。</p>
-<h3 id="2-2-基本副本协议"><a href="#2-2-基本副本协议" class="headerlink" title="2.2 基本副本协议"></a><strong>2.2 基本副本协议</strong></h3><p>副本控制协议指按特定的协议流程控制副本数据的读写行为，使得副本满足一定的可用性和一致性要求的分布式协议。副本控制协议要具有一定的对抗异常状态的容错能力，从而使得系统具有一定的可用性，同时副本控制协议要能提供一定一致性级别。由CAP 原理（在2.9 节详细分析）可知，要设计一种满足强一致性，且在出现任何网络异常时都可用的副本协议是不可能的。为此，实际中的副本控制协议总是在可用性、一致性与性能等各要素之间按照具体需求折中。</p>
-<p>副本控制协议可以分为两大类：“中心化(centralized)副本控制协议”和“去中心化(decentralized)副本控制协议”。</p>
-<h4 id="中心化副本控制协议"><a href="#中心化副本控制协议" class="headerlink" title="中心化副本控制协议"></a><strong>中心化副本控制协议</strong></h4><p>中心化副本控制协议的基本思路是由一个中心节点协调副本数据的更新、维护副本之间的一致性。图给出了中心化副本协议的通用架构。中心化副本控制协议的优点是协议相对较为简单，所有的副本相关的控制交由中心节点完成。并发控制将由中心节点完成，从而使得一个分布式并发控制问题，简化为一个单机并发控制问题。所谓并发控制，即多个节点同时需要修改副本数据时，需要解决“写写”、“读写”等并发冲突。单机系统上常用加锁等方式进行并发控制。对于分布式并发控制，加锁也是一个常用的方法，但如果没有中心节点统一进行锁管理，就需要完全分布式化的锁系统，会使得协议非常复杂。中心化副本控制协议的缺点是系统的可用性依赖于中心化节点，当中心节点异常或与中心节点通信中断时，系统将失去某些服务（通常至少失去更新服务），所以中心化副本控制协议的缺点正是存在一定的停服务时间。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hk326krj30iy07676x.jpg" alt="image-20200929140521596"></p>
-<h4 id="primary-secondary-协议"><a href="#primary-secondary-协议" class="headerlink" title="primary-secondary 协议"></a><strong>primary-secondary 协议</strong></h4><p>在primary-secondary 类型的协议中，副本被分为两大类，其中有且仅有一个副本作为primary 副本，除primary 以外的副本都作为secondary 副本。维护primary 副本的节点作为中心节点，中心节点负责维护数据的更新、并发控制、协调副本的一致性。</p>
-<p>Primary-secondary 类型的协议一般要解决四大类问题：数据更新流程、数据读取方式、Primary 副本的确定和切换、数据同步（reconcile）。</p>
-<p>数据更新基本流程</p>
-<ol>
-<li>数据更新都由primary 节点协调完成。</li>
-<li>外部节点将更新操作发给primary 节点</li>
-<li>primary 节点进行并发控制即确定并发更新操作的先后顺序</li>
-<li>primary 节点将更新操作发送给secondary 节点</li>
-<li>primary 根据secondary 节点的完成情况决定更新是否成功并将结果返回外部节点</li>
-</ol>
-<p>在工程实践中，如果由primary 直接同时发送给其他N 个副本发送数据，则每个 secondary 的更新吞吐受限于primary 总的出口网络带宽，最大为primary 网络出口带宽的1/N。为了解决这个问题，有些系统（例如，GFS），使用接力的方式同步数据，即primary 将更新发送给第一 个secondary 副本，第一个secondary 副本发送给第二secondary 副本，依次类推。</p>
-<h4 id="数据读取方式"><a href="#数据读取方式" class="headerlink" title="数据读取方式"></a><strong>数据读取方式</strong></h4><p>数据读取方式也与一致性高度相关。如果只需要最终一致性，则读取任何副本都可以满足需求。如果需要会话一致性，则可以为副本设置版本号，每次更新后递增版本号，用户读取副本时验证版本号，从而保证用户读到的数据在会话范围内单调递增。使用primary-secondary 比较困难的是实现强一致性。</p>
-<ol>
-<li>由于数据的更新流程都是由primary 控制的，primary 副本上的数据一定是最新的，所以 如果始终只读primary 副本的数据，可以实现强一致性。如果只读primary 副本，则secondary 副本将不提供读服务。实践中，如果副本不与机器绑定，而是按照数据段为单位维护副本，仅有primary 副本提供读服务在很多场景下并不会造出机器资源浪费。</li>
-</ol>
-<p>将副本分散到集群中个，假设primary 也是随机的确定的，那么每台机器上都有一些数据的primary 副本，也有另一些数据段的secondary 副本。从而某台服务器实际都提供读写服务。</p>
-<ol>
-<li>由primary 控制节点secondary 节点的可用性。当primary 更新某个secondary 副本不成功时，primary 将该secondary 副本标记为不可用，从而用户不再读取该不可用的副本。不可用的 secondary 副本可以继续尝试与primary 同步数据，当与primary 完成数据同步后，primary 可以副本标记为可用。这种方式使得所有的可用的副本，无论是primary 还是secondary 都是可读的，且在一个确定的时间内，某secondary 副本要么更新到与primary 一致的最新状态，要么被标记为不可用，从而符合较高的一致性要求。这种方式依赖于一个中心元数据管理系统，用于记录哪些副本可用，哪些副本不可用。某种意义上，该方式通过降低系统的可用性来提高系统的一致性。</li>
-</ol>
-<h4 id="primary-副本的确定与切换"><a href="#primary-副本的确定与切换" class="headerlink" title="primary 副本的确定与切换"></a><strong>primary 副本的确定与切换</strong></h4><p>在primary-secondary 类型的协议中，另一个核心的问题是如何确定primary 副本，尤其是在原primary 副本所在机器出现宕机等异常时，需要有某种机制切换primary 副本，使得某个secondary 副本成为新的primary 副本。</p>
-<p>通常的，在primary-secondary 类型的分布式系统中，哪个副本是primary 这一信息都属于元信息，由专门的元数据服务器维护。执行更新操作时，首先查询元数据服务器获取副本的primary 信息，从而进一步执行数据更新流程。</p>
-<p>由于分布式系统中可靠的发现节点异常是需要一定的探测时间的，这样的探测时间通常是10 秒级别，这也意味着一旦primary 异常，最多需要10 秒级别的发现时间，系统才能开始primary 的切换，在这10 秒时间内，由于没有primary，系统不能提供更 新服务，如果系统只能读primary 副本，则这段时间内甚至不能提供读服务。从这里可以看到，primary-backup 类副本协议的最大缺点就是由于primary 切换带来的一定的停服务时间。</p>
-<h4 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a><strong>数据同步</strong></h4><p>不一致的secondary 副本需要与primary 进行同步（reconcile）。</p>
-<p>通常不一致的形式有三种：一、由于网络分化等异常，secondary 上的数据落后于primary 上的数据。二、在某些协议下，secondary 上的数据有可能是脏数据，需要被丢弃。所谓脏数据是由于primary 副本没有进行某一更新操作，而secondary 副本上反而进行的多余的修改操作，从而造成secondary 副本数据错误。三、secondary 是一个新增加的副本，完全没有数据，需要从其他副本上拷贝数据。</p>
-<p>对于第一种secondary 数据落后的情况，常见的同步方式是回放primary 上的操作日志（通常是redo 日志），从而追上primary 的更新进度。对于脏数据的情况，较好的做法是设计的分布式协议不产生脏数据。如果协议一定有产生脏数据的可能，则也应该使得产生脏数据的概率降到非常低得情况，从而一旦发生脏数据的情况可以简单的直接丢弃有脏数据的副本，这样相当于副本没有数据。另外，也可以设计一些基于undo 日志的方式从而可以删除脏数据。如果secondary 副本完全没有数据，则常见的做法是直接拷贝primary 副本的数据，这种方法往往比回放日志追更新进度的方法快很多。但拷贝数据时primary 副本需要能够继续提供更新服务，这就要求primary 副本支持快照(snapshot)功能。即对某一刻的副本数据形成快照，然后拷贝快照，拷贝完成后使用回放日志的方式追快照形成后的更新操作。</p>
-<h4 id="去中心化副本控制协议"><a href="#去中心化副本控制协议" class="headerlink" title="去中心化副本控制协议"></a><strong>去中心化副本控制协议</strong></h4><p>去中心化副本控制协议没有中心节点，协议中所有的节点都是完全对等的，节点之间通过平等协商达到一致。从而去中心化协议没有因为中心化节点异常而带来的停服务等问题。</p>
-<p>去中心化协议的最大的缺点是协议过程通常比较复杂。尤其当去中心化协议需要实现强一致性时，协议流程变得复杂且不容易理解。由于流程的复杂，去中心化协议的效率或者性能一般也较中心化协议低。一个不恰当的比方就是，中心化副本控制协议类似专制制度，系统效率高但高度依赖于中心节点，一旦中心节点异常，系统受到的影响较大；去中心化副本控制协议类似民主制度，节点集体协商，效率低下，但个别节点的异常不会对系统总体造成太大影响。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hkqerbtj30hg06itav.jpg" alt="image-20200929140559373"></p>
-<h3 id="2-3-Lease-机制"><a href="#2-3-Lease-机制" class="headerlink" title="2.3 Lease 机制"></a><strong>2.3 Lease 机制</strong></h3><p>Lease 机制是最重要的分布式协议，广泛应用于各种实际的分布式系统中。</p>
-<h4 id="基于lease-的分布式cache-系统"><a href="#基于lease-的分布式cache-系统" class="headerlink" title="基于lease 的分布式cache 系统"></a><strong>基于lease 的分布式cache 系统</strong></h4><p>基本的问题背景如下：在一个分布式系统中，有一个中心服务器节点，中心服务器存储、维护着一些数据，这些数据是系统的元数据。系统中其他的节点通过访问中心服务器节点读取、修改其上的元数据。由于系统中各种操作都依赖于元数据，如果每次读取元数据的操作都访问中心服务器 节点，那么中心服务器节点的性能成为系统的瓶颈。为此，设计一种元数据cache，在各个节点上 cache 元数据信息，从而减少对中心服务器节点的访问，提高性能。另一方面，系统的正确运行严格依赖于元数据的正确，这就要求各个节点上cache 的数据始终与中心服务器上的数据一致，cache 中的数据不能是旧的脏数据。最后，设计的cache 系统要能最大可能的处理节点宕机、网络中断等异常，最大程度的提高系统的可用性。</p>
-<p>为此，利用lease 机制设计一套cache 系统，其基本原理为如下。中心服务器在向各节点发送数据时同时向节点颁发一个lease。每个lease 具有一个有效期，和信用卡上的有效期类似，lease 上的 有效期通常是一个明确的时间点，例如12:00:10，一旦真实时间超过这个时间点，则lease 过期失效。这样lease 的有效期与节点收到lease 的时间无关，节点可能收到lease 时该lease 就已经过期失效。这里首先假设中心服务器与各节点的时钟是同步的，在下节中讨论时钟不同步对lease 的影响。中心服务器发出的lease 的含义为：在lease 的有效期内，中心服务器保证不会修改对应数据的值。因此，节点收到数据和lease 后，将数据加入本地Cache，一旦对应的lease 超时，节点将对应的本地cache 数据删除。中心服务器在修改数据时，首先阻塞所有新的读请求，并等待之前为该数据发出的所有lease 超时过期，然后修改数据的值。</p>
-<p>基于lease 的cache，客户端节点读取元数据</p>
-<ol>
-<li>判断元数据是否已经处于本地cache 且lease 处于有效期内1.1 是：直接返回cache 中的元数据1.2 否：向中心服务器节点请求读取元数据信息1.2.1 服务器收到读取请求后，返回元数据及一个对应的lease 1.2.2 客户端是否成功收到服务器返回的数据  1.2.2.1 失败或超时：退出流程，读取失败，可重试1.2.2.2 成功：将元数据与该元数据的lease 记录到内存中，返回元数据</li>
-<li>基于lease 的cache，客户端节点修改元数据流程2.1 节点向服务器发起修改元数据请求。2.2 服务器收到修改请求后，阻塞所有新的读数据请求，即接收读请求，但不返回数据。2.3 服务器等待所有与该元数据相关的lease 超时。2.4 服务器修改元数据并向客户端节点返回修改成功。</li>
-</ol>
-<p>上述机制可以保证各个节点上的cache 与中心服务器上的中心始终一致。这是因为中心服务器节点在发送数据的同时授予了节点对应的lease，在lease 有效期内，服务器不会修改数据，从而客户端节点可以放心的在lease 有效期内cache 数据。上述lease 机制可以容错的关键是：服务器一旦 发出数据及lease，无论客户端是否收到，也无论后续客户端是否宕机，也无论后续网络是否正常，服务器只要等待lease 超时，就可以保证对应的客户端节点不会再继续cache 数据，从而可以放心的修改数据而不会破坏cache 的一致性。</p>
-<p>上述基础流程有一些性能和可用性上的问题，但可以很容易就优化改性。优化点一：服务器在修改元数据时首先要阻塞所有新的读请求，造成没有读服务。这是为了防止发出新的lease 从而引起不断有新客户端节点持有lease 并缓存着数据，形成“活锁”。优化的方法很简单，服务器在进入修改数据流程后，一旦收到读请求则只返回数据但不颁发lease。从而造成在修改流程执行的过程中，客户端可以读到元数据，只是不能缓存元数据。进一步的优化是，当进入修改流程，服务器颁发的lease 有效期限选择为已发出的lease 的最大有效期限。这样做，客户端可以继续在服务器进入修改流程后继续缓存元数据，但服务器的等待所有lease 过期的时间也不会因为颁发新的lease 而不断延长。</p>
-<p>最后，=cache 机制与多副本机制的区别。Cache 机制与多副本机制的相似之处都 是将一份数据保存在多个节点上。但Cache 机制却要简单许多，对于cache 的数据，可以随时删除丢弃，并命中cache 的后果仅仅是需要访问数据源读取数据；然而副本机制却不一样，副本是不能随意丢弃的，每失去一个副本，服务质量都在下降，一旦副本数下降到一定程度，则往往服务将不再可用。</p>
-<h4 id="lease-机制的分析"><a href="#lease-机制的分析" class="headerlink" title="lease 机制的分析"></a><strong>lease 机制的分析</strong></h4><p>lease 的定义：Lease 是由颁发者授予的在某一有效期内的承诺。颁发者一旦发出lease，则无论接受方是否收到，也无论后续接收方处于何种状态，只要lease 不过期，颁发者一定严守承诺；另一方面，接收方在lease 的有效期内可以使用颁发者的承诺，但一旦lease 过期，接收方一定不能继续使用颁发者的承诺。</p>
-<p>Lease 机制具有很高的容错能力。首先，通过引入有效期，Lease 机制能否非常好的容错网络异常。Lease 颁发过程只依赖于网络可以单向通信，即使接收方无法向颁发者发送消息，也不影响lease 的颁发。由于lease 的有效期是一个确定的时间点，lease 的语义与发送lease 的具体时间无关，所以 同一个lease 可以被颁发者不断重复向接受方发送。即使颁发者偶尔发送lease 失败，颁发者也可以 简单的通过重发的办法解决。一旦lease 被接收方成功接受，后续lease 机制不再依赖于网络通信，即使网络完全中断lease 机制也不受影响。再者，Lease 机制能较好的容错节点宕机。如果颁发者宕机，则宕机的颁发者通常无法改变之前的承诺，不会影响lease 的正确性。在颁发者机恢复后，如果颁发者恢复出了之前的lease 信息，颁发者可以继续遵守lease 的承诺。如果颁发者无法恢复lease 信息，则只需等待一个最大的lease 超时时间就可以使得所有的lease 都失效，从而不破坏lease机制。</p>
-<p>例如上节中的cache 系统的例子中，一旦服务器宕机，肯定不会修改元数据，重新恢复后，只需等待一个最大的lease 超时时间，所有节点上的缓存信息都将被清空。对于接受方宕机的情况，颁发者 不需要做更多的容错处理，只需等待lease 过期失效，就可以收回承诺，实践中也就是收回之前赋予的权限、身份等。最后，lease 机制不依赖于存储。颁发者可以持久化颁发过的lease 信息，从而在 宕机恢复后可以使得在有效期的lease 继续有效。但这对于lease 机制只是一个优化，如之前的分析，即使颁发者没有持久化lease 信息，也可以通过等待一个最大的lease 时间的方式使得之前所有颁发 的lease 失效，从而保证机制继续有效。</p>
-<p>Lease 机制依赖于有效期，这就要求颁发者和接收者的时钟是同步的。一方面，如果颁发者的 时钟比接收者的时钟慢，则当接收者认为lease 已经过期的时候，颁发者依旧认为lease 有效。接收者可以用在lease 到期前申请新的lease 的方式解决这个问题。另一方面，如果颁发者的时钟比接收 者的时钟快，则当颁发者认为lease 已经过期的时候，接收者依旧认为lease 有效，颁发者可能将lease 颁发给其他节点，造成承诺失效，影响系统的正确性。对于这种时钟不同步，实践中的通常做法是将颁发者的有效期设置得比接收者的略大，只需大过时钟误差就可以避免对lease 的有效性的影响。</p>
-<h4 id="基于lease-机制确定节点状态"><a href="#基于lease-机制确定节点状态" class="headerlink" title="基于lease 机制确定节点状态"></a><strong>基于lease 机制确定节点状态</strong></h4><p>分布式协议依赖于对节点状态认知的全局一致性，即一旦节点Q 认为某个节点 A 异常，则节点A 也必须认为自己异常，从而节点A 停止作为primary，避免“双主”问题的出现。解决这种问题有两种思路，第一、设计的分布式协议可以容忍“双主”错误，即不依赖于对节点状 态的全局一致性认识，或者全局一致性状态是全体协商后的结果；第二、利用lease 机制。对于第一 种思路即放弃使用中心化的设计，而改用去中心化设计，超过本节的讨论范畴。下面着重讨论利用 lease 机制确定节点状态。</p>
-<p>由中心节点向其他节点发送lease，若某个节点持有有效的lease，则认为该节点正常可以提供服 务。用于例2.3.1 中，节点A、B、C 依然周期性的发送heart beat 报告自身状态，节点Q 收到heart beat 后发送一个lease，表示节点Q 确认了节点A、B、C 的状态，并允许节点在lease 有效期内正常工 作。节点Q 可以给primary 节点一个特殊的lease，表示节点可以作为primary 工作。一旦节点Q 希望切换新的primary，则只需等前一个primary 的lease 过期，则就可以安全的颁发新的lease 给新的 primary 节点，而不会出现“双主”问题。</p>
-<p>在实际系统中，若用一个中心节点发送lease 也有很大的风险，一旦该中心节点宕机或网络异常，则所有的节点没有lease，从而造成系统高度不可用。为此，实际系统总是使用多个中心节点互为副本，成为一个小的集群，该小集群具有高可用性，对外提供颁发lease 的功能。chubby 和zookeeper 都是基于这样的设计。</p>
-<h4 id="lease-的有效期时间选择"><a href="#lease-的有效期时间选择" class="headerlink" title="lease 的有效期时间选择"></a><strong>lease 的有效期时间选择</strong></h4><p>工程中，常选择的lease 时长是10 秒级别，这是一个经过验证的经验值，实践中可以作为参考并综合选择合适的时长。</p>
-<h3 id="2-4-Quorum-机制"><a href="#2-4-Quorum-机制" class="headerlink" title="2.4 Quorum 机制"></a><strong>2.4 Quorum 机制</strong></h3><p>先做这样的约定：更新操作（write）是一系列顺序的过程，通过其他机制确定更新操作的顺序（例如primary-secondary 架构中由primary 决定顺序），每个更新操作记为wi， i 为更新操作单调递增的序号，每个wi 执行成功后副本数据都发生变化，称为不同的数据版本，记 作vi。假设每个副本都保存了历史上所有版本的数据。</p>
-<h4 id="write-all-read-one"><a href="#write-all-read-one" class="headerlink" title="write-all-read-one"></a><strong>write-all-read-one</strong></h4><p>Write-all-read-one（简称WARO）是一种最简单的副本控制规则，顾名思义即在更新时写所有的副本，只有在所有的副本上更新成功，才认为更新成功，从而保证所有的副本一致，这样在读取数据时可以读任一副本上的数据。</p>
-<p>由于更新操作需要在所有的N 个副本上都成功，更新操作才能成 功，所以一旦有一个副本异常，更新操作失败，更新服务不可用。对于更新服务，虽然有N 个副本， 但系统无法容忍任何一个副本异常。另一方面，N 个副本中只要有一个副本正常，系统就可以提供读服务。对于读服务而言，当有N 个副本时，系统可以容忍N-1 个副本异常。从上述分析可以发现WARO 读服务的可用性较高，但更新服务的可用性不高，甚至虽然使用了副本，但更新服务的可用性等效于没有副本。</p>
-<h4 id="Quorum-定义"><a href="#Quorum-定义" class="headerlink" title="Quorum 定义"></a><strong>Quorum 定义</strong></h4><p>在Quorum 机制下，当某次更新操作wi 一旦在所有N 个副本中的W 个副本上都成功，则就称 该更新操作为“成功提交的更新操作”，称对应的数据为“成功提交的数据”。令R&gt;N-W，由于更新 操作wi 仅在W 个副本上成功，所以在读取数据时，最多需要读取R 个副本则一定能读到wi 更新后 的数据vi 。如果某次更新wi 在W 个副本上成功，由于W+R&gt;N，任意R 个副本组成的集合一定与 成功的W个副本组成的集合有交集，所以读取R 个副本一定能读到wi 更新后的数据vi。如图 2-10， Quorum 机制的原理可以文森图表示。</p>
-<p>某系统有5 个副本，W=3，R=3，最初5 个副本的数据一致，都是v1，某次更新操作 w2 在前3 副本上成功，副本情况变成（v2 v2 v2 v1 v1）。此时，任意3 个副本组成的集合中一定包括 v2。在上述定义中，令W=N，R=1，就得到WARO，即WARO 是Quorum 机制的一种特例。与分析WARO 相似，分析Quorum 机制的可用性。限制Quorum 参数为W+R=N+1。由于更新 操作需要在W 个副本上都成功，更新操作才能成功，所以一旦N-W+1 个副本异常，更新操作始终无法在W 个副本上成功，更新服务不可用。另一方面，一旦N-R+1 个副本异常，则无法保证一定可以读到与W 个副本有交集的副本集合，则读服务的一致性下降。</p>
-<p>再次强调：仅仅依赖quorum 机制是无法保证强一致性的。因为仅有quorum 机制时无法确定最新已成功提交的版本号，除非将最新已提交的版本号作为元数据由特定的元数据服务器或元数据集群管理，否则很难确定最新成功提交的版本号。在下一节中，将讨论在哪些情况下，可以仅仅 通过quorum 机制来确定最新成功提交的版本号。</p>
-<p>Quorum 机制的三个系统参数N、W、R 控制了系统的可用性，也是系统对用户的服务承诺：数据最多有N 个副本，但数据更新成功W 个副本即返回用户成功。对于一致性要求较高的Quorum 系统，系统还应该承诺任何时候不读取未成功提交的数据，即读取到的数据都是曾经在W 个副本上成功的数据。</p>
-<h4 id="读取最新成功提交的数据"><a href="#读取最新成功提交的数据" class="headerlink" title="读取最新成功提交的数据"></a><strong>读取最新成功提交的数据</strong></h4><p>Quorum 机制只需成功更新N 个副本中的W 个，在读取R 个副本时，一定可以读到最新的成功提交的数据。但由于有不成功的更新情况存在，仅仅读取R 个副本却不一定能确定哪个版本的数据 是最新的已提交的数据。对于一个强一致性Quorum 系统，若存在个数据少于W 个，假设为X 个，则继续读取其他副本，直若成功读取到W 个 该版本的副本，则该数据为最新的成功提交的数据；如果在所有副本中该数据的个数肯定不满 足W 个，则R 中版本号第二大的为最新的成功提交的副本。例：在读取到（v2 v1 v1）时，继续读取剩余的副本，若读到剩余两个副本 为（v2 v2）则v2 是最新的已提交的副本；若读到剩余的两个副本为（v2 v1）或（v1 v1）则v1 是最新成功提交的版本；若读取后续两个副本有任一超时或失败，则无法判断哪个版本是最新的成功提交的版本。</p>
-<p>可以看出，在单纯使用Quorum 机制时，若要确定最新的成功提交的版本，最多需要读取R+ （W-R-1）=N 个副本，当出现任一副本异常时，读最新的成功提交的版本这一功能都有可能不可用。实际工程中，应该尽量通过其他技术手段，回避通过Quorum 机制读取最新的成功提交的版本。例如，当quorum 机制与primary-secondary 控制协议结合使用时，可以通过读取primary 的方式读取到最新的已提交的数据。</p>
-<h4 id="基于Quorum-机制选择primary副本"><a href="#基于Quorum-机制选择primary副本" class="headerlink" title="基于Quorum 机制选择primary副本"></a><strong>基于Quorum 机制选择primary副本</strong></h4><p>读取数据时依照一致性要求的不同可以有不同的做法：如果需要强一致性的立刻读取到最新的成功提交的数据，则可以简单的只读取primary 副本上的数据即可，也可以通过上节的方式读取；如果需要会话一致性，则可以根据之前已经读到的数据版本号在各个副本上进行选择性读取；如果只需要弱一致性，则可以选择任意副本读取。</p>
-<p>在primary-secondary 协议中，当primary 异常时，需要选择出一个新的primary，之后secondary 副本与primary 同步数据。通常情况下，选择新的primary 的工作是由某一中心节点完成的，在引入 quorum 机制后，常用的primary 选择方式与读取数据的方式类似，即中心节点读取R 个副本，选择 R 个副本中版本号最高的副本作为新的primary。新primary 与至少W 个副本完成数据同步后作为新的primary 提供读写服务。首先，R 个副本中版本号最高的副本一定蕴含了最新的成功提交的数据。再者，虽然不能确定最高版本号的数是一个成功提交的数据，但新的primary 在随后与secondary 同 步数据，使得该版本的副本个数达到W，从而使得该版本的数据成为成功提交的数据。</p>
-<p>例：在N=5，W=3，R=3 的系统中，某时刻副本最大版本号为（v2 v2 v1 v1 v1），此时v1 是系统的最新的成功提交的数据，v2 是一个处于中间状态的未成功提交的数据。假设此刻原primary 副本异常，中心节点进行primary 切换工作。这类“中间态”数据究竟作为“脏数据”被删除，还是作为新的数据被同步后成为生效的数据，完全取决于这个数据能否参与新primary 的选举。下面分别分析这两种情况。</p>
-<p>第一、如图 2-12，若中心节点与其中3 个副本通信成功，读取到的版本号为（v1 v1 v1），则任 选一个副本作为primary，新primary 以v1 作为最新的成功提交的版本并与其他副本同步，当与第1、第2 个副本同步数据时，由于第1、第2 个副本版本号大于primary，属于脏数据，可以按照2.2.2.4 节中介绍的处理脏数据的方式解决。实践中，新primary 也有可能与后两个副本完成同步后就提供数据服务，随后自身版本号也更新到v2，如果系统不能保证之后的v2 与之前的v2 完全一样，则新 primary 在与第1、2 个副本同步数据时不但要比较数据版本号还需要比较更新操作的具体内容是否一样。</p>
-<p>第二、若中心节点与其他3 个副本通信成功，读取到的版本号为（v2 v1 v1），则选取版本号为 v2 的副本作为新的primary，之后，一旦新primary 与其他2 个副本完成数据同步，则符合v2 的副 本个数达到W 个，成为最新的成功提交的副本，新primary 可以提供正常的读写服务。</p>
-<h3 id="2-5-日志技术"><a href="#2-5-日志技术" class="headerlink" title="2.5 日志技术"></a><strong>2.5 日志技术</strong></h3><p>日志技术是宕机恢复的主要技术之一。日志技术最初使用在数据库系统中。严格来说日志技术不是一种分布式系统的技术，但在分布式系统的实践中，却广泛使用了日志技术做宕机恢复，甚 至如BigTable 等系统将日志保存到一个分布式系统中进一步增强了系统容错能力。</p>
-<h4 id="Redo-Log-与Check-point"><a href="#Redo-Log-与Check-point" class="headerlink" title="Redo Log 与Check point"></a><strong>Redo Log 与Check point</strong></h4><p>设计一个高速的单机查询系统，将数据全部存放在内存中以实现高速的数据查询，每次更新操作更新一小部分数据（例如 key-value 中的某一个key）。现在问题为利用日志技术实现该内存查询系统的宕机恢复。与数据库的事务不同的是，这个问题模型中的每个成功的更新操作都会生效。这也等效为数据库的每个事务只有一个更新操作，且每次更新操作都可以也必须立即提交（Auto commit）。</p>
-<ul>
-<li><h5 id="Redo-Log"><a href="#Redo-Log" class="headerlink" title="Redo Log"></a>Redo Log</h5></li>
-</ul>
-<ol>
-<li>将更新操作的结果（例如Set K1=1，则记录K1=1）以追加写（append）的方式写入磁盘的 日志文件</li>
-<li>按更新操作修改内存中的数据</li>
-<li>返回更新成功</li>
-</ol>
-<p>从Redo Log 的流程可以看出，Redo 写入日志的是更新操作完成后的结果（虽然本文不讨论Undo Log，这点是与Undo Log 的区别之一），且由于是顺序追加写日志文件，在磁盘等对顺序写有力的 存储设备上效率较高。</p>
-<p>用Redo Log 进行宕机恢复非常简单，只需要“回放”日志即可。</p>
-<p>流程2.5.2：Redo Log 的宕机恢复</p>
-<ol>
-<li>从头读取日志文件中的每次更新操作的结果，用这些结果修改内存中的数据。</li>
-</ol>
-<p>从Redo Log 的宕机恢复流程也可以看出，只有写入日志文件的更新结果才能在宕机后恢复。这也是为什么在Redo Log 流程中需要先更新日志文件再更新内存中的数据的原因。假如先更新内存中的数据，那么用户立刻就能读到更新后的数据，一旦在完成内存修改与写入日志之间发生宕机，那么最后一次更新操作无法恢复，但之前用户可能已经读取到了更新后的数据，从而引起不一致的问题。</p>
-<ul>
-<li><h5 id="Check-point"><a href="#Check-point" class="headerlink" title="Check point"></a>Check point</h5></li>
-</ul>
-<p>。在简化的模型下，check point 技术的过程即将内存中的数据以某种易于重新加载的数据组织方式完整的dump 到磁盘，从而减少宕机恢复时需要回放的日志数据。</p>
-<p>流程：check point</p>
-<ol>
-<li>向日志文件中记录“Begin Check Point”</li>
-<li>将内存中的数据以某种易于重新加载的数据组织方式dump 到磁盘上</li>
-<li>向日志文件中记录“End Check Point” 在check point 流程中，数据可以继续按照流程2.5.1 被更新，这段过程中新更新的数据可以dump 到磁盘也可以不dump 到磁盘，具体取决于实现。例如，check point 开始时k1=v1，check point 过程 中某次更新为k1 = v2，那么dump 到磁盘上的k1 的值可以是v1 也可以是v2。</li>
-</ol>
-<p>流程：基于check point 的宕机恢复流程</p>
-<ol>
-<li>将dump 到磁盘的数据加载到内存。</li>
-<li>从后向前扫描日志文件，寻找最后一个“End Check Point”日志。</li>
-<li>从最后一个“End Check Point”日志向前找到最近的一个“Begin Check Point”日志，并回 放该日志之后的所有更新操作日志。</li>
-</ol>
-<ul>
-<li><h5 id="No-Undo-No-Redo-log"><a href="#No-Undo-No-Redo-log" class="headerlink" title="No Undo/No Redo log"></a>No Undo/No Redo log</h5></li>
-</ul>
-<p>若数据维护在磁盘中，某批更新由若干个更新操作组成，这些更新操作需要原子生效，即要么同时生效，要么都不生效。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hmgqw30j30je0akq7e.jpg" alt="image-20200929140739266"></p>
-<p>0/1 目录技术中有两个目录结构，称为目录0(Directory 0)和目录1(Directory 1)。另有一个结构称为主记录（Master record）记录当前正在使用的目录称为活动目录。主记录中要么记录使用目录0，要么记录使用目录1。目录0 或目录1 中记录了各个数据的在日志文件中的位置。0/1 目录的数据更新过程始终在非活动目录上进行，只是在数据生效前，将主记录中的0、1 值反转，从而切换主记录。</p>
-<p>流程：0/1 目录数据更新流程</p>
-<ol>
-<li>将活动目录完整拷贝到非活动目录。</li>
-<li>对于每个更新操作，新建一个日志项纪录操作后的值，并在非活动目录中将相应数据的位置修改为新建的日志项的位置。</li>
-<li>原子性修改主记录：反转主记录中的值，使得非活动目录生效。</li>
-</ol>
-<p>0/1 目录的更新流程非常简单，通过0、1 目录的主记录切换使得一批修改的生效是原子的。0/1 目录将批量事务操作的原子性通过目录手段归结到主记录的原子切换。由于多条记录的原子修改一般较难实现而单条记录的原子修改往往可以实现，从而降低了问题实现的难度。在工程中0/1 目录的思想运用非常广泛，其形式也不局限在上述流程中，可以是内存中的两个数据结构来回切换，也可以是磁盘上的两个文件目录来回生效切换。</p>
-<h3 id="2-6-两阶段提交协议"><a href="#2-6-两阶段提交协议" class="headerlink" title="2.6 两阶段提交协议"></a><strong>2.6 两阶段提交协议</strong></h3><p>两阶段提交协议是一种经典的强一致性中心化副本控制协议。虽然在工程中该协议有较多的问题，但研究该协议能很好的理解分布式系统的几个典型问题。</p>
-<h4 id="流程描述"><a href="#流程描述" class="headerlink" title="流程描述"></a><strong>流程描述</strong></h4><p>两阶段提交协议是一种典型的“中心化副本控制”协议。在该协议中，参与的节点分为两类：一个中心化协调者节点（coordinator）和N 个参与者节点（participant）。每个参与者节点即上文背景介绍中的管理数据库副本的节点。</p>
-<p>两阶段提交的思路比较简单，在第一阶段，协调者询问所有的参与者是否可以提交事务（请参与者投票），所有参与者向协调者投票。在第二阶段，协调者根据所有参与者的投票结果做出是否事务可以全局提交的决定，并通知所有的参与者执行该决定。在一个两阶段提交流程中，参与者不能改变自己的投票结果。两阶段提交协议的可以全局提交的前提是所有的参与者都同意提交事务，只要有一个参与者投票选择放弃(abort)事务，则事务必须被放弃。</p>
-<p>流程：两阶段提交协调者流程</p>
-<ol>
-<li>写本地日志“begin_commit”，并进入WAIT 状态；</li>
-<li>向所有参与者发送“prepare 消息”；</li>
-<li>等待并接收参与者发送的对“prepare 消息”的响应；3.1 若收到任何一个参与者发送的“vote-abort 消息”；3.1.1 写本地“global-abort”日志，进入ABORT；3.1.2 向所有的参与者发送“global-abort 消息”；3.1.3 进入ABORT 状态；3.2 若收到所有参与者发送的“vote-commit”消息；3.2.1 写本地“global-commit”日志，进入COMMIT 状态；3.1.2 向所有的参与者发送“global-commit 消息”；</li>
-<li>等待并接收参与者发送的对“global-abort 消息”或“global-commit 消息”的确认响应消息，一旦收到所有参与者的确认消息，写本地“end_transaction” 日志流程结束。</li>
-</ol>
-<p>流程：两阶段提交协调者流程</p>
-<ol>
-<li>写本地日志“init”记录，进入INIT 状态</li>
-<li>等待并接受协调者发送的“prepare 消息”，收到后  2.1 若参与者可以提交本次事务 2.1.1 写本地日志“ready”，进入READY 状态 2.1.2 向协调者发送“vote-commit”消息 2.1.4 等待协调者的消息2.1.4.1 若收到协调者的“global-abort”消息2.1.4.1.1 写本地日志“abort”，进入ABORT 状态2.1.4.1.2 向协调者发送对“global-abort”的确认消息  2.1.4.2 若收到协调者的“global-commit”消息2.1.4.1.1 写本地日志“commit”，进入COMMIT 状态   2.1.4.1.2 向协调者发送对“global-commit”的确认消息  2.2 若参与者无法提交本次事务 2.2.1 写本地日志“abort”，进入ABORT 状态 2.2.2 向协调者发送“vote-abort”消息 2.2.3 流程对该参与者结束 2.2.4 若后续收到协调者的“global-abort”消息可以响应</li>
-<li>即使流程结束，但任何时候收到协调者发送的“global-abort”消息或“global-commit”消息也都要发送一个对应的确认消息。</li>
-</ol>
-<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a><strong>异常处理</strong></h4><h4 id="宕机恢复"><a href="#宕机恢复" class="headerlink" title="宕机恢复"></a>宕机恢复</h4><ol>
-<li>协调者宕机恢复 协调者宕机恢复后，首先通过日志查找到宕机前的状态。如果日志中最后是“begin_commit”记录，说明宕机前协调者处于WAIT 状态，协调者可能已经发送过“prepare 消息”也可能还没发送，但协调者一定还没有发送过“global-commit 消息”或“global-abort 消息”，即事务的全局状态还没有确定。此时，协调者可以重新发送“prepare 消息” 继续两阶段提交流程，即使参与者已经发送过对“prepare 消息”的响应，也不过是再次重传之前的响应而不会影响协议的一致性。如果日志中最后是“global-commit”或“global-abort”记录，说明宕机前协调者处于COMMIT 或ABORT 状态。此时协调者只需重新向所有的参与者发送“global-commit 消息”或“global-abort 消息”就可以继续两阶段提交流程。</li>
-<li>参与者宕机恢复参与者宕机恢复后，首先通过日志查找宕机前的状态。如果日志中最后是“init”记录，说明参与者处于INIT 状态，还没有对本次事务做出投票选择，参与者可以继续流程等待协调者发送的“prepare 消息”。如果日志中最后是“ready”记录，说明参与者处于REDAY 状态，此时说明参与者已经就本次 事务做出了投票选择，但宕机前参与者是否已经向协调者发送“vote-commit”消息并不可知。所以此时参与者可以向协调者重发“vote-commit”，并继续协议流程。如果日志中最后是“commit”或“abort”记录，说明参与者已经收到过协调者的“global-commit 消息”（处于COMMIT 状态）或者“global-abort 消息”（处于ABORT 状态）。至于是否向协调者发 送过对“global-commit”或“global-abort”的确认消息则未知。但即使没有发送过确认消息，由于协调者会不断重发“global-commit”或“global-abort”，只需在收到这些消息时发送确认消息既可，不影响协议的全局一致性。</li>
-</ol>
-<h4 id="协议分析"><a href="#协议分析" class="headerlink" title="协议分析"></a><strong>协议分析</strong></h4><p>两阶段提交协议在工程实践中真正使用的较少，主要原因有以下几点：</p>
-<ol>
-<li>两阶段提交协议的容错能力较差。从上文的分析可以看出，两阶段提交协议在某些情况下存在流程无法执行下去的情况，且也无法判断流程状态。在工程中好的分布式协议往往总是可以在即使发生异常的情况下也能执行下去。例如，回忆Lease 机制（2.3 ），一旦lease 发出，无论出现任何异常，Lease 服务器节点总是可以通过时间判定出Lease 是否有效，也可以用等待Lease 超时的方法收回Lease 权限，整个Lease 协议的流程不存在任何流程被阻塞而无法执行下去的情况。与Lease 机制的简单有效相比，两阶段提交的协议显得较为复杂且容错能力差。</li>
-<li>两阶段提交协议的性能较差。一次成功的两阶段提交协议流程中，协调者与每个参与者 之间至少需要两轮交互4 个消息“prepare”、“vote-commit”、“global-commit”、“确认global-commit”。过多的交互次数会降低性能。另一方面，协调者需要等待所有的参与者的投票结果，一旦存在较慢的参与者，会影响全局流程执行速度。</li>
-</ol>
-<p>虽然存在一些改进的两阶段提交协议可以提高容错能力和性能，然而这类协议依旧是在工程中使用较少的一类协议，其理论价值大于实践意义。</p>
-<h3 id="2-7-MVCC"><a href="#2-7-MVCC" class="headerlink" title="2.7 MVCC"></a><strong>2.7 MVCC</strong></h3><p>MVCC(Multi-version Cocurrent Control，多版本并发控制)技术。MVCC 技术最初也是在数据库系统中被提出，但这种思想并不局限于单机的分布式系统，在分布式系统中同样有效。</p>
-<p>MVCC 即多个不同版本的数据实现并发控制的技术，其基本思想是为每次事务生成 一个新版本的数据，在读数据时选择不同版本的数据即可以实现对事务结果的完整性读取。在使用MVCC 时，每个事务都是基于一个已生效的基础版本进行更新，事务可以并行进行，从而可以产生一种图状结构。</p>
-<p>基础数据的版本为1，同时产生了两个事务：事务A 与事务B。这两个事务都各自对数据进行了一些本地修改（这些修改只有事务自己可见，不影响真正的数据），之后事务A 首先提交，生成数据版本2；基于数据版本2，又发起了事务C，事务C 继续提交，生成了数据版 本3；最后事务B 提交，此时事务B 的结果需要与事务C 的结果合并，如果数据没有冲突，即事务 B 没有修改事务A 与事务C 修改过的变量，那么事务B 可以提交，否则事务B 提交失败。MVCC 的流程过程非常类似于SVN 等版本控制系统的流程，或者说SVN 等版本控制系统就是 使用的MVCC 思想。事务在基于基础数据版本做本地修改时，为了不影响真正的数据，通常有两种做法，一是将基础数据版本中的数据完全拷贝出来再修改，SVN 即使用了这种方法，SVN check out 即是拷贝的过程；二是每个事务中只记录更新操作，而不记录完整的数据，读取数据时再将更新操作应用到用基础版本的数据从而计算出结果，这个过程也类似SVN 的增量提交。</p>
-<h3 id="2-8-Paxos协议"><a href="#2-8-Paxos协议" class="headerlink" title="2.8 Paxos协议"></a><strong>2.8 Paxos协议</strong></h3><p>Paxos 协议是少数在工程实践中证实的强一致性、高可用的去中心化分布式协议。Paxos 协议的流程较为复杂，但其基本思想却不难理解，类似于人类社会的投票过程。Paxos 协议中，有一组完全对等的参与节点（称为accpetor），这组节点各自就某一事件做出决议，如果某个决议获得了超过半数节点的同意则生效。Paxos 协议中只要有超过一半的节点正常，就可以工作，能很好对抗宕机、网络分化等异常情况。</p>
-<h4 id="角色"><a href="#角色" class="headerlink" title="角色"></a><strong>角色</strong></h4><p>Proposer：提案者。Proposer 可以有多个，Proposer 提出议案（value）。所谓value，在工程中可以是任何操作，例如“修改某个变量的值为某个值”、“设置当前primary 为某个节点”等等。Paxos 协议中统一将这些操作抽象为value。不同的Proposer 可以提出不同的甚至矛盾的value，例如某个Proposer 提议“将变量X 设置为1”，另一个Proposer 提议“将变量X 设置为2”，但对同一轮Paxos 过程，最多只有一个value 被批准。Acceptor：批准者。Acceptor 有N 个，Proposer 提出的value 必须获得超过半数(N/2+1)的Acceptor 批准后才能通过。Acceptor 之间完全对等独立。Learner：学习者。Learner 学习被批准的value。所谓学习就是通过读取各个Proposer 对value 的选择结果，如果某个value 被超过半数Proposer 通过，则Learner 学习到了这个value。回忆（2.4 ） 不难理解，这里类似Quorum 机制，某个value 需要获得W=N/2 + 1 的Acceptor 批准，从而学习者需要至少读取N/2+1 个Accpetor，至多读取N 个Acceptor 的结果后，能学习到一个通过的value。上述三类角色只是逻辑上的划分，实践中一个节点可以同时充当这三类角色。</p>
-<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a><strong>流程</strong></h4><p>Paxos 协议一轮一轮的进行，每轮都有一个编号。每轮Paxos 协议可能会批准一个value，也可 能无法批准一个value。如果某一轮Paxos 协议批准了某个value，则以后各轮Paxos 只能批准这个 value。上述各轮协议流程组成了一个Paxos 协议实例，即一次Paxos 协议实例只能批准一个value，这也是Paxos 协议强一致性的重要体现。每轮Paxos 协议分为阶段，准备阶段和批准阶段，在这两个阶段Proposer 和Acceptor 有各自的处理流程。</p>
-<p>流程：Proposer 的流程 （准备阶段）</p>
-<ol>
-<li>向所有的Acceptor 发送消息“Prepare(b)”；这里b 是Paxos 的轮数，每轮递增</li>
-<li>如果收到任何一个Acceptor 发送的消息“Reject(B)”，则对于这个Proposer 而言本轮Paxos 失败，将轮数b 设置为B+1 后重新步骤1；（批准阶段，根据收到的Acceptor 的消息作出不同选择）</li>
-<li>如果接收到的Acceptor 的“Promise(b, v_i)”消息达到N/2+1 个（N 为Acceptor 总数，除法取整， 下同）；v_i 表示Acceptor 最近一次在i 轮批准过value v。3.1 如果收到的“Promise(b, v)”消息中，v 都为空，Proposer 选择一个value v，向所有Acceptor 广播Accept(b, v)；3.2 否则，在所有收到的“Promise(b, v_i)”消息中，选择i 最大的value v，向所有Acceptor 广播消息Accept(b，v)；</li>
-<li>如果收到Nack(B)，将轮数b 设置为B+1 后重新步骤1；</li>
-</ol>
-<p>流程：Accpetor 流程 （准备阶段）</p>
-<ol>
-<li>接受某个Propeser 的消息Prepare(b)。参数B 是该Acceptor 收到的最大Paxos 轮数编号；V 是Acceptor 批准的value，可以为空 1.1 如果b&gt;B，回复Promise(b, V_B)，设置B=b; 表示保证不再接受编号小于b 的提案。1.2 否则，回复Reject(B) （批准阶段）</li>
-<li>接收Accept(b, v)， 2.1 如果b &lt; B, 回复Nack(B)，暗示proposer 有一个更大编号的提案被这个Acceptor 接收了 2.2 否则设置V=v。表示这个Acceptor 批准的Value 是v。广播Accepted 消息。</li>
-</ol>
-<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a><strong>例子</strong></h4><p>基本例子里有5 个Acceptor，1 个Proposer，不存在任何网络、宕机异常。我们着重考察各个Accpetor 上变量B 和变量V 的变化，及Proposer 上变量b 的变化。</p>
-<ol>
-<li>初始状态</li>
-</ol>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hn8bsllj30iy06mgon.jpg" alt="image-20200929140823262"></p>
-<ol start="2">
-<li><p>Proposer 向所有Accpetor 发送“Prepare(1)”，所有Acceptor 正确处理，并回复Promise(1, NULL</p>
-</li>
-<li><p>Proposer 收到5 个Promise(1, NULL)，满足多余半数的Promise 的value 为空，此时发送 Accept(1, v1)，其中v1 是Proposer 选择的Value。</p>
-</li>
-</ol>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7ho8fvo7j30ic03sjsk.jpg" alt="image-20200929140920934"></p>
-<ol start="4">
-<li>此时，v1 被超过半数的Acceptor 批准，v1 即是本次Paxos 协议实例批准的Value。如果Learner 学习value，学到的只能是v1</li>
-</ol>
-<p>在同一个Paxos 实例中，批准的Value 是无法改变的，即使后续Proposer 以更高的序号发起Paxos 协议也无法改变value。Paxos 协议的核心就在于“批准的value 无法改变”，这也是整个协议正确性的基础。</p>
-<p>Paxos 协议是被人为设计出来，其设计过程也是协议的推导过程。Paxos 协议利用了Quorom 机 制，选择的W=R=N/2+1。简单而言，协议就是Proposer 更新Acceptor 的过程，一旦某个Acceptor 成功更新了超过半数的Acceptor，则更新成功。Learner 按Quorum 去读取Acceptor，一旦某个value 在超过半数的Proposer 上被成功读取，则说明这是一个被批准的value。协议通过引入轮次，使得高轮次的提议抢占低轮次的提议来避免死锁。协议设计关键点是如何满足“在一次Paxos 算法实例过程中只批准一个Value”这一约束条件。</p>
-<h3 id="2-9-CAP"><a href="#2-9-CAP" class="headerlink" title="2.9 CAP"></a><strong>2.9 CAP</strong></h3><p>CAP 理论的定义很简单，CAP 三个字母分别代表了分布式系统中三个相互矛盾的属性：</p>
-<ul>
-<li>Consistency (一致性)：CAP 理论中的副本一致性特指强一致性（1.3.4 ）；</li>
-<li>Availiablity(可用性)：指系统在出现异常时已经可以提供服务；</li>
-<li>Tolerance to the partition of network (分区容忍)：指系统可以对网络分区（1.1.4.2 ）这种异常情 况进行容错处理；</li>
-</ul>
-<p>CAP 理论指出：无法设计一种分布式协议，使得同时完全具备CAP 三个属性，即1)该种协议下的副本始终是强一致性，2)服务始终是可用的，3)协议可以容忍任何网络分区异常；分布式系统协议只能在CAP 这三者间所有折中。</p>
-<p>热力学第二定律说明了永动机是不可能存在的，不要去妄图设计永动机。与之类似，CAP 理论的意义就在于明确提出了不要去妄图设计一种对CAP 三大属性都完全拥有的完美系统，因为这种系统在理论上就已经被证明不存在。</p>
-<ul>
-<li>Lease 机制: Lease 机制牺牲了部分异常情况下的A，从而获得了完全的C 与很好的P。</li>
-<li>Quorum 机制: Quorum 机制，在CAP 三大因素中都各做了折中，有一定的C，有较好 的A，也有较好的P，是一种较为平衡的分布式协议。</li>
-<li>两阶段提交协议: 两阶段提交系统具有完全的C，很糟糕的A，很糟糕的P。</li>
-<li>Paxos 协议：同样是强一致性协议，Paxos 在CAP 三方面较之两阶段提交协议要优秀得多。Paxos 协议具有 完全的C，较好的A，较好的P。Paxos 的A 与P 的属性与Quorum 机制类似，因为Paxos 的协议本 身就具有Quorum 机制的因素。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/pythonn/36-38.%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MySQL/" class="post-title-link" itemprop="url">关系数据库入门</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 09:55:46" itemprop="dateModified" datetime="2020-10-01T09:55:46+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2511,7 +1814,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/31-35.%E7%8E%A9%E8%BD%ACLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/java/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2525,7 +1828,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/31-35.%E7%8E%A9%E8%BD%ACLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">玩转Linux操作系统</a>
+            <a href="/2020/09/29/java/%E5%88%86%E5%B8%83%E5%BC%8F%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">分布式总结</a>
         </h2>
 
         <div class="post-meta">
@@ -2542,7 +1845,310 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 01:54:38" itemprop="dateModified" datetime="2020-10-01T01:54:38+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">Java概览</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分布式总结"><a href="#分布式总结" class="headerlink" title="分布式总结"></a>分布式总结</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1 概念"></a><strong>1 概念</strong></h2><h3 id="1-1-模型"><a href="#1-1-模型" class="headerlink" title="1.1 模型"></a><strong>1.1 模型</strong></h3><h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a><strong>节点</strong></h4><p>在具体的工程项目中，一个节点往往是一个操作系统上的进程。在本文的模型中，认为节点是一个完整的、不可分的整体，如果某个程序进程实际上由若干相对独立部分构成，则在模型中可以将一个进程划分为多个节点。</p>
+<h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a><strong>异常</strong></h4><ol>
+<li><strong>机器宕机</strong>：机器宕机是最常见的异常之一。在大型集群中每日宕机发生的概率为千分之一左右，在实践中，一台宕机的机器恢复的时间通常认为是24 小时，一般需要人工介入重启机器。</li>
+<li><strong>网络异常</strong>：消息丢失，两片节点之间彼此完全无法通信，即出现了“网络分化”；消息乱序，有一定的概率不是按照发送时的顺序依次到达目的节点，考虑使用序列号等机制处理网络消息的乱序问题，使得无效的、过期的网络消息不影响系统的正确性；数据错误；不可靠的TCP，TCP 协议为应用层提供了可靠的、面向连接的传输服务，但在分布式系统的协议设计中不能认为所有网络通信都基于TCP 协议则通信就是可靠的。TCP协议只能保证同一个TCP 链接内的网络消息不乱序，TCP 链接之间的网络消息顺序则无法保证。</li>
+<li><strong>分布式三态</strong>：如果某个节点向另一个节点发起RPC(Remote procedure call)调用，即某个节点A 向另一个节点B 发送一个消息，节点B 根据收到的消息内容完成某些操作，并将操作的结果通过另一个消息返回给节点A，那么这个RPC 执行的结果有三种状态：“成功”、“失败”、“超时（未知）”，称之为分布式系统的三态。</li>
+<li><strong>存储数据丢失</strong>:对于有状态节点来说，数据丢失意味着状态丢失，通常只能从其他节点读取、恢复存储的状态。</li>
+<li><strong>异常处理原则</strong>：被大量工程实践所检验过的异常处理黄金原则是：任何在设计阶段考虑到的异常情况一定会在系统实际运行中发生，但在系统实际运行遇到的异常却很有可能在设计时未能考虑，所以，除非需求指标允许，在系统设计时不能放过任何异常情况。</li>
+</ol>
+<h3 id="1-2-副本"><a href="#1-2-副本" class="headerlink" title="1.2 副本"></a><strong>1.2 副本</strong></h3><p>副本（replica/copy）指在分布式系统中为数据或服务提供的冗余。对于数据副本指在不同的节点上持久化同一份数据，当出现某一个节点的存储的数据丢失时，可以从副本上读到数据。数据副本是分布式系统解决数据丢失异常的唯一手段。另一类副本是服务副本，指数个节点提供某种相同的服务，这种服务一般并不依赖于节点的本地存储，其所需数据一般来自其他节点。</p>
+<p>副本协议是贯穿整个分布式系统的理论核心。</p>
+<h4 id="副本一致性"><a href="#副本一致性" class="headerlink" title="副本一致性"></a><strong>副本一致性</strong></h4><p>分布式系统通过副本控制协议，使得从系统外部读取系统内部各个副本的数据在一定的约束条件下相同，称之为副本一致性(consistency)。副本一致性是针对分布式系统而言的，不是针对某一个副本而言。</p>
+<ol>
+<li>**强一致性(strong consistency)**：任何时刻任何用户或节点都可以读到最近一次成功更新的副本数据。强一致性是程度最高的一致性要求，也是实践中最难以实现的一致性。</li>
+<li>**单调一致性(monotonic consistency)**：任何时刻，任何用户一旦读到某个数据在某次更新后的值，这个用户不会再读到比这个值更旧的值。单调一致性是弱于强一致性却非常实用的一种一致性级别。因为通常来说，用户只关心从己方视角观察到的一致性，而不会关注其他用户的一致性情况。</li>
+<li>**会话一致性(session consistency)**：任何用户在某一次会话内一旦读到某个数据在某次更新后的值，这个用户在这次会话过程中不会再读到比这个值更旧的值。会话一致性通过引入会话的概念，在单调一致性的基础上进一步放松约束，会话一致性只保证单个用户单次会话内数据的单调修改，对于不同用户间的一致性和同一用户不同会话间的一致性没有保障。实践中有许多机制正好对应会话的概念，例如php 中的session 概念。</li>
+<li>**最终一致性(eventual consistency)**：最终一致性要求一旦更新成功，各个副本上的数据最终将达 到完全一致的状态，但达到完全一致状态所需要的时间不能保障。对于最终一致性系统而言，一个用户只要始终读取某一个副本的数据，则可以实现类似单调一致性的效果，但一旦用户更换读取的副本，则无法保障任何一致性。</li>
+<li>**弱一致性(week consistency)**：一旦某个更新成功，用户无法在一个确定时间内读到这次更新的值，且即使在某个副本上读到了新的值，也不能保证在其他副本上可以读到新的值。弱一致性系统一般很难在实际中使用，使用弱一致性系统需要应用方做更多的工作从而使得系统可用。</li>
+</ol>
+<h3 id="1-3-衡量分布式系统的指标"><a href="#1-3-衡量分布式系统的指标" class="headerlink" title="1.3 衡量分布式系统的指标"></a><strong>1.3 衡量分布式系统的指标</strong></h3><ol>
+<li><strong>性能</strong>：系统的吞吐能力，指系统在某一时间可以处理的数据总量，通常可以用系统每秒处理的总的数据量来衡量；系统的响应延迟，指系统完成某一功能需要使用的时间；系统的并发能力，指系统可以同时完成某一功能的能力，通常也用QPS(query per second)来衡量。上述三个性能指标往往会相互制约，追求高吞吐的系统，往往很难做到低延迟；系统平均响应时间较长时，也很难提高QPS。</li>
+<li><strong>可用性</strong>：系统的可用性(availability)指系统在面对各种异常时可以正确提供服务的能力。系统的可用性可以用系统停服务的时间与正常服务的时间的比例来衡量，也可以用某功能的失败次数与成功次数的比例来衡量。可用性是分布式的重要指标，衡量了系统的鲁棒性，是系统容错能力的体现。</li>
+<li><strong>可扩展性</strong>：系统的可扩展性(scalability)指分布式系统通过扩展集群机器规模提高系统性能（吞吐、延迟、并发）、存储容量、计算能力的特性。好的分布式系统总在追求“线性扩展性”，也就是使得系统的某一指标可以随着集群中的机器数量线性增长。</li>
+<li><strong>一致性</strong>：分布式系统为了提高可用性，总是不可避免的使用副本的机制，从而引发副本一致性的问题。越是强的一致的性模型，对于用户使用来说使用起来越简单。</li>
+</ol>
+<h2 id="2-分布式系统原理"><a href="#2-分布式系统原理" class="headerlink" title="2 分布式系统原理"></a><strong>2 分布式系统原理</strong></h2><h3 id="2-1-数据分布方式"><a href="#2-1-数据分布方式" class="headerlink" title="2.1 数据分布方式"></a><strong>2.1 数据分布方式</strong></h3><p>所谓分布式系统顾名思义就是利用多台计算机协同解决单台计算机所不能解决的计算、存储等问题。单机系统与分布式系统的最大的区别在于问题的规模，即计算、存储的数据量的区别。将一个单机问题使用分布式解决，首先要解决的就是如何将问题拆解为可以使用多机分布式解决，使得分布式系统中的每台机器负责原问题的一个子集。由于无论是计算还是存储，其问题输入对象都是数据，所以如何拆解分布式系统的输入数据成为分布式系统的基本问题。</p>
+<h4 id="哈希方式"><a href="#哈希方式" class="headerlink" title="哈希方式"></a><strong>哈希方式</strong></h4><p>哈希分布数据的缺点同样明显，突出表现为可扩展性不高，一旦集群规模需要扩展，则几乎所有的数据需要被迁移并重新分布。工程中，扩展哈希分布数据的系统时，往往使得集群规模成倍扩展，按照数据重新计算哈希，这样原本一台机器上的数据只需迁移一半到另一台对应的机器上即可完成扩展。</p>
+<p>针对哈希方式扩展性差的问题，一种思路是不再简单的将哈希值与机器做除法取模映射，而是将对应关系作为元数据由专门的元数据服务器管理.同时，哈希值取模个数往往大于机器个数，这样同一台机器上需要负责多个哈希取模的余数。但需要以较复杂的机制维护大量的元数据。哈希分布数据的另一个缺点是，一旦某数据特征值的数据严重不均，容易出现“数据倾斜”（data skew）问题。</p>
+<p>哈希分布数据的另一个缺点是，一旦某数据特征值的数据严重不均，容易出现“数据倾斜”（data skew）问题</p>
+<h4 id="按数据范围分布"><a href="#按数据范围分布" class="headerlink" title="按数据范围分布"></a><strong>按数据范围分布</strong></h4><p>按数据范围分布是另一个常见的数据分布式，将数据按特征值的值域范围划分为不同的区间，使得集群中每台（组）服务器处理不同区间的数据。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hj0ojk4j30ik0b4795.jpg" alt="image-20200929140420324"></p>
+<p>工程中，为了数据迁移等负载均衡操作的方便，往往利用动态划分区间的技术，使得每个区间中服务的数据量尽量的一样多。当某个区间的数据量较大时，通过将区间“分裂”的方式拆分为两个区间，使得每个数据区间中的数据量都尽量维持在一个较为固定的阈值之下。</p>
+<p>一般的，往往需要使用专门的服务器在内存中维护数据分布信息，称这种数据的分布信息为一种元信息。甚至对于大规模的集群，由于元信息的规模非常庞大，单台 计算机无法独立维护，需要使用多台机器作为元信息服务器。</p>
+<h4 id="按数据量分布"><a href="#按数据量分布" class="headerlink" title="按数据量分布"></a><strong>按数据量分布</strong></h4><p>数据量分布数据与具体的数据特征无关，而是将数据视为一个顺序增长的文件，并将这个文件按照某一较为固定的大小划分为若干数据块（chunk），不同的数据块分布到不同的服务器上。与按数据范围分布数据的方式类似的是，按数据量分布数据也需要记录数据块的具体分布情况，并将该分布信息作为元数据使用元数据服务器管理。</p>
+<p>由于与具体的数据内容无关，按数据量分布数据的方式一般没有数据倾斜的问题，数据总是被均匀切分并分布到集群中。当集群需要重新负载均衡时，只需通过迁移数据块即可完成。集群扩容也没有太大的限制，只需将部分数据库迁移到新加入的机器上即可以完成扩容。按数据量划分数据的缺点是需要管理较为复杂的元信息，与按范围分布数据的方式类似，当集群规模较大时，元信息的数据量也变得很大，高效的管理元信息成为新的课题。</p>
+<h4 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a><strong>一致性哈希</strong></h4><p>一致性哈希（consistent hashing）是另一个种在工程中使用较为广泛的数据分布方式。一致性哈希最初在P2P 网络中作为分布式哈希表（DHT）的常用数据分布算法。一致性哈希的基本方式是使用一个哈希函数计算数据或数据特征的哈希值，令该哈希函数的输出值域为一个封闭的环，即哈希函数输出的最大值是最小值的前序。将节点随机分布到这个环上，每个节点负责处理从自己开始顺时针至下一个节点的全部哈希值域上的数据。</p>
+<p>使用一致性哈希的方式需要将节点在一致性哈希环上的位置作为元信息加以管理，这点比直接使用哈希分布数据的方式要复杂。然而，节点的位置信息只于集群中的机器规模相关，其元信息的量通常比按数据范围分布数据和按数据量分布数据的元信息量要小很多。</p>
+<p>为此一种常见的改进算法是引入虚节点（virtual node）的概念，系统初始时就创建许多虚节点，虚节点的个数一般远大于未来集群中机器的个数，将虚节点均匀分布到一致性哈希值域环上，其功能与基本一致性哈希算法中的节点相同。为每个节点分配若干虚节点。操作数据时，首先通过数据的哈希值在环上找到对应的虚节点，进而查找元数据找到对应的真实节点。使用虚节点改进有多个优点。首先，一旦某个节点不可用，该节点将使得多个虚节点不可用，从而使得多个相邻的真实节点负载失效节点的压里。同理，一旦加入一个新节点，可以分配多个虚节点，从而使得新节点可以 负载多个原有节点的压力，从全局看，较容易实现扩容时的负载均衡。</p>
+<h4 id="副本与数据分布"><a href="#副本与数据分布" class="headerlink" title="副本与数据分布"></a><strong>副本与数据分布</strong></h4><p>分布式系统容错、提高可用性的基本手段就是使用副本。对于数据副本的分布方式主要影响系统的可扩展性。一种基本的数据副本策略是以机器为单位，若干机器互为副本，副本机器之间的数据完全相同。这种策略适用于上述各种数据分布方式。其优点是非常简单，其缺点是恢复数据的效率不高、可扩展性也不高。</p>
+<p>更合适的做法不是以机器作为副本单位，而是将数据拆为较合理的数据段，以数据段为单位作为副本。实践中，常常使得每个数据段的大小尽量相等且控制在一定的大小以内。数据段有很多不同的称谓，segment，fragment，chunk，partition 等等。数据段的选择与数据分布方式直接相关。对于哈希分数据的方式，每个哈希分桶后的余数可以作为一个数据段，为了控制数据段的大小，常常使得分桶个数大于集群规模。一旦将数据分为数据段，则可以以数据段为单位管理副本，从而副本与机器不再硬相关，每台机器都可以负责一定数据段的副本。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hjo1bi9j30m8092ade.jpg" alt="image-20200929140458068"></p>
+<p>一旦副本分布与机器无关，数据丢失后的恢复效率将非常高。这是因为，一旦某台机器的数据丢失，其上数据段的副本将分布在整个集群的所有机器中，而不是仅在几个副本机器中，从而可以从整个集群同时拷贝恢复数据，而集群中每台数据源机器都可以以非常低的资源做拷贝。作为恢复数据源的机器即使都限速1MB/s，若有100 台机器参与恢复，恢复速度也能达到100MB/s。再者，副本分布与机器无关也利于集群容错。如果出现机器宕机，由于宕机机器上的副本分散于整个集群，其压力也自然分散到整个集群。最后，副本分布与机器无关也利于集群扩展。理论上，设集群规模 为N 台机器，当加入一台新的机器时，只需从各台机器上迁移1/N – 1/N+1 比例的数据段到新机器即实现了新的负载均衡。由于是从集群中各机器迁移数据，与数据恢复同理，效率也较高。工程中，完全按照数据段建立副本会引起需要管理的元数据的开销增大，副本维护的难度也相应增大。一种折中的做法是将某些数据段组成一个数据段分组，按数据段分组为粒度进行副本管理。这样做可以将副本粒度控制在一个较为合适的范围内。</p>
+<h4 id="本地化计算"><a href="#本地化计算" class="headerlink" title="本地化计算"></a><strong>本地化计算</strong></h4><p>在分布式系统中，数据的分布方式也深深影响着计算的分布方式。在分布式系统中计算节点和保存计算数据的存储节点可以在同一台物理机器上，也可以位于不同的物理机器。如果计算节点和存储节点位于不同的物理机器则计算的数据需要通过网络传输，此种方式的开销很大，甚至网络带宽会成为系统的总体瓶颈。另一种思路是，将计算尽量调度到与存储节点在同一台物理机器上的计算节点上进行，这称之为本地化计算。本地化计算是计算调度的一种重要优化，其体现了一种重要的分布式调度思想：“移动数据不如移动计算”。</p>
+<h4 id="数据分布方式的选择"><a href="#数据分布方式的选择" class="headerlink" title="数据分布方式的选择"></a><strong>数据分布方式的选择</strong></h4><p>在实际工程实践中，可以根据需求及实施复杂度合理选择数据分布方式。另外，数据分布方式是可以灵活组合使用的，往往可以兼备各种方式的优点，收到较好的综合效果。</p>
+<p>例：数据倾斜问题，在按哈希分数据的基础上引入按数据量分布数据的方式，解决该数据倾斜问题。按用户id 的哈希值分数据，当某个用户id 的数据量特别大时，该用户的数据始终落在某一台机器上。此时，引入按数据量分布数据的方式，统计用户的数据量，并按某一阈值将用户的数据切为多个均匀的数据段，将这些数据段分布到集群中去。由于大部分用户的数据量不会超过阈值，所以元数据中仅仅保存超过阈值的用户的数据段分布信息，从而可以控制元数据的规模。这种哈希分布数据方式与按数据量分布数据方式组合使用的方案，在某真实系统中使用，取得了较好的效果。</p>
+<h3 id="2-2-基本副本协议"><a href="#2-2-基本副本协议" class="headerlink" title="2.2 基本副本协议"></a><strong>2.2 基本副本协议</strong></h3><p>副本控制协议指按特定的协议流程控制副本数据的读写行为，使得副本满足一定的可用性和一致性要求的分布式协议。副本控制协议要具有一定的对抗异常状态的容错能力，从而使得系统具有一定的可用性，同时副本控制协议要能提供一定一致性级别。由CAP 原理（在2.9 节详细分析）可知，要设计一种满足强一致性，且在出现任何网络异常时都可用的副本协议是不可能的。为此，实际中的副本控制协议总是在可用性、一致性与性能等各要素之间按照具体需求折中。</p>
+<p>副本控制协议可以分为两大类：“中心化(centralized)副本控制协议”和“去中心化(decentralized)副本控制协议”。</p>
+<h4 id="中心化副本控制协议"><a href="#中心化副本控制协议" class="headerlink" title="中心化副本控制协议"></a><strong>中心化副本控制协议</strong></h4><p>中心化副本控制协议的基本思路是由一个中心节点协调副本数据的更新、维护副本之间的一致性。图给出了中心化副本协议的通用架构。中心化副本控制协议的优点是协议相对较为简单，所有的副本相关的控制交由中心节点完成。并发控制将由中心节点完成，从而使得一个分布式并发控制问题，简化为一个单机并发控制问题。所谓并发控制，即多个节点同时需要修改副本数据时，需要解决“写写”、“读写”等并发冲突。单机系统上常用加锁等方式进行并发控制。对于分布式并发控制，加锁也是一个常用的方法，但如果没有中心节点统一进行锁管理，就需要完全分布式化的锁系统，会使得协议非常复杂。中心化副本控制协议的缺点是系统的可用性依赖于中心化节点，当中心节点异常或与中心节点通信中断时，系统将失去某些服务（通常至少失去更新服务），所以中心化副本控制协议的缺点正是存在一定的停服务时间。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hk326krj30iy07676x.jpg" alt="image-20200929140521596"></p>
+<h4 id="primary-secondary-协议"><a href="#primary-secondary-协议" class="headerlink" title="primary-secondary 协议"></a><strong>primary-secondary 协议</strong></h4><p>在primary-secondary 类型的协议中，副本被分为两大类，其中有且仅有一个副本作为primary 副本，除primary 以外的副本都作为secondary 副本。维护primary 副本的节点作为中心节点，中心节点负责维护数据的更新、并发控制、协调副本的一致性。</p>
+<p>Primary-secondary 类型的协议一般要解决四大类问题：数据更新流程、数据读取方式、Primary 副本的确定和切换、数据同步（reconcile）。</p>
+<p>数据更新基本流程</p>
+<ol>
+<li>数据更新都由primary 节点协调完成。</li>
+<li>外部节点将更新操作发给primary 节点</li>
+<li>primary 节点进行并发控制即确定并发更新操作的先后顺序</li>
+<li>primary 节点将更新操作发送给secondary 节点</li>
+<li>primary 根据secondary 节点的完成情况决定更新是否成功并将结果返回外部节点</li>
+</ol>
+<p>在工程实践中，如果由primary 直接同时发送给其他N 个副本发送数据，则每个 secondary 的更新吞吐受限于primary 总的出口网络带宽，最大为primary 网络出口带宽的1/N。为了解决这个问题，有些系统（例如，GFS），使用接力的方式同步数据，即primary 将更新发送给第一 个secondary 副本，第一个secondary 副本发送给第二secondary 副本，依次类推。</p>
+<h4 id="数据读取方式"><a href="#数据读取方式" class="headerlink" title="数据读取方式"></a><strong>数据读取方式</strong></h4><p>数据读取方式也与一致性高度相关。如果只需要最终一致性，则读取任何副本都可以满足需求。如果需要会话一致性，则可以为副本设置版本号，每次更新后递增版本号，用户读取副本时验证版本号，从而保证用户读到的数据在会话范围内单调递增。使用primary-secondary 比较困难的是实现强一致性。</p>
+<ol>
+<li>由于数据的更新流程都是由primary 控制的，primary 副本上的数据一定是最新的，所以 如果始终只读primary 副本的数据，可以实现强一致性。如果只读primary 副本，则secondary 副本将不提供读服务。实践中，如果副本不与机器绑定，而是按照数据段为单位维护副本，仅有primary 副本提供读服务在很多场景下并不会造出机器资源浪费。</li>
+</ol>
+<p>将副本分散到集群中个，假设primary 也是随机的确定的，那么每台机器上都有一些数据的primary 副本，也有另一些数据段的secondary 副本。从而某台服务器实际都提供读写服务。</p>
+<ol>
+<li>由primary 控制节点secondary 节点的可用性。当primary 更新某个secondary 副本不成功时，primary 将该secondary 副本标记为不可用，从而用户不再读取该不可用的副本。不可用的 secondary 副本可以继续尝试与primary 同步数据，当与primary 完成数据同步后，primary 可以副本标记为可用。这种方式使得所有的可用的副本，无论是primary 还是secondary 都是可读的，且在一个确定的时间内，某secondary 副本要么更新到与primary 一致的最新状态，要么被标记为不可用，从而符合较高的一致性要求。这种方式依赖于一个中心元数据管理系统，用于记录哪些副本可用，哪些副本不可用。某种意义上，该方式通过降低系统的可用性来提高系统的一致性。</li>
+</ol>
+<h4 id="primary-副本的确定与切换"><a href="#primary-副本的确定与切换" class="headerlink" title="primary 副本的确定与切换"></a><strong>primary 副本的确定与切换</strong></h4><p>在primary-secondary 类型的协议中，另一个核心的问题是如何确定primary 副本，尤其是在原primary 副本所在机器出现宕机等异常时，需要有某种机制切换primary 副本，使得某个secondary 副本成为新的primary 副本。</p>
+<p>通常的，在primary-secondary 类型的分布式系统中，哪个副本是primary 这一信息都属于元信息，由专门的元数据服务器维护。执行更新操作时，首先查询元数据服务器获取副本的primary 信息，从而进一步执行数据更新流程。</p>
+<p>由于分布式系统中可靠的发现节点异常是需要一定的探测时间的，这样的探测时间通常是10 秒级别，这也意味着一旦primary 异常，最多需要10 秒级别的发现时间，系统才能开始primary 的切换，在这10 秒时间内，由于没有primary，系统不能提供更 新服务，如果系统只能读primary 副本，则这段时间内甚至不能提供读服务。从这里可以看到，primary-backup 类副本协议的最大缺点就是由于primary 切换带来的一定的停服务时间。</p>
+<h4 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a><strong>数据同步</strong></h4><p>不一致的secondary 副本需要与primary 进行同步（reconcile）。</p>
+<p>通常不一致的形式有三种：一、由于网络分化等异常，secondary 上的数据落后于primary 上的数据。二、在某些协议下，secondary 上的数据有可能是脏数据，需要被丢弃。所谓脏数据是由于primary 副本没有进行某一更新操作，而secondary 副本上反而进行的多余的修改操作，从而造成secondary 副本数据错误。三、secondary 是一个新增加的副本，完全没有数据，需要从其他副本上拷贝数据。</p>
+<p>对于第一种secondary 数据落后的情况，常见的同步方式是回放primary 上的操作日志（通常是redo 日志），从而追上primary 的更新进度。对于脏数据的情况，较好的做法是设计的分布式协议不产生脏数据。如果协议一定有产生脏数据的可能，则也应该使得产生脏数据的概率降到非常低得情况，从而一旦发生脏数据的情况可以简单的直接丢弃有脏数据的副本，这样相当于副本没有数据。另外，也可以设计一些基于undo 日志的方式从而可以删除脏数据。如果secondary 副本完全没有数据，则常见的做法是直接拷贝primary 副本的数据，这种方法往往比回放日志追更新进度的方法快很多。但拷贝数据时primary 副本需要能够继续提供更新服务，这就要求primary 副本支持快照(snapshot)功能。即对某一刻的副本数据形成快照，然后拷贝快照，拷贝完成后使用回放日志的方式追快照形成后的更新操作。</p>
+<h4 id="去中心化副本控制协议"><a href="#去中心化副本控制协议" class="headerlink" title="去中心化副本控制协议"></a><strong>去中心化副本控制协议</strong></h4><p>去中心化副本控制协议没有中心节点，协议中所有的节点都是完全对等的，节点之间通过平等协商达到一致。从而去中心化协议没有因为中心化节点异常而带来的停服务等问题。</p>
+<p>去中心化协议的最大的缺点是协议过程通常比较复杂。尤其当去中心化协议需要实现强一致性时，协议流程变得复杂且不容易理解。由于流程的复杂，去中心化协议的效率或者性能一般也较中心化协议低。一个不恰当的比方就是，中心化副本控制协议类似专制制度，系统效率高但高度依赖于中心节点，一旦中心节点异常，系统受到的影响较大；去中心化副本控制协议类似民主制度，节点集体协商，效率低下，但个别节点的异常不会对系统总体造成太大影响。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hkqerbtj30hg06itav.jpg" alt="image-20200929140559373"></p>
+<h3 id="2-3-Lease-机制"><a href="#2-3-Lease-机制" class="headerlink" title="2.3 Lease 机制"></a><strong>2.3 Lease 机制</strong></h3><p>Lease 机制是最重要的分布式协议，广泛应用于各种实际的分布式系统中。</p>
+<h4 id="基于lease-的分布式cache-系统"><a href="#基于lease-的分布式cache-系统" class="headerlink" title="基于lease 的分布式cache 系统"></a><strong>基于lease 的分布式cache 系统</strong></h4><p>基本的问题背景如下：在一个分布式系统中，有一个中心服务器节点，中心服务器存储、维护着一些数据，这些数据是系统的元数据。系统中其他的节点通过访问中心服务器节点读取、修改其上的元数据。由于系统中各种操作都依赖于元数据，如果每次读取元数据的操作都访问中心服务器 节点，那么中心服务器节点的性能成为系统的瓶颈。为此，设计一种元数据cache，在各个节点上 cache 元数据信息，从而减少对中心服务器节点的访问，提高性能。另一方面，系统的正确运行严格依赖于元数据的正确，这就要求各个节点上cache 的数据始终与中心服务器上的数据一致，cache 中的数据不能是旧的脏数据。最后，设计的cache 系统要能最大可能的处理节点宕机、网络中断等异常，最大程度的提高系统的可用性。</p>
+<p>为此，利用lease 机制设计一套cache 系统，其基本原理为如下。中心服务器在向各节点发送数据时同时向节点颁发一个lease。每个lease 具有一个有效期，和信用卡上的有效期类似，lease 上的 有效期通常是一个明确的时间点，例如12:00:10，一旦真实时间超过这个时间点，则lease 过期失效。这样lease 的有效期与节点收到lease 的时间无关，节点可能收到lease 时该lease 就已经过期失效。这里首先假设中心服务器与各节点的时钟是同步的，在下节中讨论时钟不同步对lease 的影响。中心服务器发出的lease 的含义为：在lease 的有效期内，中心服务器保证不会修改对应数据的值。因此，节点收到数据和lease 后，将数据加入本地Cache，一旦对应的lease 超时，节点将对应的本地cache 数据删除。中心服务器在修改数据时，首先阻塞所有新的读请求，并等待之前为该数据发出的所有lease 超时过期，然后修改数据的值。</p>
+<p>基于lease 的cache，客户端节点读取元数据</p>
+<ol>
+<li>判断元数据是否已经处于本地cache 且lease 处于有效期内1.1 是：直接返回cache 中的元数据1.2 否：向中心服务器节点请求读取元数据信息1.2.1 服务器收到读取请求后，返回元数据及一个对应的lease 1.2.2 客户端是否成功收到服务器返回的数据  1.2.2.1 失败或超时：退出流程，读取失败，可重试1.2.2.2 成功：将元数据与该元数据的lease 记录到内存中，返回元数据</li>
+<li>基于lease 的cache，客户端节点修改元数据流程2.1 节点向服务器发起修改元数据请求。2.2 服务器收到修改请求后，阻塞所有新的读数据请求，即接收读请求，但不返回数据。2.3 服务器等待所有与该元数据相关的lease 超时。2.4 服务器修改元数据并向客户端节点返回修改成功。</li>
+</ol>
+<p>上述机制可以保证各个节点上的cache 与中心服务器上的中心始终一致。这是因为中心服务器节点在发送数据的同时授予了节点对应的lease，在lease 有效期内，服务器不会修改数据，从而客户端节点可以放心的在lease 有效期内cache 数据。上述lease 机制可以容错的关键是：服务器一旦 发出数据及lease，无论客户端是否收到，也无论后续客户端是否宕机，也无论后续网络是否正常，服务器只要等待lease 超时，就可以保证对应的客户端节点不会再继续cache 数据，从而可以放心的修改数据而不会破坏cache 的一致性。</p>
+<p>上述基础流程有一些性能和可用性上的问题，但可以很容易就优化改性。优化点一：服务器在修改元数据时首先要阻塞所有新的读请求，造成没有读服务。这是为了防止发出新的lease 从而引起不断有新客户端节点持有lease 并缓存着数据，形成“活锁”。优化的方法很简单，服务器在进入修改数据流程后，一旦收到读请求则只返回数据但不颁发lease。从而造成在修改流程执行的过程中，客户端可以读到元数据，只是不能缓存元数据。进一步的优化是，当进入修改流程，服务器颁发的lease 有效期限选择为已发出的lease 的最大有效期限。这样做，客户端可以继续在服务器进入修改流程后继续缓存元数据，但服务器的等待所有lease 过期的时间也不会因为颁发新的lease 而不断延长。</p>
+<p>最后，=cache 机制与多副本机制的区别。Cache 机制与多副本机制的相似之处都 是将一份数据保存在多个节点上。但Cache 机制却要简单许多，对于cache 的数据，可以随时删除丢弃，并命中cache 的后果仅仅是需要访问数据源读取数据；然而副本机制却不一样，副本是不能随意丢弃的，每失去一个副本，服务质量都在下降，一旦副本数下降到一定程度，则往往服务将不再可用。</p>
+<h4 id="lease-机制的分析"><a href="#lease-机制的分析" class="headerlink" title="lease 机制的分析"></a><strong>lease 机制的分析</strong></h4><p>lease 的定义：Lease 是由颁发者授予的在某一有效期内的承诺。颁发者一旦发出lease，则无论接受方是否收到，也无论后续接收方处于何种状态，只要lease 不过期，颁发者一定严守承诺；另一方面，接收方在lease 的有效期内可以使用颁发者的承诺，但一旦lease 过期，接收方一定不能继续使用颁发者的承诺。</p>
+<p>Lease 机制具有很高的容错能力。首先，通过引入有效期，Lease 机制能否非常好的容错网络异常。Lease 颁发过程只依赖于网络可以单向通信，即使接收方无法向颁发者发送消息，也不影响lease 的颁发。由于lease 的有效期是一个确定的时间点，lease 的语义与发送lease 的具体时间无关，所以 同一个lease 可以被颁发者不断重复向接受方发送。即使颁发者偶尔发送lease 失败，颁发者也可以 简单的通过重发的办法解决。一旦lease 被接收方成功接受，后续lease 机制不再依赖于网络通信，即使网络完全中断lease 机制也不受影响。再者，Lease 机制能较好的容错节点宕机。如果颁发者宕机，则宕机的颁发者通常无法改变之前的承诺，不会影响lease 的正确性。在颁发者机恢复后，如果颁发者恢复出了之前的lease 信息，颁发者可以继续遵守lease 的承诺。如果颁发者无法恢复lease 信息，则只需等待一个最大的lease 超时时间就可以使得所有的lease 都失效，从而不破坏lease机制。</p>
+<p>例如上节中的cache 系统的例子中，一旦服务器宕机，肯定不会修改元数据，重新恢复后，只需等待一个最大的lease 超时时间，所有节点上的缓存信息都将被清空。对于接受方宕机的情况，颁发者 不需要做更多的容错处理，只需等待lease 过期失效，就可以收回承诺，实践中也就是收回之前赋予的权限、身份等。最后，lease 机制不依赖于存储。颁发者可以持久化颁发过的lease 信息，从而在 宕机恢复后可以使得在有效期的lease 继续有效。但这对于lease 机制只是一个优化，如之前的分析，即使颁发者没有持久化lease 信息，也可以通过等待一个最大的lease 时间的方式使得之前所有颁发 的lease 失效，从而保证机制继续有效。</p>
+<p>Lease 机制依赖于有效期，这就要求颁发者和接收者的时钟是同步的。一方面，如果颁发者的 时钟比接收者的时钟慢，则当接收者认为lease 已经过期的时候，颁发者依旧认为lease 有效。接收者可以用在lease 到期前申请新的lease 的方式解决这个问题。另一方面，如果颁发者的时钟比接收 者的时钟快，则当颁发者认为lease 已经过期的时候，接收者依旧认为lease 有效，颁发者可能将lease 颁发给其他节点，造成承诺失效，影响系统的正确性。对于这种时钟不同步，实践中的通常做法是将颁发者的有效期设置得比接收者的略大，只需大过时钟误差就可以避免对lease 的有效性的影响。</p>
+<h4 id="基于lease-机制确定节点状态"><a href="#基于lease-机制确定节点状态" class="headerlink" title="基于lease 机制确定节点状态"></a><strong>基于lease 机制确定节点状态</strong></h4><p>分布式协议依赖于对节点状态认知的全局一致性，即一旦节点Q 认为某个节点 A 异常，则节点A 也必须认为自己异常，从而节点A 停止作为primary，避免“双主”问题的出现。解决这种问题有两种思路，第一、设计的分布式协议可以容忍“双主”错误，即不依赖于对节点状 态的全局一致性认识，或者全局一致性状态是全体协商后的结果；第二、利用lease 机制。对于第一 种思路即放弃使用中心化的设计，而改用去中心化设计，超过本节的讨论范畴。下面着重讨论利用 lease 机制确定节点状态。</p>
+<p>由中心节点向其他节点发送lease，若某个节点持有有效的lease，则认为该节点正常可以提供服 务。用于例2.3.1 中，节点A、B、C 依然周期性的发送heart beat 报告自身状态，节点Q 收到heart beat 后发送一个lease，表示节点Q 确认了节点A、B、C 的状态，并允许节点在lease 有效期内正常工 作。节点Q 可以给primary 节点一个特殊的lease，表示节点可以作为primary 工作。一旦节点Q 希望切换新的primary，则只需等前一个primary 的lease 过期，则就可以安全的颁发新的lease 给新的 primary 节点，而不会出现“双主”问题。</p>
+<p>在实际系统中，若用一个中心节点发送lease 也有很大的风险，一旦该中心节点宕机或网络异常，则所有的节点没有lease，从而造成系统高度不可用。为此，实际系统总是使用多个中心节点互为副本，成为一个小的集群，该小集群具有高可用性，对外提供颁发lease 的功能。chubby 和zookeeper 都是基于这样的设计。</p>
+<h4 id="lease-的有效期时间选择"><a href="#lease-的有效期时间选择" class="headerlink" title="lease 的有效期时间选择"></a><strong>lease 的有效期时间选择</strong></h4><p>工程中，常选择的lease 时长是10 秒级别，这是一个经过验证的经验值，实践中可以作为参考并综合选择合适的时长。</p>
+<h3 id="2-4-Quorum-机制"><a href="#2-4-Quorum-机制" class="headerlink" title="2.4 Quorum 机制"></a><strong>2.4 Quorum 机制</strong></h3><p>先做这样的约定：更新操作（write）是一系列顺序的过程，通过其他机制确定更新操作的顺序（例如primary-secondary 架构中由primary 决定顺序），每个更新操作记为wi， i 为更新操作单调递增的序号，每个wi 执行成功后副本数据都发生变化，称为不同的数据版本，记 作vi。假设每个副本都保存了历史上所有版本的数据。</p>
+<h4 id="write-all-read-one"><a href="#write-all-read-one" class="headerlink" title="write-all-read-one"></a><strong>write-all-read-one</strong></h4><p>Write-all-read-one（简称WARO）是一种最简单的副本控制规则，顾名思义即在更新时写所有的副本，只有在所有的副本上更新成功，才认为更新成功，从而保证所有的副本一致，这样在读取数据时可以读任一副本上的数据。</p>
+<p>由于更新操作需要在所有的N 个副本上都成功，更新操作才能成 功，所以一旦有一个副本异常，更新操作失败，更新服务不可用。对于更新服务，虽然有N 个副本， 但系统无法容忍任何一个副本异常。另一方面，N 个副本中只要有一个副本正常，系统就可以提供读服务。对于读服务而言，当有N 个副本时，系统可以容忍N-1 个副本异常。从上述分析可以发现WARO 读服务的可用性较高，但更新服务的可用性不高，甚至虽然使用了副本，但更新服务的可用性等效于没有副本。</p>
+<h4 id="Quorum-定义"><a href="#Quorum-定义" class="headerlink" title="Quorum 定义"></a><strong>Quorum 定义</strong></h4><p>在Quorum 机制下，当某次更新操作wi 一旦在所有N 个副本中的W 个副本上都成功，则就称 该更新操作为“成功提交的更新操作”，称对应的数据为“成功提交的数据”。令R&gt;N-W，由于更新 操作wi 仅在W 个副本上成功，所以在读取数据时，最多需要读取R 个副本则一定能读到wi 更新后 的数据vi 。如果某次更新wi 在W 个副本上成功，由于W+R&gt;N，任意R 个副本组成的集合一定与 成功的W个副本组成的集合有交集，所以读取R 个副本一定能读到wi 更新后的数据vi。如图 2-10， Quorum 机制的原理可以文森图表示。</p>
+<p>某系统有5 个副本，W=3，R=3，最初5 个副本的数据一致，都是v1，某次更新操作 w2 在前3 副本上成功，副本情况变成（v2 v2 v2 v1 v1）。此时，任意3 个副本组成的集合中一定包括 v2。在上述定义中，令W=N，R=1，就得到WARO，即WARO 是Quorum 机制的一种特例。与分析WARO 相似，分析Quorum 机制的可用性。限制Quorum 参数为W+R=N+1。由于更新 操作需要在W 个副本上都成功，更新操作才能成功，所以一旦N-W+1 个副本异常，更新操作始终无法在W 个副本上成功，更新服务不可用。另一方面，一旦N-R+1 个副本异常，则无法保证一定可以读到与W 个副本有交集的副本集合，则读服务的一致性下降。</p>
+<p>再次强调：仅仅依赖quorum 机制是无法保证强一致性的。因为仅有quorum 机制时无法确定最新已成功提交的版本号，除非将最新已提交的版本号作为元数据由特定的元数据服务器或元数据集群管理，否则很难确定最新成功提交的版本号。在下一节中，将讨论在哪些情况下，可以仅仅 通过quorum 机制来确定最新成功提交的版本号。</p>
+<p>Quorum 机制的三个系统参数N、W、R 控制了系统的可用性，也是系统对用户的服务承诺：数据最多有N 个副本，但数据更新成功W 个副本即返回用户成功。对于一致性要求较高的Quorum 系统，系统还应该承诺任何时候不读取未成功提交的数据，即读取到的数据都是曾经在W 个副本上成功的数据。</p>
+<h4 id="读取最新成功提交的数据"><a href="#读取最新成功提交的数据" class="headerlink" title="读取最新成功提交的数据"></a><strong>读取最新成功提交的数据</strong></h4><p>Quorum 机制只需成功更新N 个副本中的W 个，在读取R 个副本时，一定可以读到最新的成功提交的数据。但由于有不成功的更新情况存在，仅仅读取R 个副本却不一定能确定哪个版本的数据 是最新的已提交的数据。对于一个强一致性Quorum 系统，若存在个数据少于W 个，假设为X 个，则继续读取其他副本，直若成功读取到W 个 该版本的副本，则该数据为最新的成功提交的数据；如果在所有副本中该数据的个数肯定不满 足W 个，则R 中版本号第二大的为最新的成功提交的副本。例：在读取到（v2 v1 v1）时，继续读取剩余的副本，若读到剩余两个副本 为（v2 v2）则v2 是最新的已提交的副本；若读到剩余的两个副本为（v2 v1）或（v1 v1）则v1 是最新成功提交的版本；若读取后续两个副本有任一超时或失败，则无法判断哪个版本是最新的成功提交的版本。</p>
+<p>可以看出，在单纯使用Quorum 机制时，若要确定最新的成功提交的版本，最多需要读取R+ （W-R-1）=N 个副本，当出现任一副本异常时，读最新的成功提交的版本这一功能都有可能不可用。实际工程中，应该尽量通过其他技术手段，回避通过Quorum 机制读取最新的成功提交的版本。例如，当quorum 机制与primary-secondary 控制协议结合使用时，可以通过读取primary 的方式读取到最新的已提交的数据。</p>
+<h4 id="基于Quorum-机制选择primary副本"><a href="#基于Quorum-机制选择primary副本" class="headerlink" title="基于Quorum 机制选择primary副本"></a><strong>基于Quorum 机制选择primary副本</strong></h4><p>读取数据时依照一致性要求的不同可以有不同的做法：如果需要强一致性的立刻读取到最新的成功提交的数据，则可以简单的只读取primary 副本上的数据即可，也可以通过上节的方式读取；如果需要会话一致性，则可以根据之前已经读到的数据版本号在各个副本上进行选择性读取；如果只需要弱一致性，则可以选择任意副本读取。</p>
+<p>在primary-secondary 协议中，当primary 异常时，需要选择出一个新的primary，之后secondary 副本与primary 同步数据。通常情况下，选择新的primary 的工作是由某一中心节点完成的，在引入 quorum 机制后，常用的primary 选择方式与读取数据的方式类似，即中心节点读取R 个副本，选择 R 个副本中版本号最高的副本作为新的primary。新primary 与至少W 个副本完成数据同步后作为新的primary 提供读写服务。首先，R 个副本中版本号最高的副本一定蕴含了最新的成功提交的数据。再者，虽然不能确定最高版本号的数是一个成功提交的数据，但新的primary 在随后与secondary 同 步数据，使得该版本的副本个数达到W，从而使得该版本的数据成为成功提交的数据。</p>
+<p>例：在N=5，W=3，R=3 的系统中，某时刻副本最大版本号为（v2 v2 v1 v1 v1），此时v1 是系统的最新的成功提交的数据，v2 是一个处于中间状态的未成功提交的数据。假设此刻原primary 副本异常，中心节点进行primary 切换工作。这类“中间态”数据究竟作为“脏数据”被删除，还是作为新的数据被同步后成为生效的数据，完全取决于这个数据能否参与新primary 的选举。下面分别分析这两种情况。</p>
+<p>第一、如图 2-12，若中心节点与其中3 个副本通信成功，读取到的版本号为（v1 v1 v1），则任 选一个副本作为primary，新primary 以v1 作为最新的成功提交的版本并与其他副本同步，当与第1、第2 个副本同步数据时，由于第1、第2 个副本版本号大于primary，属于脏数据，可以按照2.2.2.4 节中介绍的处理脏数据的方式解决。实践中，新primary 也有可能与后两个副本完成同步后就提供数据服务，随后自身版本号也更新到v2，如果系统不能保证之后的v2 与之前的v2 完全一样，则新 primary 在与第1、2 个副本同步数据时不但要比较数据版本号还需要比较更新操作的具体内容是否一样。</p>
+<p>第二、若中心节点与其他3 个副本通信成功，读取到的版本号为（v2 v1 v1），则选取版本号为 v2 的副本作为新的primary，之后，一旦新primary 与其他2 个副本完成数据同步，则符合v2 的副 本个数达到W 个，成为最新的成功提交的副本，新primary 可以提供正常的读写服务。</p>
+<h3 id="2-5-日志技术"><a href="#2-5-日志技术" class="headerlink" title="2.5 日志技术"></a><strong>2.5 日志技术</strong></h3><p>日志技术是宕机恢复的主要技术之一。日志技术最初使用在数据库系统中。严格来说日志技术不是一种分布式系统的技术，但在分布式系统的实践中，却广泛使用了日志技术做宕机恢复，甚 至如BigTable 等系统将日志保存到一个分布式系统中进一步增强了系统容错能力。</p>
+<h4 id="Redo-Log-与Check-point"><a href="#Redo-Log-与Check-point" class="headerlink" title="Redo Log 与Check point"></a><strong>Redo Log 与Check point</strong></h4><p>设计一个高速的单机查询系统，将数据全部存放在内存中以实现高速的数据查询，每次更新操作更新一小部分数据（例如 key-value 中的某一个key）。现在问题为利用日志技术实现该内存查询系统的宕机恢复。与数据库的事务不同的是，这个问题模型中的每个成功的更新操作都会生效。这也等效为数据库的每个事务只有一个更新操作，且每次更新操作都可以也必须立即提交（Auto commit）。</p>
+<ul>
+<li><h5 id="Redo-Log"><a href="#Redo-Log" class="headerlink" title="Redo Log"></a>Redo Log</h5></li>
+</ul>
+<ol>
+<li>将更新操作的结果（例如Set K1=1，则记录K1=1）以追加写（append）的方式写入磁盘的 日志文件</li>
+<li>按更新操作修改内存中的数据</li>
+<li>返回更新成功</li>
+</ol>
+<p>从Redo Log 的流程可以看出，Redo 写入日志的是更新操作完成后的结果（虽然本文不讨论Undo Log，这点是与Undo Log 的区别之一），且由于是顺序追加写日志文件，在磁盘等对顺序写有力的 存储设备上效率较高。</p>
+<p>用Redo Log 进行宕机恢复非常简单，只需要“回放”日志即可。</p>
+<p>流程2.5.2：Redo Log 的宕机恢复</p>
+<ol>
+<li>从头读取日志文件中的每次更新操作的结果，用这些结果修改内存中的数据。</li>
+</ol>
+<p>从Redo Log 的宕机恢复流程也可以看出，只有写入日志文件的更新结果才能在宕机后恢复。这也是为什么在Redo Log 流程中需要先更新日志文件再更新内存中的数据的原因。假如先更新内存中的数据，那么用户立刻就能读到更新后的数据，一旦在完成内存修改与写入日志之间发生宕机，那么最后一次更新操作无法恢复，但之前用户可能已经读取到了更新后的数据，从而引起不一致的问题。</p>
+<ul>
+<li><h5 id="Check-point"><a href="#Check-point" class="headerlink" title="Check point"></a>Check point</h5></li>
+</ul>
+<p>。在简化的模型下，check point 技术的过程即将内存中的数据以某种易于重新加载的数据组织方式完整的dump 到磁盘，从而减少宕机恢复时需要回放的日志数据。</p>
+<p>流程：check point</p>
+<ol>
+<li>向日志文件中记录“Begin Check Point”</li>
+<li>将内存中的数据以某种易于重新加载的数据组织方式dump 到磁盘上</li>
+<li>向日志文件中记录“End Check Point” 在check point 流程中，数据可以继续按照流程2.5.1 被更新，这段过程中新更新的数据可以dump 到磁盘也可以不dump 到磁盘，具体取决于实现。例如，check point 开始时k1=v1，check point 过程 中某次更新为k1 = v2，那么dump 到磁盘上的k1 的值可以是v1 也可以是v2。</li>
+</ol>
+<p>流程：基于check point 的宕机恢复流程</p>
+<ol>
+<li>将dump 到磁盘的数据加载到内存。</li>
+<li>从后向前扫描日志文件，寻找最后一个“End Check Point”日志。</li>
+<li>从最后一个“End Check Point”日志向前找到最近的一个“Begin Check Point”日志，并回 放该日志之后的所有更新操作日志。</li>
+</ol>
+<ul>
+<li><h5 id="No-Undo-No-Redo-log"><a href="#No-Undo-No-Redo-log" class="headerlink" title="No Undo/No Redo log"></a>No Undo/No Redo log</h5></li>
+</ul>
+<p>若数据维护在磁盘中，某批更新由若干个更新操作组成，这些更新操作需要原子生效，即要么同时生效，要么都不生效。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hmgqw30j30je0akq7e.jpg" alt="image-20200929140739266"></p>
+<p>0/1 目录技术中有两个目录结构，称为目录0(Directory 0)和目录1(Directory 1)。另有一个结构称为主记录（Master record）记录当前正在使用的目录称为活动目录。主记录中要么记录使用目录0，要么记录使用目录1。目录0 或目录1 中记录了各个数据的在日志文件中的位置。0/1 目录的数据更新过程始终在非活动目录上进行，只是在数据生效前，将主记录中的0、1 值反转，从而切换主记录。</p>
+<p>流程：0/1 目录数据更新流程</p>
+<ol>
+<li>将活动目录完整拷贝到非活动目录。</li>
+<li>对于每个更新操作，新建一个日志项纪录操作后的值，并在非活动目录中将相应数据的位置修改为新建的日志项的位置。</li>
+<li>原子性修改主记录：反转主记录中的值，使得非活动目录生效。</li>
+</ol>
+<p>0/1 目录的更新流程非常简单，通过0、1 目录的主记录切换使得一批修改的生效是原子的。0/1 目录将批量事务操作的原子性通过目录手段归结到主记录的原子切换。由于多条记录的原子修改一般较难实现而单条记录的原子修改往往可以实现，从而降低了问题实现的难度。在工程中0/1 目录的思想运用非常广泛，其形式也不局限在上述流程中，可以是内存中的两个数据结构来回切换，也可以是磁盘上的两个文件目录来回生效切换。</p>
+<h3 id="2-6-两阶段提交协议"><a href="#2-6-两阶段提交协议" class="headerlink" title="2.6 两阶段提交协议"></a><strong>2.6 两阶段提交协议</strong></h3><p>两阶段提交协议是一种经典的强一致性中心化副本控制协议。虽然在工程中该协议有较多的问题，但研究该协议能很好的理解分布式系统的几个典型问题。</p>
+<h4 id="流程描述"><a href="#流程描述" class="headerlink" title="流程描述"></a><strong>流程描述</strong></h4><p>两阶段提交协议是一种典型的“中心化副本控制”协议。在该协议中，参与的节点分为两类：一个中心化协调者节点（coordinator）和N 个参与者节点（participant）。每个参与者节点即上文背景介绍中的管理数据库副本的节点。</p>
+<p>两阶段提交的思路比较简单，在第一阶段，协调者询问所有的参与者是否可以提交事务（请参与者投票），所有参与者向协调者投票。在第二阶段，协调者根据所有参与者的投票结果做出是否事务可以全局提交的决定，并通知所有的参与者执行该决定。在一个两阶段提交流程中，参与者不能改变自己的投票结果。两阶段提交协议的可以全局提交的前提是所有的参与者都同意提交事务，只要有一个参与者投票选择放弃(abort)事务，则事务必须被放弃。</p>
+<p>流程：两阶段提交协调者流程</p>
+<ol>
+<li>写本地日志“begin_commit”，并进入WAIT 状态；</li>
+<li>向所有参与者发送“prepare 消息”；</li>
+<li>等待并接收参与者发送的对“prepare 消息”的响应；3.1 若收到任何一个参与者发送的“vote-abort 消息”；3.1.1 写本地“global-abort”日志，进入ABORT；3.1.2 向所有的参与者发送“global-abort 消息”；3.1.3 进入ABORT 状态；3.2 若收到所有参与者发送的“vote-commit”消息；3.2.1 写本地“global-commit”日志，进入COMMIT 状态；3.1.2 向所有的参与者发送“global-commit 消息”；</li>
+<li>等待并接收参与者发送的对“global-abort 消息”或“global-commit 消息”的确认响应消息，一旦收到所有参与者的确认消息，写本地“end_transaction” 日志流程结束。</li>
+</ol>
+<p>流程：两阶段提交协调者流程</p>
+<ol>
+<li>写本地日志“init”记录，进入INIT 状态</li>
+<li>等待并接受协调者发送的“prepare 消息”，收到后  2.1 若参与者可以提交本次事务 2.1.1 写本地日志“ready”，进入READY 状态 2.1.2 向协调者发送“vote-commit”消息 2.1.4 等待协调者的消息2.1.4.1 若收到协调者的“global-abort”消息2.1.4.1.1 写本地日志“abort”，进入ABORT 状态2.1.4.1.2 向协调者发送对“global-abort”的确认消息  2.1.4.2 若收到协调者的“global-commit”消息2.1.4.1.1 写本地日志“commit”，进入COMMIT 状态   2.1.4.1.2 向协调者发送对“global-commit”的确认消息  2.2 若参与者无法提交本次事务 2.2.1 写本地日志“abort”，进入ABORT 状态 2.2.2 向协调者发送“vote-abort”消息 2.2.3 流程对该参与者结束 2.2.4 若后续收到协调者的“global-abort”消息可以响应</li>
+<li>即使流程结束，但任何时候收到协调者发送的“global-abort”消息或“global-commit”消息也都要发送一个对应的确认消息。</li>
+</ol>
+<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a><strong>异常处理</strong></h4><h4 id="宕机恢复"><a href="#宕机恢复" class="headerlink" title="宕机恢复"></a>宕机恢复</h4><ol>
+<li>协调者宕机恢复 协调者宕机恢复后，首先通过日志查找到宕机前的状态。如果日志中最后是“begin_commit”记录，说明宕机前协调者处于WAIT 状态，协调者可能已经发送过“prepare 消息”也可能还没发送，但协调者一定还没有发送过“global-commit 消息”或“global-abort 消息”，即事务的全局状态还没有确定。此时，协调者可以重新发送“prepare 消息” 继续两阶段提交流程，即使参与者已经发送过对“prepare 消息”的响应，也不过是再次重传之前的响应而不会影响协议的一致性。如果日志中最后是“global-commit”或“global-abort”记录，说明宕机前协调者处于COMMIT 或ABORT 状态。此时协调者只需重新向所有的参与者发送“global-commit 消息”或“global-abort 消息”就可以继续两阶段提交流程。</li>
+<li>参与者宕机恢复参与者宕机恢复后，首先通过日志查找宕机前的状态。如果日志中最后是“init”记录，说明参与者处于INIT 状态，还没有对本次事务做出投票选择，参与者可以继续流程等待协调者发送的“prepare 消息”。如果日志中最后是“ready”记录，说明参与者处于REDAY 状态，此时说明参与者已经就本次 事务做出了投票选择，但宕机前参与者是否已经向协调者发送“vote-commit”消息并不可知。所以此时参与者可以向协调者重发“vote-commit”，并继续协议流程。如果日志中最后是“commit”或“abort”记录，说明参与者已经收到过协调者的“global-commit 消息”（处于COMMIT 状态）或者“global-abort 消息”（处于ABORT 状态）。至于是否向协调者发 送过对“global-commit”或“global-abort”的确认消息则未知。但即使没有发送过确认消息，由于协调者会不断重发“global-commit”或“global-abort”，只需在收到这些消息时发送确认消息既可，不影响协议的全局一致性。</li>
+</ol>
+<h4 id="协议分析"><a href="#协议分析" class="headerlink" title="协议分析"></a><strong>协议分析</strong></h4><p>两阶段提交协议在工程实践中真正使用的较少，主要原因有以下几点：</p>
+<ol>
+<li>两阶段提交协议的容错能力较差。从上文的分析可以看出，两阶段提交协议在某些情况下存在流程无法执行下去的情况，且也无法判断流程状态。在工程中好的分布式协议往往总是可以在即使发生异常的情况下也能执行下去。例如，回忆Lease 机制（2.3 ），一旦lease 发出，无论出现任何异常，Lease 服务器节点总是可以通过时间判定出Lease 是否有效，也可以用等待Lease 超时的方法收回Lease 权限，整个Lease 协议的流程不存在任何流程被阻塞而无法执行下去的情况。与Lease 机制的简单有效相比，两阶段提交的协议显得较为复杂且容错能力差。</li>
+<li>两阶段提交协议的性能较差。一次成功的两阶段提交协议流程中，协调者与每个参与者 之间至少需要两轮交互4 个消息“prepare”、“vote-commit”、“global-commit”、“确认global-commit”。过多的交互次数会降低性能。另一方面，协调者需要等待所有的参与者的投票结果，一旦存在较慢的参与者，会影响全局流程执行速度。</li>
+</ol>
+<p>虽然存在一些改进的两阶段提交协议可以提高容错能力和性能，然而这类协议依旧是在工程中使用较少的一类协议，其理论价值大于实践意义。</p>
+<h3 id="2-7-MVCC"><a href="#2-7-MVCC" class="headerlink" title="2.7 MVCC"></a><strong>2.7 MVCC</strong></h3><p>MVCC(Multi-version Cocurrent Control，多版本并发控制)技术。MVCC 技术最初也是在数据库系统中被提出，但这种思想并不局限于单机的分布式系统，在分布式系统中同样有效。</p>
+<p>MVCC 即多个不同版本的数据实现并发控制的技术，其基本思想是为每次事务生成 一个新版本的数据，在读数据时选择不同版本的数据即可以实现对事务结果的完整性读取。在使用MVCC 时，每个事务都是基于一个已生效的基础版本进行更新，事务可以并行进行，从而可以产生一种图状结构。</p>
+<p>基础数据的版本为1，同时产生了两个事务：事务A 与事务B。这两个事务都各自对数据进行了一些本地修改（这些修改只有事务自己可见，不影响真正的数据），之后事务A 首先提交，生成数据版本2；基于数据版本2，又发起了事务C，事务C 继续提交，生成了数据版 本3；最后事务B 提交，此时事务B 的结果需要与事务C 的结果合并，如果数据没有冲突，即事务 B 没有修改事务A 与事务C 修改过的变量，那么事务B 可以提交，否则事务B 提交失败。MVCC 的流程过程非常类似于SVN 等版本控制系统的流程，或者说SVN 等版本控制系统就是 使用的MVCC 思想。事务在基于基础数据版本做本地修改时，为了不影响真正的数据，通常有两种做法，一是将基础数据版本中的数据完全拷贝出来再修改，SVN 即使用了这种方法，SVN check out 即是拷贝的过程；二是每个事务中只记录更新操作，而不记录完整的数据，读取数据时再将更新操作应用到用基础版本的数据从而计算出结果，这个过程也类似SVN 的增量提交。</p>
+<h3 id="2-8-Paxos协议"><a href="#2-8-Paxos协议" class="headerlink" title="2.8 Paxos协议"></a><strong>2.8 Paxos协议</strong></h3><p>Paxos 协议是少数在工程实践中证实的强一致性、高可用的去中心化分布式协议。Paxos 协议的流程较为复杂，但其基本思想却不难理解，类似于人类社会的投票过程。Paxos 协议中，有一组完全对等的参与节点（称为accpetor），这组节点各自就某一事件做出决议，如果某个决议获得了超过半数节点的同意则生效。Paxos 协议中只要有超过一半的节点正常，就可以工作，能很好对抗宕机、网络分化等异常情况。</p>
+<h4 id="角色"><a href="#角色" class="headerlink" title="角色"></a><strong>角色</strong></h4><p>Proposer：提案者。Proposer 可以有多个，Proposer 提出议案（value）。所谓value，在工程中可以是任何操作，例如“修改某个变量的值为某个值”、“设置当前primary 为某个节点”等等。Paxos 协议中统一将这些操作抽象为value。不同的Proposer 可以提出不同的甚至矛盾的value，例如某个Proposer 提议“将变量X 设置为1”，另一个Proposer 提议“将变量X 设置为2”，但对同一轮Paxos 过程，最多只有一个value 被批准。Acceptor：批准者。Acceptor 有N 个，Proposer 提出的value 必须获得超过半数(N/2+1)的Acceptor 批准后才能通过。Acceptor 之间完全对等独立。Learner：学习者。Learner 学习被批准的value。所谓学习就是通过读取各个Proposer 对value 的选择结果，如果某个value 被超过半数Proposer 通过，则Learner 学习到了这个value。回忆（2.4 ） 不难理解，这里类似Quorum 机制，某个value 需要获得W=N/2 + 1 的Acceptor 批准，从而学习者需要至少读取N/2+1 个Accpetor，至多读取N 个Acceptor 的结果后，能学习到一个通过的value。上述三类角色只是逻辑上的划分，实践中一个节点可以同时充当这三类角色。</p>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a><strong>流程</strong></h4><p>Paxos 协议一轮一轮的进行，每轮都有一个编号。每轮Paxos 协议可能会批准一个value，也可 能无法批准一个value。如果某一轮Paxos 协议批准了某个value，则以后各轮Paxos 只能批准这个 value。上述各轮协议流程组成了一个Paxos 协议实例，即一次Paxos 协议实例只能批准一个value，这也是Paxos 协议强一致性的重要体现。每轮Paxos 协议分为阶段，准备阶段和批准阶段，在这两个阶段Proposer 和Acceptor 有各自的处理流程。</p>
+<p>流程：Proposer 的流程 （准备阶段）</p>
+<ol>
+<li>向所有的Acceptor 发送消息“Prepare(b)”；这里b 是Paxos 的轮数，每轮递增</li>
+<li>如果收到任何一个Acceptor 发送的消息“Reject(B)”，则对于这个Proposer 而言本轮Paxos 失败，将轮数b 设置为B+1 后重新步骤1；（批准阶段，根据收到的Acceptor 的消息作出不同选择）</li>
+<li>如果接收到的Acceptor 的“Promise(b, v_i)”消息达到N/2+1 个（N 为Acceptor 总数，除法取整， 下同）；v_i 表示Acceptor 最近一次在i 轮批准过value v。3.1 如果收到的“Promise(b, v)”消息中，v 都为空，Proposer 选择一个value v，向所有Acceptor 广播Accept(b, v)；3.2 否则，在所有收到的“Promise(b, v_i)”消息中，选择i 最大的value v，向所有Acceptor 广播消息Accept(b，v)；</li>
+<li>如果收到Nack(B)，将轮数b 设置为B+1 后重新步骤1；</li>
+</ol>
+<p>流程：Accpetor 流程 （准备阶段）</p>
+<ol>
+<li>接受某个Propeser 的消息Prepare(b)。参数B 是该Acceptor 收到的最大Paxos 轮数编号；V 是Acceptor 批准的value，可以为空 1.1 如果b&gt;B，回复Promise(b, V_B)，设置B=b; 表示保证不再接受编号小于b 的提案。1.2 否则，回复Reject(B) （批准阶段）</li>
+<li>接收Accept(b, v)， 2.1 如果b &lt; B, 回复Nack(B)，暗示proposer 有一个更大编号的提案被这个Acceptor 接收了 2.2 否则设置V=v。表示这个Acceptor 批准的Value 是v。广播Accepted 消息。</li>
+</ol>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a><strong>例子</strong></h4><p>基本例子里有5 个Acceptor，1 个Proposer，不存在任何网络、宕机异常。我们着重考察各个Accpetor 上变量B 和变量V 的变化，及Proposer 上变量b 的变化。</p>
+<ol>
+<li>初始状态</li>
+</ol>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7hn8bsllj30iy06mgon.jpg" alt="image-20200929140823262"></p>
+<ol start="2">
+<li><p>Proposer 向所有Accpetor 发送“Prepare(1)”，所有Acceptor 正确处理，并回复Promise(1, NULL</p>
+</li>
+<li><p>Proposer 收到5 个Promise(1, NULL)，满足多余半数的Promise 的value 为空，此时发送 Accept(1, v1)，其中v1 是Proposer 选择的Value。</p>
+</li>
+</ol>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7ho8fvo7j30ic03sjsk.jpg" alt="image-20200929140920934"></p>
+<ol start="4">
+<li>此时，v1 被超过半数的Acceptor 批准，v1 即是本次Paxos 协议实例批准的Value。如果Learner 学习value，学到的只能是v1</li>
+</ol>
+<p>在同一个Paxos 实例中，批准的Value 是无法改变的，即使后续Proposer 以更高的序号发起Paxos 协议也无法改变value。Paxos 协议的核心就在于“批准的value 无法改变”，这也是整个协议正确性的基础。</p>
+<p>Paxos 协议是被人为设计出来，其设计过程也是协议的推导过程。Paxos 协议利用了Quorom 机 制，选择的W=R=N/2+1。简单而言，协议就是Proposer 更新Acceptor 的过程，一旦某个Acceptor 成功更新了超过半数的Acceptor，则更新成功。Learner 按Quorum 去读取Acceptor，一旦某个value 在超过半数的Proposer 上被成功读取，则说明这是一个被批准的value。协议通过引入轮次，使得高轮次的提议抢占低轮次的提议来避免死锁。协议设计关键点是如何满足“在一次Paxos 算法实例过程中只批准一个Value”这一约束条件。</p>
+<h3 id="2-9-CAP"><a href="#2-9-CAP" class="headerlink" title="2.9 CAP"></a><strong>2.9 CAP</strong></h3><p>CAP 理论的定义很简单，CAP 三个字母分别代表了分布式系统中三个相互矛盾的属性：</p>
+<ul>
+<li>Consistency (一致性)：CAP 理论中的副本一致性特指强一致性（1.3.4 ）；</li>
+<li>Availiablity(可用性)：指系统在出现异常时已经可以提供服务；</li>
+<li>Tolerance to the partition of network (分区容忍)：指系统可以对网络分区（1.1.4.2 ）这种异常情 况进行容错处理；</li>
+</ul>
+<p>CAP 理论指出：无法设计一种分布式协议，使得同时完全具备CAP 三个属性，即1)该种协议下的副本始终是强一致性，2)服务始终是可用的，3)协议可以容忍任何网络分区异常；分布式系统协议只能在CAP 这三者间所有折中。</p>
+<p>热力学第二定律说明了永动机是不可能存在的，不要去妄图设计永动机。与之类似，CAP 理论的意义就在于明确提出了不要去妄图设计一种对CAP 三大属性都完全拥有的完美系统，因为这种系统在理论上就已经被证明不存在。</p>
+<ul>
+<li>Lease 机制: Lease 机制牺牲了部分异常情况下的A，从而获得了完全的C 与很好的P。</li>
+<li>Quorum 机制: Quorum 机制，在CAP 三大因素中都各做了折中，有一定的C，有较好 的A，也有较好的P，是一种较为平衡的分布式协议。</li>
+<li>两阶段提交协议: 两阶段提交系统具有完全的C，很糟糕的A，很糟糕的P。</li>
+<li>Paxos 协议：同样是强一致性协议，Paxos 在CAP 三方面较之两阶段提交协议要优秀得多。Paxos 协议具有 完全的C，较好的A，较好的P。Paxos 的A 与P 的属性与Quorum 机制类似，因为Paxos 的协议本 身就具有Quorum 机制的因素。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/31-35.%E7%8E%A9%E8%BD%ACLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/python/31-35.%E7%8E%A9%E8%BD%ACLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">31-35、玩转Linux操作系统</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 09:55:32" itemprop="dateModified" datetime="2020-10-01T09:55:32+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -3522,7 +3128,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/pythonn/95.%E4%BD%BF%E7%94%A8Django%E5%BC%80%E5%8F%91%E5%95%86%E4%B8%9A%E9%A1%B9%E7%9B%AE/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/95.%E4%BD%BF%E7%94%A8Django%E5%BC%80%E5%8F%91%E5%95%86%E4%B8%9A%E9%A1%B9%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -3536,7 +3142,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/pythonn/95.%E4%BD%BF%E7%94%A8Django%E5%BC%80%E5%8F%91%E5%95%86%E4%B8%9A%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">使用Django开发商业项目</a>
+            <a href="/2020/09/29/python/95.%E4%BD%BF%E7%94%A8Django%E5%BC%80%E5%8F%91%E5%95%86%E4%B8%9A%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">95、使用Django开发商业项目</a>
         </h2>
 
         <div class="post-meta">
@@ -3553,7 +3159,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:49:04" itemprop="dateModified" datetime="2020-10-01T09:49:04+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 10:00:24" itemprop="dateModified" datetime="2020-10-01T10:00:24+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -5411,6 +5017,289 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/java/SpringCloud%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/java/SpringCloud%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">SpringCloud总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 10:55:20" itemprop="dateCreated datePublished" datetime="2020-09-29T10:55:20+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 01:53:23" itemprop="dateModified" datetime="2020-10-01T01:53:23+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">Java概览</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="SpringCloud总结"><a href="#SpringCloud总结" class="headerlink" title="SpringCloud总结"></a>SpringCloud总结</h1><h2 id="为什么需要学习Spring-Cloud"><a href="#为什么需要学习Spring-Cloud" class="headerlink" title="为什么需要学习Spring Cloud"></a><strong>为什么需要学习Spring Cloud</strong></h2><p>不论是商业应用还是用户应用，在业务初期都很简单，我们通常会把它实现为单体结构的应用。但是，随着业务逐渐发展，产品思想会变得越来越复杂，单体结构的应用也会越来越复杂。这就会给应用带来如下的几个问题：</p>
+<ul>
+<li>代码结构混乱：业务复杂，导致代码量很大，管理会越来越困难。同时，这也会给业务的快速迭代带来巨大挑战；</li>
+<li>开发效率变低：开发人员同时开发一套代码，很难避免代码冲突。开发过程会伴随着不断解决冲突的过程，这会严重的影响开发效率；</li>
+<li>排查解决问题成本高：线上业务发现 bug，修复 bug 的过程可能很简单。但是，由于只有一套代码，需要重新编译、打包、上线，成本很高。</li>
+</ul>
+<p>由于单体结构的应用随着系统复杂度的增高，会暴露出各种各样的问题。近些年来，微服务架构逐渐取代了单体架构，且这种趋势将会越来越流行。Spring Cloud是目前最常用的微服务开发框架，已经在企业级开发中大量的应用。</p>
+<h2 id="什么是Spring-Cloud"><a href="#什么是Spring-Cloud" class="headerlink" title="什么是Spring Cloud"></a><strong>什么是Spring Cloud</strong></h2><p>Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、智能路由、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。Spring Cloud并没有重复制造轮子，它只是将各家公司开发的比较成熟、经得起实际考验的服务框架组合起来，通过Spring Boot风格进行再封装屏蔽掉了复杂的配置和实现原理，最终给开发者留出了一套简单易懂、易部署和易维护的分布式系统开发工具包。</p>
+<h3 id="设计目标与优缺点"><a href="#设计目标与优缺点" class="headerlink" title="设计目标与优缺点"></a><strong>设计目标与优缺点</strong></h3><h4 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a><strong>设计目标</strong></h4><h5 id="协调各个微服务，简化分布式系统开发。"><a href="#协调各个微服务，简化分布式系统开发。" class="headerlink" title="协调各个微服务，简化分布式系统开发。"></a><strong>协调各个微服务，简化分布式系统开发</strong>。</h5><p><strong>优缺点</strong></p>
+<p>微服务的框架那么多比如：dubbo、Kubernetes，为什么就要使用Spring Cloud的呢？</p>
+<p>优点：</p>
+<ul>
+<li>产出于Spring大家族，Spring在企业级开发框架中无人能敌，来头很大，可以保证后续的更新、完善</li>
+<li>组件丰富，功能齐全。Spring Cloud 为微服务架构提供了非常完整的支持。例如、配置管理、服务发现、断路器、微服务网关等；</li>
+<li>Spring Cloud 社区活跃度很高，教程很丰富，遇到问题很容易找到解决方案</li>
+<li>服务拆分粒度更细，耦合度比较低，有利于资源重复利用，有利于提高开发效率</li>
+<li>可以更精准的制定优化服务方案，提高系统的可维护性</li>
+<li>减轻团队的成本，可以并行开发，不用关注其他人怎么开发，先关注自己的开发</li>
+<li>微服务可以是跨平台的，可以用任何一种语言开发</li>
+<li>适于互联网时代，产品迭代周期更短</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>微服务过多，治理成本高，不利于维护系统</li>
+<li>分布式系统开发的成本高（容错，分布式事务等）对团队挑战大</li>
+</ul>
+<p>总的来说优点大过于缺点，目前看来Spring Cloud是一套非常完善的分布式框架，目前很多企业开始用微服务、Spring Cloud的优势是显而易见的。因此对于想研究微服务架构的同学来说，学习Spring Cloud是一个不错的选择。</p>
+<h2 id="Spring-Cloud发展前景"><a href="#Spring-Cloud发展前景" class="headerlink" title="Spring Cloud发展前景"></a><strong>Spring Cloud发展前景</strong></h2><p>Spring Cloud对于中小型互联网公司来说是一种福音，因为这类公司往往没有实力或者没有足够的资金投入去开发自己的分布式系统基础设施，使用Spring Cloud一站式解决方案能在从容应对业务发展的同时大大减少开发成本。同时，随着近几年微服务架构和Docker容器概念的火爆，也会让Spring Cloud在未来越来越“云”化的软件开发风格中立有一席之地，尤其是在五花八门的分布式解决方案中提供了标准化的、全站式的技术方案，意义可能会堪比当年Servlet规范的诞生，有效推进服务端软件系统技术水平的进步。</p>
+<h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a><strong>整体架构</strong></h3><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7c4zql0dj317o0mdgrx.jpg" alt="9BBB0225B3264E22849DB1DB1617DCA0"></p>
+<h3 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a><strong>主要项目</strong></h3><p>Spring Cloud的子项目，大致可分成两类，一类是对现有成熟框架”Spring Boot化”的封装和抽象，也是数量最多的项目；第二类是开发了一部分分布式系统的基础设施的实现，如Spring Cloud Stream扮演的就是kafka, ActiveMQ这样的角色。</p>
+<h4 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a><strong>Spring Cloud Config</strong></h4><p>集中配置管理工具，分布式系统中统一的外部配置管理，默认使用Git来存储配置，可以支持客户端配置的刷新及加密、解密操作。</p>
+<h4 id="Spring-Cloud-Netflix"><a href="#Spring-Cloud-Netflix" class="headerlink" title="Spring Cloud Netflix"></a><strong>Spring Cloud Netflix</strong></h4><p>Netflix OSS 开源组件集成，包括Eureka、Hystrix、Ribbon、Feign、Zuul等核心组件。</p>
+<ul>
+<li>Eureka：服务治理组件，包括服务端的注册中心和客户端的服务发现机制；</li>
+<li>Ribbon：负载均衡的服务调用组件，具有多种负载均衡调用策略；</li>
+<li>Hystrix：服务容错组件，实现了断路器模式，为依赖服务的出错和延迟提供了容错能力；</li>
+<li>Feign：基于Ribbon和Hystrix的声明式服务调用组件；</li>
+<li>Zuul：API网关组件，对请求提供路由及过滤功能。</li>
+</ul>
+<h4 id="Spring-Cloud-Bus"><a href="#Spring-Cloud-Bus" class="headerlink" title="Spring Cloud Bus"></a><strong>Spring Cloud Bus</strong></h4><p>用于传播集群状态变化的消息总线，使用轻量级消息代理链接分布式系统中的节点，可以用来动态刷新集群中的服务配置。</p>
+<h4 id="Spring-Cloud-Consul"><a href="#Spring-Cloud-Consul" class="headerlink" title="Spring Cloud Consul"></a><strong>Spring Cloud Consul</strong></h4><p>基于Hashicorp Consul的服务治理组件。</p>
+<h4 id="Spring-Cloud-Security"><a href="#Spring-Cloud-Security" class="headerlink" title="Spring Cloud Security"></a><strong>Spring Cloud Security</strong></h4><p>安全工具包，对Zuul代理中的负载均衡OAuth2客户端及登录认证进行支持。</p>
+<h4 id="Spring-Cloud-Sleuth"><a href="#Spring-Cloud-Sleuth" class="headerlink" title="Spring Cloud Sleuth"></a><strong>Spring Cloud Sleuth</strong></h4><p>Spring Cloud应用程序的分布式请求链路跟踪，支持使用Zipkin、HTrace和基于日志（例如ELK）的跟踪。</p>
+<h4 id="Spring-Cloud-Stream"><a href="#Spring-Cloud-Stream" class="headerlink" title="Spring Cloud Stream"></a><strong>Spring Cloud Stream</strong></h4><p>轻量级事件驱动微服务框架，可以使用简单的声明式模型来发送及接收消息，主要实现为Apache Kafka及RabbitMQ。</p>
+<h4 id="Spring-Cloud-Task"><a href="#Spring-Cloud-Task" class="headerlink" title="Spring Cloud Task"></a><strong>Spring Cloud Task</strong></h4><p>用于快速构建短暂、有限数据处理任务的微服务框架，用于向应用中添加功能性和非功能性的特性。</p>
+<h4 id="Spring-Cloud-Zookeeper"><a href="#Spring-Cloud-Zookeeper" class="headerlink" title="Spring Cloud Zookeeper"></a><strong>Spring Cloud Zookeeper</strong></h4><p>基于Apache Zookeeper的服务治理组件。</p>
+<h4 id="Spring-Cloud-Gateway"><a href="#Spring-Cloud-Gateway" class="headerlink" title="Spring Cloud Gateway"></a><strong>Spring Cloud Gateway</strong></h4><p>API网关组件，对请求提供路由及过滤功能。</p>
+<h4 id="Spring-Cloud-OpenFeign"><a href="#Spring-Cloud-OpenFeign" class="headerlink" title="Spring Cloud OpenFeign"></a><strong>Spring Cloud OpenFeign</strong></h4><p>基于Ribbon和Hystrix的声明式服务调用组件，可以动态创建基于Spring MVC注解的接口实现用于服务调用，在Spring Cloud 2.0中已经取代Feign成为了一等公民。</p>
+<h2 id="Spring-Cloud的版本关系"><a href="#Spring-Cloud的版本关系" class="headerlink" title="Spring Cloud的版本关系"></a><strong>Spring Cloud的版本关系</strong></h2><p>Spring Cloud是一个由许多子项目组成的综合项目，各子项目有不同的发布节奏。 为了管理Spring Cloud与各子项目的版本依赖关系，发布了一个清单，其中包括了某个Spring Cloud版本对应的子项目版本。 为了避免Spring Cloud版本号与子项目版本号混淆，Spring Cloud版本采用了名称而非版本号的命名，这些版本的名字采用了伦敦地铁站的名字，根据字母表的顺序来对应版本时间顺序，例如Angel是第一个版本，Brixton是第二个版本。 当Spring Cloud的发布内容积累到临界点或者一个重大BUG被解决后，会发布一个”service releases”版本，简称SRX版本，比如Greenwich.SR2就是Spring Cloud发布的Greenwich版本的第2个SRX版本。目前Spring Cloud的最新版本是Hoxton。</p>
+<h3 id="Spring-Cloud和SpringBoot版本对应关系"><a href="#Spring-Cloud和SpringBoot版本对应关系" class="headerlink" title="Spring Cloud和SpringBoot版本对应关系"></a><strong>Spring Cloud和SpringBoot版本对应关系</strong></h3><table>
+<thead>
+<tr>
+<th><strong>Spring Cloud Version</strong></th>
+<th><strong>SpringBoot Version</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hoxton</td>
+<td>2.2.x</td>
+</tr>
+<tr>
+<td>Greenwich</td>
+<td>2.1.x</td>
+</tr>
+<tr>
+<td>Finchley</td>
+<td>2.0.x</td>
+</tr>
+<tr>
+<td>Edgware</td>
+<td>1.5.x</td>
+</tr>
+<tr>
+<td>Dalston</td>
+<td>1.5.x</td>
+</tr>
+</tbody></table>
+<h3 id="Spring-Cloud和各子项目版本对应关系"><a href="#Spring-Cloud和各子项目版本对应关系" class="headerlink" title="Spring Cloud和各子项目版本对应关系"></a><strong>Spring Cloud和各子项目版本对应关系</strong></h3><table>
+<thead>
+<tr>
+<th><strong>Component</strong></th>
+<th><strong>Edgware.SR6</strong></th>
+<th><strong>Greenwich.SR2</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spring-cloud-bus</td>
+<td>1.3.4.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-commons</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-config</td>
+<td>1.4.7.RELEASE</td>
+<td>2.1.3.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-netflix</td>
+<td>1.4.7.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-security</td>
+<td>1.2.4.RELEASE</td>
+<td>2.1.3.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-consul</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-sleuth</td>
+<td>1.3.6.RELEASE</td>
+<td>2.1.1.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-stream</td>
+<td>Ditmars.SR5</td>
+<td>Fishtown.SR3</td>
+</tr>
+<tr>
+<td>spring-cloud-zookeeper</td>
+<td>1.2.3.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-boot</td>
+<td>1.5.21.RELEASE</td>
+<td>2.1.5.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-task</td>
+<td>1.2.4.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-gateway</td>
+<td>1.0.3.RELEASE</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+<tr>
+<td>spring-cloud-openfeign</td>
+<td>暂无</td>
+<td>2.1.2.RELEASE</td>
+</tr>
+</tbody></table>
+<p><strong>注意：Hoxton版本是基于SpringBoot 2.2.x版本构建的，不适用于1.5.x版本。随着2019年8月SpringBoot 1.5.x版本停止维护，Edgware版本也将停止维护。</strong></p>
+<h3 id="SpringBoot和SpringCloud的区别？"><a href="#SpringBoot和SpringCloud的区别？" class="headerlink" title="SpringBoot和SpringCloud的区别？"></a><strong>SpringBoot和SpringCloud的区别？</strong></h3><p>SpringBoot专注于快速方便的开发单个个体微服务。</p>
+<p>SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务整合并管理起来，</p>
+<p>为各个微服务之间提供，配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等集成服务</p>
+<p>SpringBoot可以离开SpringCloud独立使用开发项目， 但是SpringCloud离不开SpringBoot ，属于依赖的关系</p>
+<p>SpringBoot专注于快速、方便的开发单个微服务个体，SpringCloud关注全局的服务治理框架。</p>
+<p><strong>使用 Spring Boot 开发分布式微服务时，我们面临以下问题</strong></p>
+<p>（1）与分布式系统相关的复杂性-这种开销包括网络问题，延迟开销，带宽问题，安全问题。</p>
+<p>（2）服务发现-服务发现工具管理群集中的流程和服务如何查找和互相交谈。它涉及一个服务目录，在该目录中注册服务，然后能够查找并连接到该目录中的服务。</p>
+<p>（3）冗余-分布式系统中的冗余问题。</p>
+<p>（4）负载平衡 –负载平衡改善跨多个计算资源的工作负荷，诸如计算机，计算机集群，网络链路，中央处理单元，或磁盘驱动器的分布。</p>
+<p>（5）性能-问题 由于各种运营开销导致的性能问题。</p>
+<p>（6）部署复杂性-Devops 技能的要求。</p>
+<h3 id="服务注册和发现是什么意思？Spring-Cloud-如何实现？"><a href="#服务注册和发现是什么意思？Spring-Cloud-如何实现？" class="headerlink" title="服务注册和发现是什么意思？Spring Cloud 如何实现？"></a><strong>服务注册和发现是什么意思？Spring Cloud 如何实现？</strong></h3><p>当我们开始一个项目时，我们通常在属性文件中进行所有的配置。随着越来越多的服务开发和部署，添加和修改这些属性变得更加复杂。有些服务可能会下降，而某些位置可能会发生变化。手动更改属性可能会产生问题。 Eureka 服务注册和发现可以在这种情况下提供帮助。由于所有服务都在 Eureka 服务器上注册并通过调用 Eureka 服务器完成查找，因此无需处理服务地点的任何更改和处理。</p>
+<h3 id="Spring-Cloud-和dubbo区别"><a href="#Spring-Cloud-和dubbo区别" class="headerlink" title="Spring Cloud 和dubbo区别?"></a><strong>Spring Cloud 和dubbo区别?</strong></h3><p>（1）服务调用方式 dubbo是RPC springcloud Rest Api</p>
+<p>（2）注册中心,dubbo 是zookeeper springcloud是eureka，也可以是zookeeper</p>
+<p>（3）服务网关,dubbo本身没有实现，只能通过其他第三方技术整合，springcloud有Zuul路由网关，作为路由服务器，进行消费者的请求分发,springcloud支持断路器，与git完美集成配置文件支持版本控制，事物总线实现配置文件的更新与服务自动装配等等一系列的微服务架构要素。</p>
+<h3 id="负载平衡的意义什么？"><a href="#负载平衡的意义什么？" class="headerlink" title="负载平衡的意义什么？"></a><strong>负载平衡的意义什么？</strong></h3><p>在计算中，负载平衡可以改善跨计算机，计算机集群，网络链接，中央处理单元或磁盘驱动器等多种计算资源的工作负载分布。负载平衡旨在优化资源使用，最大化吞吐量，最小化响应时间并避免任何单一资源的过载。使用多个组件进行负载平衡而不是单个组件可能会通过冗余来提高可靠性和可用性。负载平衡通常涉及专用软件或硬件，例如多层交换机或域名系统服务器进程。</p>
+<h3 id="什么是-Hystrix？它如何实现容错？"><a href="#什么是-Hystrix？它如何实现容错？" class="headerlink" title="什么是 Hystrix？它如何实现容错？"></a><strong>什么是 Hystrix？它如何实现容错？</strong></h3><p>Hystrix 是一个延迟和容错库，旨在隔离远程系统，服务和第三方库的访问点，当出现故障是不可避免的故障时，停止级联故障并在复杂的分布式系统中实现弹性。</p>
+<p>通常对于使用微服务架构开发的系统，涉及到许多微服务。这些微服务彼此协作。</p>
+<p>思考以下微服务</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cawrmbxj30us0e8wvh.jpg" alt="image-20200929110333157"></p>
+<p>假设如果上图中的微服务 9 失败了，那么使用传统方法我们将传播一个异常。但这仍然会导致整个系统崩溃。</p>
+<p>随着微服务数量的增加，这个问题变得更加复杂。微服务的数量可以高达 1000.这是 hystrix 出现的地方 我们将使用 Hystrix 在这种情况下的 Fallback 方法功能。我们有两个服务 employee-consumer 使用由 employee-consumer 公开的服务。</p>
+<p>简化图如下所示</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cbc99r4j30uw088dol.jpg" alt="image-20200929110357392"></p>
+<p>现在假设由于某种原因，employee-producer 公开的服务会抛出异常。我们在这种情况下使用 Hystrix 定义了一个回退方法。这种后备方法应该具有与公开服务相同的返回类型。如果暴露服务中出现异常，则回退方法将返回一些值。</p>
+<h3 id="什么是-Hystrix-断路器？我们需要它吗？"><a href="#什么是-Hystrix-断路器？我们需要它吗？" class="headerlink" title="什么是 Hystrix 断路器？我们需要它吗？"></a><strong>什么是 Hystrix 断路器？我们需要它吗？</strong></h3><p>由于某些原因，employee-consumer 公开服务会引发异常。在这种情况下使用Hystrix 我们定义了一个回退方法。如果在公开服务中发生异常，则回退方法返回一些默认值。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cbtpmrnj30t20eynd5.jpg" alt="image-20200929110425193"></p>
+<p>如果 firstPage method() 中的异常继续发生，则 Hystrix 电路将中断，并且员工使用者将一起跳过 firtsPage 方法，并直接调用回退方法。 断路器的目的是给第一页方法或第一页方法可能调用的其他方法留出时间，并导致异常恢复。可能发生的情况是，在负载较小的情况下，导致异常的问题有更好的恢复机会 。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7ccpk8ecj30uk0aq78n.jpg" alt="image-20200929110515151"></p>
+<h3 id="什么是-Netflix-Feign？它的优点是什么？"><a href="#什么是-Netflix-Feign？它的优点是什么？" class="headerlink" title="什么是 Netflix Feign？它的优点是什么？"></a><strong>什么是 Netflix Feign？它的优点是什么？</strong></h3><p>Feign 是受到 Retrofit，JAXRS-2.0 和 WebSocket 启发的 java 客户端联编程序。</p>
+<p>Feign 的第一个目标是将约束分母的复杂性统一到 http apis，而不考虑其稳定性。</p>
+<p>在 employee-consumer 的例子中，我们使用了 employee-producer 使用 REST模板公开的 REST 服务。</p>
+<p>但是我们必须编写大量代码才能执行以下步骤</p>
+<p>（1）使用功能区进行负载平衡。</p>
+<p>（2）获取服务实例，然后获取基本 URL。</p>
+<p>（3）利用 REST 模板来使用服务。 前面的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerControllerClient</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LoadBalancerClient loadBalancer;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getEmployee</span><span class="params">()</span> <span class="keyword">throws</span> RestClientException, IOException </span>&#123;</span><br><span class="line">        ServiceInstance serviceInstance = loadBalancer.choose(<span class="string">&quot;employee-producer&quot;</span>);</span><br><span class="line">        System.out.println(serviceInstance.getUri());</span><br><span class="line">        String baseUrl = serviceInstance.getUri().toString();</span><br><span class="line">        baseUrl = baseUrl + <span class="string">&quot;/employee&quot;</span>;</span><br><span class="line">        RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();</span><br><span class="line">        ResponseEntity&lt;String&gt; response = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            response = restTemplate.exchange(baseUrl, HttpMethod.GET, getHeaders(), String.class);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            System.out.println(ex);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(response.getBody());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前的代码，有像 NullPointer 这样的例外的机会，并不是最优的。我们将看到如何使用 Netflix Feign 使呼叫变得更加轻松和清洁。如果 Netflix Ribbon 依赖关系也在类路径中，那么 Feign 默认也会负责负载平衡。</p>
+<h3 id="什么是-Spring-Cloud-Bus？我们需要它吗？"><a href="#什么是-Spring-Cloud-Bus？我们需要它吗？" class="headerlink" title="什么是 Spring Cloud Bus？我们需要它吗？"></a><strong>什么是 Spring Cloud Bus？我们需要它吗？</strong></h3><p>考虑以下情况：我们有多个应用程序使用 Spring Cloud Config 读取属性，而Spring Cloud Config 从 GIT 读取这些属性。</p>
+<p>下面的例子中多个员工生产者模块从 Employee Config Module 获取 Eureka 注册的财产。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cf2b27xj30ua0kqe0l.jpg" alt="image-20200929110732589"></p>
+<p>如果假设 GIT 中的 Eureka 注册属性更改为指向另一台 Eureka 服务器，会发生什么情况。在这种情况下，我们将不得不重新启动服务以获取更新的属性。</p>
+<p>还有另一种使用执行器端点/刷新的方式。但是我们将不得不为每个模块单独调用这个 url。例如，如果 Employee Producer1 部署在端口 8080 上，则调用 http：// localhost：8080 / refresh。同样对于 Employee Producer2 http：//localhost：8081 / refresh 等等。这又很麻烦。这就是 Spring Cloud Bus 发挥作用的地方。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cfikzpcj30tm0lee4d.jpg" alt="image-20200929110757942"></p>
+<p>Spring Cloud Bus 提供了跨多个实例刷新配置的功能。因此，在上面的示例中，如果我们刷新 Employee Producer1，则会自动刷新所有其他必需的模块。如果我们有多个微服务启动并运行，这特别有用。这是通过将所有微服务连接到单个消息代理来实现的。无论何时刷新实例，此事件都会订阅到侦听此代理的所有微服务，并且它们也会刷新。可以通过使用端点/总线/刷新来实现对任何单个实例的刷新。</p>
+<h3 id="Spring-Cloud断路器的作用"><a href="#Spring-Cloud断路器的作用" class="headerlink" title="Spring Cloud断路器的作用"></a><strong>Spring Cloud断路器的作用</strong></h3><p>当一个服务调用另一个服务由于网络原因或自身原因出现问题，调用者就会等待被调用者的响应 当更多的服务请求到这些资源导致更多的请求等待，发生连锁效应（雪崩效应）</p>
+<p>断路器有完全打开状态:一段时间内 达到一定的次数无法调用 并且多次监测没有恢复的迹象 断路器完全打开 那么下次请求就不会请求到该服务</p>
+<p>半开:短时间内 有恢复迹象 断路器会将部分请求发给该服务，正常调用时 断路器关闭</p>
+<p>关闭：当服务一直处于正常状态 能正常调用</p>
+<h3 id="什么是Spring-Cloud-Config"><a href="#什么是Spring-Cloud-Config" class="headerlink" title="什么是Spring Cloud Config?"></a><strong>什么是Spring Cloud Config?</strong></h3><p>在分布式系统中，由于服务数量巨多，为了方便服务配置文件统一管理，实时更新，所以需要分布式配置中心组件。在Spring Cloud中，有分布式配置中心组件spring cloud config ，它支持配置服务放在配置服务的内存中（即本地），也支持放在远程Git仓库中。在spring cloud config 组件中，分两个角色，一是config server，二是config client。</p>
+<p>使用：</p>
+<p>（1）添加pom依赖</p>
+<p>（2）配置文件添加相关配置</p>
+<p>（3）启动类添加注解@EnableConfigServer</p>
+<h3 id="什么是Spring-Cloud-Gateway"><a href="#什么是Spring-Cloud-Gateway" class="headerlink" title="什么是Spring Cloud Gateway?"></a><strong>什么是Spring Cloud Gateway?</strong></h3><p>Spring Cloud Gateway是Spring Cloud官方推出的第二代网关框架，取代Zuul网关。网关作为流量的，在微服务系统中有着非常作用，网关常见的功能有路由转发、权限校验、限流控制等作用。</p>
+<p>使用了一个RouteLocatorBuilder的bean去创建路由，除了创建路由RouteLocatorBuilder可以让你添加各种predicates和filters，predicates断言的意思，顾名思义就是根据具体的请求的规则，由具体的route去处理，filters是各种过滤器，用来对请求做各种判断和修改。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -5480,7 +5369,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
