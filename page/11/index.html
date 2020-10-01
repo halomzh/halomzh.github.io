@@ -186,6 +186,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/18/java/AOP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/18/java/AOP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" class="post-title-link" itemprop="url">AOP基本概念</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-18 13:10:38" itemprop="dateCreated datePublished" datetime="2020-09-18T13:10:38+08:00">2020-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 01:54:21" itemprop="dateModified" datetime="2020-10-01T01:54:21+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Java源码</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="AOP-中必须明白的几个概念"><a href="#AOP-中必须明白的几个概念" class="headerlink" title="AOP 中必须明白的几个概念"></a>AOP 中必须明白的几个概念</h1><h2 id="1、切面（Aspect）"><a href="#1、切面（Aspect）" class="headerlink" title="1、切面（Aspect）"></a>1、切面（Aspect）</h2><p>官方的抽象定义为“ 一个关注点的模块化，这个关注点可能会横切多个对象” 。“ 切面”在ApplicationContext 中<a href="aop:aspect">aop:aspect</a>来配置。<br>连接点（Joinpoint） ：程序执行过程中的某一行为，例如，MemberService .get 的调用或者MemberService .delete 抛出异常等行为。</p>
+<h2 id="2、通知（Advice）"><a href="#2、通知（Advice）" class="headerlink" title="2、通知（Advice）"></a>2、通知（Advice）</h2><p>“切面”对于某个“连接点”所产生的动作。其中，一个“切面”可以包含多个“Advice”。</p>
+<h2 id="3、切入点（Pointcut）"><a href="#3、切入点（Pointcut）" class="headerlink" title="3、切入点（Pointcut）"></a>3、切入点（Pointcut）</h2><p>匹配连接点的断言，在AOP 中通知和一个切入点表达式关联。切面中的所有通知所关注的连接点，都由切入点表达式来决定。</p>
+<h2 id="4、目标对象（Target-Object）"><a href="#4、目标对象（Target-Object）" class="headerlink" title="4、目标对象（Target Object）"></a>4、目标对象（Target Object）</h2><p>被一个或者多个切面所通知的对象。例如，AServcieImpl 和BServiceImpl，当然在实际运行时，SpringAOP 采用代理实现，实际AOP 操作的是TargetObject 的代理对象。</p>
+<h2 id="5、AOP-代理（AOP-Proxy）"><a href="#5、AOP-代理（AOP-Proxy）" class="headerlink" title="5、AOP 代理（AOP Proxy）"></a>5、AOP 代理（AOP Proxy）</h2><p>在Spring AOP 中有两种代理方式，JDK 动态代理和CGLib 代理。默认情况下，TargetObject 实现了接口时，则采用JDK 动态代理，例如，AServiceImpl；反之，采用CGLib 代理，例如，BServiceImpl。强制使用CGLib 代理需要将<a href="aop:config">aop:config</a>的proxy-target-class 属性设为true。</p>
+<p>通知（Advice）类型：</p>
+<h2 id="6、前置通知（Before-Advice）"><a href="#6、前置通知（Before-Advice）" class="headerlink" title="6、前置通知（Before Advice）"></a>6、前置通知（Before Advice）</h2><p>在某连接点（JoinPoint）之前执行的通知，但这个通知不能阻止连接点前的执行。ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:before">aop:before</a>元素进行声明。例如，TestAspect 中的doBefore 方法。</p>
+<h2 id="7、后置通知（After-Advice）"><a href="#7、后置通知（After-Advice）" class="headerlink" title="7、后置通知（After Advice）"></a>7、后置通知（After Advice）</h2><p>当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。ApplicationContext 中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:after">aop:after</a>元素进行声明。例如，ServiceAspect 中的returnAfter 方法，所以Teser 中调用UserService.delete 抛出异常时，returnAfter 方法仍然执行。</p>
+<h2 id="8、返回后通知（After-Return-Advice）"><a href="#8、返回后通知（After-Return-Advice）" class="headerlink" title="8、返回后通知（After Return Advice）"></a>8、返回后通知（After Return Advice）</h2><p>在某连接点正常完成后执行的通知，不包括抛出异常的情况。ApplicationContext 中在<a href="aop:aspect">aop:aspect</a>里面使用<after-returning>元素进行声明。</p>
+<h2 id="9、环绕通知（Around-Advice）"><a href="#9、环绕通知（Around-Advice）" class="headerlink" title="9、环绕通知（Around Advice）"></a>9、环绕通知（Around Advice）</h2><p>包围一个连接点的通知，类似Web 中Servlet 规范中的Filter 的doFilter 方法。可以在方法的调用前后完成自定义的行为， 也可以选择不执行。ApplicationContext 中在<a href="aop:aspect">aop:aspect</a> 里面使用<a href="aop:around">aop:around</a>元素进行声明。例如，ServiceAspect 中的around 方法。</p>
+<h2 id="10、异常通知（After-Throwing-Advice）"><a href="#10、异常通知（After-Throwing-Advice）" class="headerlink" title="10、异常通知（After Throwing Advice）"></a>10、异常通知（After Throwing Advice）</h2><p>在方法抛出异常退出时执行的通知。ApplicationContext 中在<a href="aop:aspect">aop:aspect</a> 里面使用<a href="aop:after-throwing">aop:after-throwing</a>元素进行声明。例如，ServiceAspect 中的returnThrow 方法。<br>注：可以将多个通知应用到一个目标对象上，即可以将多个切面织入到同一目标对象。</p>
+<h1 id="AOP的使用"><a href="#AOP的使用" class="headerlink" title="AOP的使用"></a>AOP的使用</h1><p>使用Spring AOP 可以基于两种方式，一种是比较方便和强大的注解方式，另一种则是中规中矩的xml配置方式。</p>
+<p>先说注解，使用注解配置Spring AOP 总体分为两步，第一步是在xml 文件中声明激活自动扫描组件功能，同时激活自动代理功能（来测试AOP 的注解功能）：</p>
+<h2 id="为Aspect-切面类添加注解"><a href="#为Aspect-切面类添加注解" class="headerlink" title="为Aspect 切面类添加注解"></a>为Aspect 切面类添加注解</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.aspectj.lang.JoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="comment">//声明这是一个组件</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="comment">//声明这是一个切面Bean</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotaionAspect</span> </span>&#123;</span><br><span class="line">    <span class="comment">//配置切入点,该方法无方法体,主要为方便同类中其他方法使用此处配置的切入点</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(* com.gupaoedu.vip.pattern.spring.aop.service..*(..))&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">aspect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 配置前置通知,使用在方法aspect()上注册的切入点</span></span><br><span class="line"><span class="comment">     * 同时接受JoinPoint 切入点对象,可以没有该参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Before(&quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;before 通知&quot;</span> + joinPoint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置后置通知,使用在方法aspect()上注册的切入点</span></span><br><span class="line">    <span class="meta">@After(&quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;after 通知&quot;</span> + joinPoint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置环绕通知,使用在方法aspect()上注册的切入点</span></span><br><span class="line">    <span class="meta">@Around(&quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">around</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ((ProceedingJoinPoint) joinPoint).proceed();</span><br><span class="line">            <span class="keyword">long</span> end = System.currentTimeMillis();</span><br><span class="line">            log.info(<span class="string">&quot;around 通知&quot;</span> + joinPoint + <span class="string">&quot;\tUse time : &quot;</span> + (end - start) + <span class="string">&quot; ms!&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            <span class="keyword">long</span> end = System.currentTimeMillis();</span><br><span class="line">            log.info(<span class="string">&quot;around 通知&quot;</span> + joinPoint + <span class="string">&quot;\tUse time : &quot;</span> + (end - start) + <span class="string">&quot; ms with exception :</span></span><br><span class="line"><span class="string">                    &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置后置返回通知,使用在方法aspect()上注册的切入点</span></span><br><span class="line">    <span class="meta">@AfterReturning(&quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturn</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;afterReturn 通知&quot;</span> + joinPoint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置抛出异常后通知,使用在方法aspect()上注册的切入点</span></span><br><span class="line">    <span class="meta">@AfterThrowing(pointcut = &quot;aspect()&quot;, throwing = &quot;ex&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterThrow</span><span class="params">(JoinPoint joinPoint, Exception ex)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;afterThrow 通知&quot;</span> + joinPoint + <span class="string">&quot;\t&quot;</span> + ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ContextConfiguration(locations = &#123;&quot;classpath*:application-context.xml&quot;&#125;)</span></span><br><span class="line"><span class="meta">@RunWith(SpringJUnit4ClassRunner.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationTester</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    MemberService annotationService;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    ApplicationContext app;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="comment">// @Ignore</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;=====这是一条华丽的分割线======&quot;</span>);</span><br><span class="line">        AnnotaionAspect aspect = app.getBean(AnnotaionAspect.class);</span><br><span class="line">        System.out.println(aspect);</span><br><span class="line">        annotationService.save(<span class="keyword">new</span> Member());</span><br><span class="line">        System.out.println(<span class="string">&quot;=====这是一条华丽的分割线======&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            annotationService.delete(<span class="number">1L</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">//e.printStackTrace();</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="简单说一下xml-配置方式"><a href="#简单说一下xml-配置方式" class="headerlink" title="简单说一下xml 配置方式"></a>简单说一下xml 配置方式</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;xmlAspect&quot; class=&quot;com.gupaoedu.vip.pattern.spring.aop.aspect.XmlAspect&quot;&gt;&lt;/bean&gt;</span><br><span class="line">&lt;!-- AOP 配置--&gt;</span><br><span class="line">&lt;aop:config&gt;</span><br><span class="line">    &lt;!-- 声明一个切面,并注入切面Bean,相当于<span class="meta">@Aspect</span> --&gt;</span><br><span class="line">    &lt;aop:aspect ref=<span class="string">&quot;xmlAspect&quot;</span>&gt;</span><br><span class="line">        &lt;!-- 配置一个切入点,相当于<span class="meta">@Pointcut</span> --&gt;</span><br><span class="line">        &lt;aop:pointcut expression=<span class="string">&quot;execution(* com.gupaoedu.vip.pattern.spring.aop.service..*(..))&quot;</span></span><br><span class="line">id=<span class="string">&quot;simplePointcut&quot;</span>/&gt;</span><br><span class="line">        &lt;!-- 配置通知,相当于<span class="meta">@Before</span>、<span class="meta">@After</span>、<span class="meta">@AfterReturn</span>、<span class="meta">@Around</span>、<span class="meta">@AfterThrowing</span> --&gt;</span><br><span class="line">        &lt;aop:before pointcut-ref=<span class="string">&quot;simplePointcut&quot;</span> method=<span class="string">&quot;before&quot;</span>/&gt;</span><br><span class="line">        &lt;aop:after pointcut-ref=<span class="string">&quot;simplePointcut&quot;</span> method=<span class="string">&quot;after&quot;</span>/&gt;</span><br><span class="line">        &lt;aop:after-returning pointcut-ref=<span class="string">&quot;simplePointcut&quot;</span> method=<span class="string">&quot;afterReturn&quot;</span>/&gt;</span><br><span class="line">        &lt;aop:after-throwing pointcut-ref=<span class="string">&quot;simplePointcut&quot;</span> method=<span class="string">&quot;afterThrow&quot;</span> throwing=<span class="string">&quot;ex&quot;</span>/&gt;</span><br><span class="line">    &lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="简单地介绍一下切入点表达式的配置规则"><a href="#简单地介绍一下切入点表达式的配置规则" class="headerlink" title="简单地介绍一下切入点表达式的配置规则"></a>简单地介绍一下切入点表达式的配置规则</h1><p>通常情况下，表达式中使用”execution“就可以满足大部分的要求。表达式格式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(modifiers-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?</span><br></pre></td></tr></table></figure>
+<p>modifiers-pattern：方法的操作权限<br>ret-type-pattern：返回值 （必须）<br>declaring-type-pattern：方法所在的包<br>name-pattern：方法名 （必须）<br>parm-pattern：参数名<br>throws-pattern：异常</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/18/java/IOC%E5%AE%B9%E5%99%A8%E4%B8%AD%E9%82%A3%E4%BA%9B%E9%B2%9C%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E7%BB%86%E8%8A%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -903,7 +996,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
