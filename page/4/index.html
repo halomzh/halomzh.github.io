@@ -186,6 +186,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/68.%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/python/68.%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">68、存储数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 09:58:07" itemprop="dateModified" datetime="2020-10-01T09:58:07+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="存储数据"><a href="#存储数据" class="headerlink" title="存储数据"></a>存储数据</h2><h3 id="存储海量数据"><a href="#存储海量数据" class="headerlink" title="存储海量数据"></a>存储海量数据</h3><p>数据持久化的首选方案应该是关系型数据库，关系型数据库的产品很多，包括：Oracle、MySQL、SQLServer、PostgreSQL等。如果要存储海量的低价值数据，文档数据库也是不错的选择，MongoDB是文档数据库中的佼佼者，有兴趣的读者可以自行研究。</p>
+<p>下面的代码演示了如何使用MySQL来保存从知乎发现上爬取到的链接和页面。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> zhihu <span class="keyword">default</span> <span class="keyword">charset</span> utf8;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;hellokitty&#x27;</span>@<span class="string">&#x27;%&#x27;</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">&#x27;Hellokitty.618&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> zhihu.* <span class="keyword">to</span> <span class="string">&#x27;hellokitty&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> zhihu;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">`tb_explore`</span></span><br><span class="line">(</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">integer</span> auto_increment,</span><br><span class="line">    <span class="string">`url`</span> <span class="built_in">varchar</span>(<span class="number">1024</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`page`</span> longblob <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`digest`</span> <span class="built_in">char</span>(<span class="number">48</span>) <span class="keyword">unique</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`idate`</span> datetime <span class="keyword">default</span> <span class="keyword">now</span>(),</span><br><span class="line">    primary <span class="keyword">key</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">conn = MySQLdb.connect(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">3306</span>,</span><br><span class="line">                       user=<span class="string">&#x27;hellokitty&#x27;</span>, password=<span class="string">&#x27;Hellokitty.618&#x27;</span>,</span><br><span class="line">                       database=<span class="string">&#x27;zhihu&#x27;</span>, charset=<span class="string">&#x27;utf8&#x27;</span>,</span><br><span class="line">                       autocommit=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_to_db</span>(<span class="params">url, page, digest</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(</span><br><span class="line">                <span class="string">&#x27;insert into tb_explore (url, page, digest) values (%s, %s, %s) &#x27;</span>,</span><br><span class="line">                (url, page, digest)</span><br><span class="line">            )</span><br><span class="line">    <span class="keyword">except</span> MySQLdb.MySQLError <span class="keyword">as</span> err:</span><br><span class="line">        print(err)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    base_url = <span class="string">&#x27;https://www.zhihu.com/&#x27;</span></span><br><span class="line">    seed_url = urljoin(base_url, <span class="string">&#x27;explore&#x27;</span>)</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Baiduspider&#x27;</span>&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        resp = requests.get(seed_url, headers=headers)</span><br><span class="line">        soup = bs4.BeautifulSoup(resp.text, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">        href_regex = re.compile(<span class="string">r&#x27;^/question&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> a_tag <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;a&#x27;</span>, &#123;<span class="string">&#x27;href&#x27;</span>: href_regex&#125;):</span><br><span class="line">            href = a_tag.attrs[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">            full_url = urljoin(base_url, href)</span><br><span class="line">            digest = hashlib.sha1(full_url.encode()).hexdigest()</span><br><span class="line">            html_page = requests.get(full_url, headers=headers).text</span><br><span class="line">            zipped_page = zlib.compress(pickle.dumps(html_page))</span><br><span class="line">            write_to_db(full_url, zipped_page, digest)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据缓存"><a href="#数据缓存" class="headerlink" title="数据缓存"></a>数据缓存</h3><p>通过<a href="./67.%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8C%E8%A7%A3%E6%9E%90.md">《网络数据采集和解析》</a>一文，我们已经知道了如何从指定的页面中抓取数据，以及如何保存抓取的结果，但是我们没有考虑过这么一种情况，就是我们可能需要从已经抓取过的页面中提取出更多的数据，重新去下载这些页面对于规模不大的网站倒是问题也不大，但是如果能够把这些页面缓存起来，对应用的性能会有明显的改善。下面的例子演示了如何使用Redis来缓存知乎发现上的页面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    base_url = <span class="string">&#x27;https://www.zhihu.com/&#x27;</span></span><br><span class="line">    seed_url = urljoin(base_url, <span class="string">&#x27;explore&#x27;</span>)</span><br><span class="line">    client = redis.Redis(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">6379</span>, password=<span class="string">&#x27;1qaz2wsx&#x27;</span>)</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Baiduspider&#x27;</span>&#125;</span><br><span class="line">    resp = requests.get(seed_url, headers=headers)</span><br><span class="line">    soup = bs4.BeautifulSoup(resp.text, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    href_regex = re.compile(<span class="string">r&#x27;^/question&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> a_tag <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;a&#x27;</span>, &#123;<span class="string">&#x27;href&#x27;</span>: href_regex&#125;):</span><br><span class="line">        href = a_tag.attrs[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">        full_url = urljoin(base_url, href)</span><br><span class="line">        field_key = hashlib.sha1(full_url.encode()).hexdigest()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> client.hexists(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>, field_key):</span><br><span class="line">            html_page = requests.get(full_url, headers=headers).text</span><br><span class="line">            zipped_page = zlib.compress(pickle.dumps(html_page))</span><br><span class="line">            client.hset(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>, field_key, zipped_page)</span><br><span class="line">    print(<span class="string">&#x27;Total %d question pages found.&#x27;</span> % client.hlen(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/67.%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8C%E8%A7%A3%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -487,90 +571,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/68.%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/python/68.%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">68、存储数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:58:07" itemprop="dateModified" datetime="2020-10-01T09:58:07+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="存储数据"><a href="#存储数据" class="headerlink" title="存储数据"></a>存储数据</h2><h3 id="存储海量数据"><a href="#存储海量数据" class="headerlink" title="存储海量数据"></a>存储海量数据</h3><p>数据持久化的首选方案应该是关系型数据库，关系型数据库的产品很多，包括：Oracle、MySQL、SQLServer、PostgreSQL等。如果要存储海量的低价值数据，文档数据库也是不错的选择，MongoDB是文档数据库中的佼佼者，有兴趣的读者可以自行研究。</p>
-<p>下面的代码演示了如何使用MySQL来保存从知乎发现上爬取到的链接和页面。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> zhihu <span class="keyword">default</span> <span class="keyword">charset</span> utf8;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;hellokitty&#x27;</span>@<span class="string">&#x27;%&#x27;</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">&#x27;Hellokitty.618&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> zhihu.* <span class="keyword">to</span> <span class="string">&#x27;hellokitty&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> zhihu;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">`tb_explore`</span></span><br><span class="line">(</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">integer</span> auto_increment,</span><br><span class="line">    <span class="string">`url`</span> <span class="built_in">varchar</span>(<span class="number">1024</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`page`</span> longblob <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`digest`</span> <span class="built_in">char</span>(<span class="number">48</span>) <span class="keyword">unique</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">`idate`</span> datetime <span class="keyword">default</span> <span class="keyword">now</span>(),</span><br><span class="line">    primary <span class="keyword">key</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">conn = MySQLdb.connect(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">3306</span>,</span><br><span class="line">                       user=<span class="string">&#x27;hellokitty&#x27;</span>, password=<span class="string">&#x27;Hellokitty.618&#x27;</span>,</span><br><span class="line">                       database=<span class="string">&#x27;zhihu&#x27;</span>, charset=<span class="string">&#x27;utf8&#x27;</span>,</span><br><span class="line">                       autocommit=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_to_db</span>(<span class="params">url, page, digest</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(</span><br><span class="line">                <span class="string">&#x27;insert into tb_explore (url, page, digest) values (%s, %s, %s) &#x27;</span>,</span><br><span class="line">                (url, page, digest)</span><br><span class="line">            )</span><br><span class="line">    <span class="keyword">except</span> MySQLdb.MySQLError <span class="keyword">as</span> err:</span><br><span class="line">        print(err)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    base_url = <span class="string">&#x27;https://www.zhihu.com/&#x27;</span></span><br><span class="line">    seed_url = urljoin(base_url, <span class="string">&#x27;explore&#x27;</span>)</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Baiduspider&#x27;</span>&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        resp = requests.get(seed_url, headers=headers)</span><br><span class="line">        soup = bs4.BeautifulSoup(resp.text, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">        href_regex = re.compile(<span class="string">r&#x27;^/question&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> a_tag <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;a&#x27;</span>, &#123;<span class="string">&#x27;href&#x27;</span>: href_regex&#125;):</span><br><span class="line">            href = a_tag.attrs[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">            full_url = urljoin(base_url, href)</span><br><span class="line">            digest = hashlib.sha1(full_url.encode()).hexdigest()</span><br><span class="line">            html_page = requests.get(full_url, headers=headers).text</span><br><span class="line">            zipped_page = zlib.compress(pickle.dumps(html_page))</span><br><span class="line">            write_to_db(full_url, zipped_page, digest)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<h3 id="数据缓存"><a href="#数据缓存" class="headerlink" title="数据缓存"></a>数据缓存</h3><p>通过<a href="./67.%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8C%E8%A7%A3%E6%9E%90.md">《网络数据采集和解析》</a>一文，我们已经知道了如何从指定的页面中抓取数据，以及如何保存抓取的结果，但是我们没有考虑过这么一种情况，就是我们可能需要从已经抓取过的页面中提取出更多的数据，重新去下载这些页面对于规模不大的网站倒是问题也不大，但是如果能够把这些页面缓存起来，对应用的性能会有明显的改善。下面的例子演示了如何使用Redis来缓存知乎发现上的页面。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    base_url = <span class="string">&#x27;https://www.zhihu.com/&#x27;</span></span><br><span class="line">    seed_url = urljoin(base_url, <span class="string">&#x27;explore&#x27;</span>)</span><br><span class="line">    client = redis.Redis(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">6379</span>, password=<span class="string">&#x27;1qaz2wsx&#x27;</span>)</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Baiduspider&#x27;</span>&#125;</span><br><span class="line">    resp = requests.get(seed_url, headers=headers)</span><br><span class="line">    soup = bs4.BeautifulSoup(resp.text, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    href_regex = re.compile(<span class="string">r&#x27;^/question&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> a_tag <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;a&#x27;</span>, &#123;<span class="string">&#x27;href&#x27;</span>: href_regex&#125;):</span><br><span class="line">        href = a_tag.attrs[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">        full_url = urljoin(base_url, href)</span><br><span class="line">        field_key = hashlib.sha1(full_url.encode()).hexdigest()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> client.hexists(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>, field_key):</span><br><span class="line">            html_page = requests.get(full_url, headers=headers).text</span><br><span class="line">            zipped_page = zlib.compress(pickle.dumps(html_page))</span><br><span class="line">            client.hset(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>, field_key, zipped_page)</span><br><span class="line">    print(<span class="string">&#x27;Total %d question pages found.&#x27;</span> % client.hlen(<span class="string">&#x27;spider:zhihu:explore&#x27;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/69.%E5%B9%B6%E5%8F%91%E4%B8%8B%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -652,6 +652,91 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> enum <span class="keyword">import</span> Enum, unique</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha1</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread, current_thread, local</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">from</span> bson <span class="keyword">import</span> Binary</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@unique</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpiderStatus</span>(<span class="params">Enum</span>):</span></span><br><span class="line">    IDLE = <span class="number">0</span></span><br><span class="line">    WORKING = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decode_page</span>(<span class="params">page_bytes, charsets=(<span class="params"><span class="string">&#x27;utf-8&#x27;</span>,</span>)</span>):</span></span><br><span class="line">    page_html = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> charset <span class="keyword">in</span> charsets:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            page_html = page_bytes.decode(charset)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> page_html</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Retry</span>(<span class="params">object</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, *, retry_times=<span class="number">3</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 wait_secs=<span class="number">5</span>, errors=(<span class="params">Exception, </span>)</span>):</span></span><br><span class="line">        self.retry_times = retry_times</span><br><span class="line">        self.wait_secs = wait_secs</span><br><span class="line">        self.errors = errors</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, fn</span>):</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> range(self.retry_times):</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">return</span> fn(*args, **kwargs)</span><br><span class="line">                <span class="keyword">except</span> self.errors <span class="keyword">as</span> e:</span><br><span class="line">                    print(e)</span><br><span class="line">                    sleep((random() + <span class="number">1</span>) * self.wait_secs)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Spider</span>(<span class="params">object</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.status = SpiderStatus.IDLE</span><br><span class="line"></span><br><span class="line"><span class="meta">    @Retry()</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fetch</span>(<span class="params">self, current_url, *, charsets=(<span class="params"><span class="string">&#x27;utf-8&#x27;</span>, </span>),</span></span></span><br><span class="line"><span class="function"><span class="params">              user_agent=None, proxies=None</span>):</span></span><br><span class="line">        thread_name = current_thread().name</span><br><span class="line">        print(<span class="string">f&#x27;[<span class="subst">&#123;thread_name&#125;</span>]: <span class="subst">&#123;current_url&#125;</span>&#x27;</span>)</span><br><span class="line">        headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: user_agent&#125; <span class="keyword">if</span> user_agent <span class="keyword">else</span> &#123;&#125;</span><br><span class="line">        resp = requests.get(current_url,</span><br><span class="line">                            headers=headers, proxies=proxies)</span><br><span class="line">        <span class="keyword">return</span> decode_page(resp.content, charsets) \</span><br><span class="line">            <span class="keyword">if</span> resp.status_code == <span class="number">200</span> <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span>(<span class="params">self, html_page, *, domain=<span class="string">&#x27;m.sohu.com&#x27;</span></span>):</span></span><br><span class="line">        soup = BeautifulSoup(html_page, <span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> a_tag <span class="keyword">in</span> soup.body.select(<span class="string">&#x27;a[href]&#x27;</span>):</span><br><span class="line">            parser = urlparse(a_tag.attrs[<span class="string">&#x27;href&#x27;</span>])</span><br><span class="line">            scheme = parser.scheme <span class="keyword">or</span> <span class="string">&#x27;http&#x27;</span></span><br><span class="line">            netloc = parser.netloc <span class="keyword">or</span> domain</span><br><span class="line">            <span class="keyword">if</span> scheme != <span class="string">&#x27;javascript&#x27;</span> <span class="keyword">and</span> netloc == domain:</span><br><span class="line">                path = parser.path</span><br><span class="line">                query = <span class="string">&#x27;?&#x27;</span> + parser.query <span class="keyword">if</span> parser.query <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">                full_url = <span class="string">f&#x27;<span class="subst">&#123;scheme&#125;</span>://<span class="subst">&#123;netloc&#125;</span><span class="subst">&#123;path&#125;</span><span class="subst">&#123;query&#125;</span>&#x27;</span></span><br><span class="line">                redis_client = thread_local.redis_client</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> redis_client.sismember(<span class="string">&#x27;visited_urls&#x27;</span>, full_url):</span><br><span class="line">                    redis_client.rpush(<span class="string">&#x27;m_sohu_task&#x27;</span>, full_url)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">extract</span>(<span class="params">self, html_page</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">store</span>(<span class="params">self, data_dict</span>):</span></span><br><span class="line">        <span class="comment"># redis_client = thread_local.redis_client</span></span><br><span class="line">        <span class="comment"># mongo_db = thread_local.mongo_db</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpiderThread</span>(<span class="params">Thread</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name, spider</span>):</span></span><br><span class="line">        super().__init__(name=name, daemon=<span class="literal">True</span>)</span><br><span class="line">        self.spider = spider</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        redis_client = redis.Redis(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">6379</span>, password=<span class="string">&#x27;1qaz2wsx&#x27;</span>)</span><br><span class="line">        mongo_client = pymongo.MongoClient(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">27017</span>)</span><br><span class="line">        thread_local.redis_client = redis_client</span><br><span class="line">        thread_local.mongo_db = mongo_client.msohu </span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            current_url = redis_client.lpop(<span class="string">&#x27;m_sohu_task&#x27;</span>)</span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">not</span> current_url:</span><br><span class="line">                current_url = redis_client.lpop(<span class="string">&#x27;m_sohu_task&#x27;</span>)</span><br><span class="line">            self.spider.status = SpiderStatus.WORKING</span><br><span class="line">            current_url = current_url.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> redis_client.sismember(<span class="string">&#x27;visited_urls&#x27;</span>, current_url):</span><br><span class="line">                redis_client.sadd(<span class="string">&#x27;visited_urls&#x27;</span>, current_url)</span><br><span class="line">                html_page = self.spider.fetch(current_url)</span><br><span class="line">                <span class="keyword">if</span> html_page <span class="keyword">not</span> <span class="keyword">in</span> [<span class="literal">None</span>, <span class="string">&#x27;&#x27;</span>]:</span><br><span class="line">                    hasher = hasher_proto.copy()</span><br><span class="line">                    hasher.update(current_url.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">                    doc_id = hasher.hexdigest()</span><br><span class="line">                    sohu_data_coll = mongo_client.msohu.webpages</span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> sohu_data_coll.find_one(&#123;<span class="string">&#x27;_id&#x27;</span>: doc_id&#125;):</span><br><span class="line">                        sohu_data_coll.insert_one(&#123;</span><br><span class="line">                            <span class="string">&#x27;_id&#x27;</span>: doc_id,</span><br><span class="line">                            <span class="string">&#x27;url&#x27;</span>: current_url,</span><br><span class="line">                            <span class="string">&#x27;page&#x27;</span>: Binary(zlib.compress(pickle.dumps(html_page)))</span><br><span class="line">                        &#125;)</span><br><span class="line">                    self.spider.parse(html_page)</span><br><span class="line">            self.spider.status = SpiderStatus.IDLE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_any_alive</span>(<span class="params">spider_threads</span>):</span></span><br><span class="line">    <span class="keyword">return</span> any([spider_thread.spider.status == SpiderStatus.WORKING</span><br><span class="line">                <span class="keyword">for</span> spider_thread <span class="keyword">in</span> spider_threads])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">thread_local = local()</span><br><span class="line">hasher_proto = sha1()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    redis_client = redis.Redis(host=<span class="string">&#x27;1.2.3.4&#x27;</span>, port=<span class="number">6379</span>, password=<span class="string">&#x27;1qaz2wsx&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> redis_client.exists(<span class="string">&#x27;m_sohu_task&#x27;</span>):</span><br><span class="line">        redis_client.rpush(<span class="string">&#x27;m_sohu_task&#x27;</span>, <span class="string">&#x27;http://m.sohu.com/&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    spider_threads = [SpiderThread(<span class="string">&#x27;thread-%d&#x27;</span> % i, Spider())</span><br><span class="line">                      <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">    <span class="keyword">for</span> spider_thread <span class="keyword">in</span> spider_threads:</span><br><span class="line">        spider_thread.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> redis_client.exists(<span class="string">&#x27;m_sohu_task&#x27;</span>) <span class="keyword">or</span> is_any_alive(spider_threads):</span><br><span class="line">        sleep(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;Over!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/73.Scrapy%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/python/73.Scrapy%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">73、Scrapy爬虫框架高级应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 09:58:26" itemprop="dateModified" datetime="2020-10-01T09:58:26+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Scrapy爬虫框架高级应用"><a href="#Scrapy爬虫框架高级应用" class="headerlink" title="Scrapy爬虫框架高级应用"></a>Scrapy爬虫框架高级应用</h2><h3 id="Spider的用法"><a href="#Spider的用法" class="headerlink" title="Spider的用法"></a>Spider的用法</h3><p>在Scrapy框架中，我们自定义的蜘蛛都继承自scrapy.spiders.Spider，这个类有一系列的属性和方法，具体如下所示：</p>
+<ol>
+<li>name：爬虫的名字。</li>
+<li>allowed_domains：允许爬取的域名，不在此范围的链接不会被跟进爬取。</li>
+<li>start_urls：起始URL列表，当我们没有重写start_requests()方法时，就会从这个列表开始爬取。</li>
+<li>custom_settings：用来存放蜘蛛专属配置的字典，这里的设置会覆盖全局的设置。</li>
+<li>crawler：由from_crawler()方法设置的和蜘蛛对应的Crawler对象，Crawler对象包含了很多项目组件，利用它我们可以获取项目的配置信息，如调用crawler.settings.get()方法。</li>
+<li>settings：用来获取爬虫全局设置的变量。</li>
+<li>start_requests()：此方法用于生成初始请求，它返回一个可迭代对象。该方法默认是使用GET请求访问起始URL，如果起始URL需要使用POST请求来访问就必须重写这个方法。</li>
+<li>parse()：当Response没有指定回调函数时，该方法就会被调用，它负责处理Response对象并返回结果，从中提取出需要的数据和后续的请求，该方法需要返回类型为Request或Item的可迭代对象（生成器当前也包含在其中，因此根据实际需要可以用return或yield来产生返回值）。</li>
+<li>closed()：当蜘蛛关闭时，该方法会被调用，通常用来做一些释放资源的善后操作。</li>
+</ol>
+<h3 id="中间件的应用"><a href="#中间件的应用" class="headerlink" title="中间件的应用"></a>中间件的应用</h3><h4 id="下载中间件"><a href="#下载中间件" class="headerlink" title="下载中间件"></a>下载中间件</h4><h4 id="蜘蛛中间件"><a href="#蜘蛛中间件" class="headerlink" title="蜘蛛中间件"></a>蜘蛛中间件</h4><h3 id="Scrapy对接Selenium"><a href="#Scrapy对接Selenium" class="headerlink" title="Scrapy对接Selenium"></a>Scrapy对接Selenium</h3><h3 id="Scrapy部署到Docker"><a href="#Scrapy部署到Docker" class="headerlink" title="Scrapy部署到Docker"></a>Scrapy部署到Docker</h3>
       
     </div>
 
@@ -920,192 +1005,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/73.Scrapy%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/python/73.Scrapy%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">73、Scrapy爬虫框架高级应用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:58:26" itemprop="dateModified" datetime="2020-10-01T09:58:26+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Scrapy爬虫框架高级应用"><a href="#Scrapy爬虫框架高级应用" class="headerlink" title="Scrapy爬虫框架高级应用"></a>Scrapy爬虫框架高级应用</h2><h3 id="Spider的用法"><a href="#Spider的用法" class="headerlink" title="Spider的用法"></a>Spider的用法</h3><p>在Scrapy框架中，我们自定义的蜘蛛都继承自scrapy.spiders.Spider，这个类有一系列的属性和方法，具体如下所示：</p>
-<ol>
-<li>name：爬虫的名字。</li>
-<li>allowed_domains：允许爬取的域名，不在此范围的链接不会被跟进爬取。</li>
-<li>start_urls：起始URL列表，当我们没有重写start_requests()方法时，就会从这个列表开始爬取。</li>
-<li>custom_settings：用来存放蜘蛛专属配置的字典，这里的设置会覆盖全局的设置。</li>
-<li>crawler：由from_crawler()方法设置的和蜘蛛对应的Crawler对象，Crawler对象包含了很多项目组件，利用它我们可以获取项目的配置信息，如调用crawler.settings.get()方法。</li>
-<li>settings：用来获取爬虫全局设置的变量。</li>
-<li>start_requests()：此方法用于生成初始请求，它返回一个可迭代对象。该方法默认是使用GET请求访问起始URL，如果起始URL需要使用POST请求来访问就必须重写这个方法。</li>
-<li>parse()：当Response没有指定回调函数时，该方法就会被调用，它负责处理Response对象并返回结果，从中提取出需要的数据和后续的请求，该方法需要返回类型为Request或Item的可迭代对象（生成器当前也包含在其中，因此根据实际需要可以用return或yield来产生返回值）。</li>
-<li>closed()：当蜘蛛关闭时，该方法会被调用，通常用来做一些释放资源的善后操作。</li>
-</ol>
-<h3 id="中间件的应用"><a href="#中间件的应用" class="headerlink" title="中间件的应用"></a>中间件的应用</h3><h4 id="下载中间件"><a href="#下载中间件" class="headerlink" title="下载中间件"></a>下载中间件</h4><h4 id="蜘蛛中间件"><a href="#蜘蛛中间件" class="headerlink" title="蜘蛛中间件"></a>蜘蛛中间件</h4><h3 id="Scrapy对接Selenium"><a href="#Scrapy对接Selenium" class="headerlink" title="Scrapy对接Selenium"></a>Scrapy对接Selenium</h3><h3 id="Scrapy部署到Docker"><a href="#Scrapy部署到Docker" class="headerlink" title="Scrapy部署到Docker"></a>Scrapy部署到Docker</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/74.Scrapy%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/python/74.Scrapy%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">74、Scrapy爬虫框架分布式实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:58:32" itemprop="dateModified" datetime="2020-10-01T09:58:32+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Scrapy爬虫框架分布式实现"><a href="#Scrapy爬虫框架分布式实现" class="headerlink" title="Scrapy爬虫框架分布式实现"></a>Scrapy爬虫框架分布式实现</h2><h3 id="分布式爬虫原理"><a href="#分布式爬虫原理" class="headerlink" title="分布式爬虫原理"></a>分布式爬虫原理</h3><h3 id="Scrapy分布式实现"><a href="#Scrapy分布式实现" class="headerlink" title="Scrapy分布式实现"></a>Scrapy分布式实现</h3><ol>
-<li>安装Scrapy-Redis。</li>
-<li>配置Redis服务器。</li>
-<li>修改配置文件。<ul>
-<li>SCHEDULER = ‘scrapy_redis.scheduler.Scheduler’</li>
-<li>DUPEFILTER_CLASS = ‘scrapy_redis.dupefilter.RFPDupeFilter’</li>
-<li>REDIS_HOST = ‘1.2.3.4’</li>
-<li>REDIS_PORT = 6379</li>
-<li>REDIS_PASSWORD = ‘1qaz2wsx’</li>
-<li>SCHEDULER_QUEUE_CLASS = ‘scrapy_redis.queue.FifoQueue’</li>
-<li>SCHEDULER_PERSIST = True（通过持久化支持接续爬取）</li>
-<li>SCHEDULER_FLUSH_ON_START = True（每次启动时重新爬取）</li>
-</ul>
-</li>
-</ol>
-<h3 id="Scrapyd分布式部署"><a href="#Scrapyd分布式部署" class="headerlink" title="Scrapyd分布式部署"></a>Scrapyd分布式部署</h3><ol>
-<li>安装Scrapyd</li>
-<li>修改配置文件<ul>
-<li>mkdir /etc/scrapyd</li>
-<li>vim /etc/scrapyd/scrapyd.conf</li>
-</ul>
-</li>
-<li>安装Scrapyd-Client<ul>
-<li>将项目打包成Egg文件。</li>
-<li>将打包的Egg文件通过addversion.json接口部署到Scrapyd上。</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/72.Scrapy%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1235,6 +1134,180 @@
 </li>
 </ol>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/74.Scrapy%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/python/74.Scrapy%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">74、Scrapy爬虫框架分布式实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 09:58:32" itemprop="dateModified" datetime="2020-10-01T09:58:32+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Scrapy爬虫框架分布式实现"><a href="#Scrapy爬虫框架分布式实现" class="headerlink" title="Scrapy爬虫框架分布式实现"></a>Scrapy爬虫框架分布式实现</h2><h3 id="分布式爬虫原理"><a href="#分布式爬虫原理" class="headerlink" title="分布式爬虫原理"></a>分布式爬虫原理</h3><h3 id="Scrapy分布式实现"><a href="#Scrapy分布式实现" class="headerlink" title="Scrapy分布式实现"></a>Scrapy分布式实现</h3><ol>
+<li>安装Scrapy-Redis。</li>
+<li>配置Redis服务器。</li>
+<li>修改配置文件。<ul>
+<li>SCHEDULER = ‘scrapy_redis.scheduler.Scheduler’</li>
+<li>DUPEFILTER_CLASS = ‘scrapy_redis.dupefilter.RFPDupeFilter’</li>
+<li>REDIS_HOST = ‘1.2.3.4’</li>
+<li>REDIS_PORT = 6379</li>
+<li>REDIS_PASSWORD = ‘1qaz2wsx’</li>
+<li>SCHEDULER_QUEUE_CLASS = ‘scrapy_redis.queue.FifoQueue’</li>
+<li>SCHEDULER_PERSIST = True（通过持久化支持接续爬取）</li>
+<li>SCHEDULER_FLUSH_ON_START = True（每次启动时重新爬取）</li>
+</ul>
+</li>
+</ol>
+<h3 id="Scrapyd分布式部署"><a href="#Scrapyd分布式部署" class="headerlink" title="Scrapyd分布式部署"></a>Scrapyd分布式部署</h3><ol>
+<li>安装Scrapyd</li>
+<li>修改配置文件<ul>
+<li>mkdir /etc/scrapyd</li>
+<li>vim /etc/scrapyd/scrapyd.conf</li>
+</ul>
+</li>
+<li>安装Scrapyd-Client<ul>
+<li>将项目打包成Egg文件。</li>
+<li>将打包的Egg文件通过addversion.json接口部署到Scrapyd上。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/python/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">78、NumPy和SciPy的应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 09:58:53" itemprop="dateModified" datetime="2020-10-01T09:58:53+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="NumPy和SciPy的应用"><a href="#NumPy和SciPy的应用" class="headerlink" title="NumPy和SciPy的应用"></a>NumPy和SciPy的应用</h2>
       
     </div>
 
@@ -1388,7 +1461,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/76.%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/65.%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1402,7 +1475,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/29/python/76.%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">76、机器学习基础</a>
+            <a href="/2020/09/29/python/65.%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/" class="post-title-link" itemprop="url">65、项目实战</a>
         </h2>
 
         <div class="post-meta">
@@ -1419,7 +1492,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:58:42" itemprop="dateModified" datetime="2020-10-01T09:58:42+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 09:57:52" itemprop="dateModified" datetime="2020-10-01T09:57:52+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1442,106 +1515,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="机器学习基础"><a href="#机器学习基础" class="headerlink" title="机器学习基础"></a>机器学习基础</h2><p>所谓“机器学习”就是利用计算机将纷繁复杂的数据处理成有用的信息，这样就可以发掘出数据带来的意义以及隐藏在数据背后的规律。现如今，“机器学习”和“大数据”可以说是IT行业中最热点的两个词汇，而无论是“机器学习”还是“大数据”最终要解决的问题本质上是一样的，用最为直白的话来说就是用现有的数据去预测将来的状况。</p>
-<p>按照问题的“输入”和“输出”，我们可以将用计算机解决的问题分为四大类：</p>
-<ol>
-<li>输入的信息是精确的，要求输出最优解。</li>
-<li>输入的信息是精确的，无法找到最优解。</li>
-<li>输入的信息是模糊的，要求输出最优解。</li>
-<li>输入的信息是模糊的，无法找到最优解。</li>
-</ol>
-<p>在上面的四大类问题中，第1类问题是计算机最擅长解决的，这类问题其实就是“数值计算”和“逻辑推理”方面的问题，而传统意义上的人工智能也就是利用逻辑推理来解决问题（如早期的“人机对弈”）。一直以来，我们都习惯于将计算机称为“电脑”，而基于“冯诺依曼”体系结构的“电脑”实际上只是实现了“人脑”理性思维这部分的功能，而且在这一点上“电脑”通常是优于“人脑”的，而“人脑”在处理输入模糊信息时表现出来的强大的处理能力，在今天看来也不是“电脑”可以完全企及的。所以我们研究人工智能也好，研究机器学习也好，是希望输入模糊信息时，计算机能够给出满意的甚至是最优的答案。</p>
-<p>至此，我们可以给“机器学习”下一个定义：机器学习是一门专门研究计算机怎样模拟或实现人类的学习行为，以获取新的知识或技能，重新组织已有的知识结构使之不断改善自身性能的学科。机器学习目前已经广泛的应用到生产生活的各个领域，以下列举了一些经典的场景：</p>
-<ol>
-<li>搜索引擎：根据搜索和使用习惯，优化下一次搜索的结果。</li>
-<li>电商网站：自动推荐你可能感兴趣的商品。</li>
-<li>贷款申请：通过你最近的金融活动信息进行综合评定。</li>
-<li>图像识别：自动识别图片中有没有不和谐的内容。</li>
-</ol>
-<p>机器学习可以分为监督学习和非监督学习。监督学习是从给定的训练数据集中学习得到一个函数，当新的数据到来时，可以根据这个函数预测结果，监督学习的训练集包括输入和输出，也可以说是特征和目标。监督学习的目标是由人来标注的，而非监督学习的数据没有类别信息，训练集也没有人为标注结果，通过无监督学习可以减少数据特征的维度，以便我们可以使用二维或三维图形更加直观地展示数据信息 。</p>
-<p>实现机器学习的一般步骤：</p>
-<ol>
-<li>数据收集</li>
-<li>数据准备</li>
-<li>数据分析</li>
-<li>训练算法</li>
-<li>测试算法</li>
-<li>应用算法</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/python/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/29/python/78.NumPy%E5%92%8CSciPy%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">78、NumPy和SciPy的应用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-29 14:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T14:02:18+08:00">2020-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 09:58:53" itemprop="dateModified" datetime="2020-10-01T09:58:53+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python%E5%88%9D%E6%8E%A2/" itemprop="url" rel="index"><span itemprop="name">Python初探</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="NumPy和SciPy的应用"><a href="#NumPy和SciPy的应用" class="headerlink" title="NumPy和SciPy的应用"></a>NumPy和SciPy的应用</h2>
+          <h2 id="项目实战"><a href="#项目实战" class="headerlink" title="项目实战"></a>项目实战</h2>
       
     </div>
 
@@ -1625,20 +1599,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

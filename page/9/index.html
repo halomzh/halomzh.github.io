@@ -186,6 +186,304 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/java/Zookeeper%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="halomzh">
+      <meta itemprop="description" content="学习记录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="halomzh.github.io">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/java/Zookeeper%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Zookeeper总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-29 11:18:28" itemprop="dateCreated datePublished" datetime="2020-09-29T11:18:28+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 01:53:17" itemprop="dateModified" datetime="2020-10-01T01:53:17+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">Java概览</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Zookeeper总结"><a href="#Zookeeper总结" class="headerlink" title="Zookeeper总结"></a>Zookeeper总结</h1><h2 id="1-ZooKeeper-是什么？"><a href="#1-ZooKeeper-是什么？" class="headerlink" title="1. ZooKeeper 是什么？"></a><strong>1. ZooKeeper 是什么？</strong></h2><p>ZooKeeper 是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件，分布式应用程序可以基于 Zookeeper 实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master 选举、分布式锁和分布式队列等功能。</p>
+<p>ZooKeeper 的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。</p>
+<p>Zookeeper 保证了如下分布式一致性特性：</p>
+<p>（1）顺序一致性</p>
+<p>（2）原子性</p>
+<p>（3）单一视图</p>
+<p>（4）可靠性</p>
+<p>（5）实时性（最终一致性）</p>
+<p>客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的 zookeeper 机器来处理。对于写请求，这些请求会同时发给其他 zookeeper 机器并且达成一致后，请求才会返回成功。因此，随着 zookeeper 的集群机器增多，读请求的吞吐会提高但是写请求的吞吐会下降。</p>
+<p>有序性是 zookeeper 中非常重要的一个特性，所有的更新都是全局有序的，每个更新都有一个唯一的时间戳，这个时间戳称为 zxid（Zookeeper Transaction Id）。而读请求只会相对于更新有序，也就是读请求的返回结果中会带有这个zookeeper 最新的 zxid。</p>
+<h2 id="2-ZooKeeper-提供了什么？"><a href="#2-ZooKeeper-提供了什么？" class="headerlink" title="2. ZooKeeper 提供了什么？"></a><strong>2. ZooKeeper 提供了什么？</strong></h2><ul>
+<li>文件系统</li>
+<li>通知机制</li>
+</ul>
+<h2 id="3-Zookeeper-文件系统"><a href="#3-Zookeeper-文件系统" class="headerlink" title="3. Zookeeper 文件系统"></a><strong>3. Zookeeper 文件系统</strong></h2><p>Zookeeper 提供一个多层级的节点命名空间（节点称为 znode）。与文件系统不同的是，这些节点都可以设置关联的数据，而文件系统中只有文件节点可以存放数据而目录节点不行。</p>
+<p>Zookeeper 为了保证高吞吐和低延迟，在内存中维护了这个树状的目录结构，这种特性使得 Zookeeper 不能用于存放大量的数据，每个节点的存放数据上限为1M。</p>
+<h2 id="4-Zookeeper-怎么保证主从节点的状态同步？"><a href="#4-Zookeeper-怎么保证主从节点的状态同步？" class="headerlink" title="4. Zookeeper 怎么保证主从节点的状态同步？"></a><strong>4. Zookeeper 怎么保证主从节点的状态同步？</strong></h2><p>Zookeeper 的核心是原子广播机制，这个机制保证了各个 server 之间的同步。实现这个机制的协议叫做 Zab 协议。Zab 协议有两种模式，它们分别是恢复模式和广播模式。</p>
+<h3 id="1、恢复模式"><a href="#1、恢复模式" class="headerlink" title="1、恢复模式"></a>1、恢复模式</h3><p>当服务启动或者在领导者崩溃后，Zab就进入了恢复模式，当领导者被选举出来，且大多数 server 完成了和 leader 的状态同步以后，恢复模式就结束了。状态同步保证了 leader 和 server 具有相同的系统状态。</p>
+<h3 id="2、广播模式"><a href="#2、广播模式" class="headerlink" title="2、广播模式"></a>2、广播模式</h3><p>一旦 leader 已经和多数的 follower 进行了状态同步后，它就可以开始广播消息了，即进入广播状态。这时候当一个 server 加入 ZooKeeper 服务中，它会在恢复模式下启动，发现 leader，并和 leader 进行状态同步。待到同步结束，它也参与消息广播。ZooKeeper 服务一直维持在 Broadcast 状态，直到 leader 崩溃了或者 leader 失去了大部分的 followers 支持。</p>
+<h2 id="5-四种类型的数据节点-Znode"><a href="#5-四种类型的数据节点-Znode" class="headerlink" title="5. 四种类型的数据节点 Znode"></a><strong>5. 四种类型的数据节点 Znode</strong></h2><h2 id="（1）PERSISTENT-持久节点"><a href="#（1）PERSISTENT-持久节点" class="headerlink" title="（1）PERSISTENT-持久节点"></a>（1）PERSISTENT-持久节点</h2><p>除非手动删除，否则节点一直存在于 Zookeeper 上</p>
+<h2 id="（2）EPHEMERAL-临时节点"><a href="#（2）EPHEMERAL-临时节点" class="headerlink" title="（2）EPHEMERAL-临时节点"></a>（2）EPHEMERAL-临时节点</h2><p>临时节点的生命周期与客户端会话绑定，一旦客户端会话失效（客户端与zookeeper 连接断开不一定会话失效），那么这个客户端创建的所有临时节点都会被移除。</p>
+<h3 id="（3）PERSISTENT-SEQUENTIAL-持久顺序节点"><a href="#（3）PERSISTENT-SEQUENTIAL-持久顺序节点" class="headerlink" title="（3）PERSISTENT_SEQUENTIAL-持久顺序节点"></a>（3）PERSISTENT_SEQUENTIAL-持久顺序节点</h3><p>基本特性同持久节点，只是增加了顺序属性，节点名后边会追加一个由父节点维护的自增整型数字。</p>
+<h3 id="（4）EPHEMERAL-SEQUENTIAL-临时顺序节点"><a href="#（4）EPHEMERAL-SEQUENTIAL-临时顺序节点" class="headerlink" title="（4）EPHEMERAL_SEQUENTIAL-临时顺序节点"></a>（4）EPHEMERAL_SEQUENTIAL-临时顺序节点</h3><p>基本特性同临时节点，增加了顺序属性，节点名后边会追加一个由父节点维护的自增整型数字。</p>
+<h2 id="6-Zookeeper-Watcher-机制-–-数据变更通知"><a href="#6-Zookeeper-Watcher-机制-–-数据变更通知" class="headerlink" title="6. Zookeeper Watcher 机制 – 数据变更通知"></a><strong>6. Zookeeper Watcher 机制 – 数据变更通知</strong></h2><p>Zookeeper 允许客户端向服务端的某个 Znode 注册一个 Watcher 监听，当服务端的一些指定事件触发了这个 Watcher，服务端会向指定客户端发送一个事件通知来实现分布式的通知功能，然后客户端根据 Watcher 通知状态和事件类型做出业务上的改变。</p>
+<p>工作机制：</p>
+<p>（1）客户端注册 watcher</p>
+<p>（2）服务端处理 watcher</p>
+<p>（3）客户端回调 watcher</p>
+<p>Watcher 特性总结：</p>
+<p>（1）一次性</p>
+<p>无论是服务端还是客户端，一旦一个 Watcher 被 触 发 ，Zookeeper 都会将其从相应的存储中移除。这样的设计有效的减轻了服务端的压力，不然对于更新非常频繁的节点，服务端会不断的向客户端发送事件通知，无论对于网络还是服务端的压力都非常大。</p>
+<p>（2）客户端串行执行</p>
+<p>客户端 Watcher 回调的过程是一个串行同步的过程。</p>
+<p>（3）轻量</p>
+<p>3.1、Watcher 通知非常简单，只会告诉客户端发生了事件，而不会说明事件的具体内容。</p>
+<p>3.2、客户端向服务端注册 Watcher 的时候，并不会把客户端真实的 Watcher 对象实体传递到服务端，仅仅是在客户端请求中使用 boolean 类型属性进行了标记。</p>
+<p>（4）watcher event 异步发送 watcher 的通知事件从 server 发送到 client 是异步的，这就存在一个问题，不同的客户端和服务器之间通过 socket 进行通信，由于网络延迟或其他因素导致客户端在不通的时刻监听到事件，由于 Zookeeper 本身提供了 ordering guarantee，即客户端监听事件后，才会感知它所监视 znode发生了变化。所以我们使用 Zookeeper 不能期望能够监控到节点每次的变化。Zookeeper 只能保证最终的一致性，而无法保证强一致性。</p>
+<p>（5）注册 watcher getData、exists、getChildren</p>
+<p>（6）触发 watcher create、delete、setData</p>
+<p>（7）当一个客户端连接到一个新的服务器上时，watch 将会被以任意会话事件触发。当与一个服务器失去连接的时候，是无法接收到 watch 的。而当 client 重新连接时，如果需要的话，所有先前注册过的 watch，都会被重新注册。通常这是完全透明的。只有在一个特殊情况下，watch 可能会丢失：对于一个未创建的 znode的 exist watch，如果在客户端断开连接期间被创建了，并且随后在客户端连接上之前又删除了，这种情况下，这个 watch 事件可能会被丢失。</p>
+<h2 id="7-客户端注册-Watcher-实现"><a href="#7-客户端注册-Watcher-实现" class="headerlink" title="7. 客户端注册 Watcher 实现"></a><strong>7. 客户端注册 Watcher 实现</strong></h2><p>（1）调用 getData()/getChildren()/exist()三个 API，传入 Watcher 对象</p>
+<p>（2）标记请求 request，封装 Watcher 到 WatchRegistration</p>
+<p>（3）封装成 Packet 对象，发服务端发送 request</p>
+<p>（4）收到服务端响应后，将 Watcher 注册到 ZKWatcherManager 中进行管理</p>
+<p>（5）请求返回，完成注册。</p>
+<h2 id="8-服务端处理-Watcher-实现"><a href="#8-服务端处理-Watcher-实现" class="headerlink" title="8. 服务端处理 Watcher 实现"></a><strong>8. 服务端处理 Watcher 实现</strong></h2><p>（1）服务端接收 Watcher 并存储</p>
+<p>接收到客户端请求，处理请求判断是否需要注册 Watcher，需要的话将数据节点的节点路径和 ServerCnxn（ServerCnxn 代表一个客户端和服务端的连接，实现了 Watcher 的 process 接口，此时可以看成一个 Watcher 对象）存储在WatcherManager 的 WatchTable 和 watch2Paths 中去。</p>
+<p>（2）Watcher 触发</p>
+<p>以服务端接收到 setData() 事务请求触发 NodeDataChanged 事件为例：</p>
+<p>2.1 封装 WatchedEvent</p>
+<p>将通知状态（SyncConnected）、事件类型（NodeDataChanged）以及节点路径封装成一个 WatchedEvent 对象</p>
+<p>2.2 查询 Watcher</p>
+<p>从 WatchTable 中根据节点路径查找 Watcher</p>
+<p>2.3 没找到；说明没有客户端在该数据节点上注册过 Watcher</p>
+<p>2.4 找到；提取并从 WatchTable 和 Watch2Paths 中删除对应 Watcher（从这里可以看出 Watcher 在服务端是一次性的，触发一次就失效了）</p>
+<p>（3）调用 process 方法来触发 Watcher</p>
+<p>这里 process 主要就是通过 ServerCnxn 对应的 TCP 连接发送 Watcher 事件通知。</p>
+<h2 id="9-客户端回调-Watcher"><a href="#9-客户端回调-Watcher" class="headerlink" title="9. 客户端回调 Watcher"></a><strong>9. 客户端回调 Watcher</strong></h2><p>客户端 SendThread 线程接收事件通知，交由 EventThread 线程回调 Watcher。</p>
+<p>客户端的 Watcher 机制同样是一次性的，一旦被触发后，该 Watcher 就失效了。</p>
+<h2 id="10-ACL-权限控制机制"><a href="#10-ACL-权限控制机制" class="headerlink" title="10. ACL 权限控制机制"></a><strong>10. ACL 权限控制机制</strong></h2><p>UGO（User/Group/Others）</p>
+<p>目前在 Linux/Unix 文件系统中使用，也是使用最广泛的权限控制方式。是一种粗粒度的文件系统权限控制模式。</p>
+<p>ACL（Access Control List）访问控制列表</p>
+<p>包括三个方面：</p>
+<p>权限模式（Scheme）</p>
+<p>（1）IP：从 IP 地址粒度进行权限控制</p>
+<p>（2）Digest：最常用，用类似于 username:password 的权限标识来进行权限配置，便于区分不同应用来进行权限控制</p>
+<p>（3）World：最开放的权限控制方式，是一种特殊的 digest 模式，只有一个权限标识“world:anyone”</p>
+<p>（4）Super：超级用户</p>
+<p>授权对象</p>
+<p>授权对象指的是权限赋予的用户或一个指定实体，例如 IP 地址或是机器灯。</p>
+<p>权限 Permission</p>
+<p>（1）CREATE：数据节点创建权限，允许授权对象在该 Znode 下创建子节点</p>
+<p>（2）DELETE：子节点删除权限，允许授权对象删除该数据节点的子节点</p>
+<p>（3）READ：数据节点的读取权限，允许授权对象访问该数据节点并读取其数据内容或子节点列表等</p>
+<p>（4）WRITE：数据节点更新权限，允许授权对象对该数据节点进行更新操作</p>
+<p>（5）ADMIN：数据节点管理权限，允许授权对象对该数据节点进行 ACL 相关设置操作</p>
+<h2 id="11-Chroot-特性"><a href="#11-Chroot-特性" class="headerlink" title="11. Chroot 特性"></a><strong>11. Chroot 特性</strong></h2><p>3.2.0 版本后，添加了 Chroot 特性，该特性允许每个客户端为自己设置一个命名空间。如果一个客户端设置了 Chroot，那么该客户端对服务器的任何操作，都将会被限制在其自己的命名空间下。</p>
+<p>通过设置 Chroot，能够将一个客户端应用于 Zookeeper 服务端的一颗子树相对应，在那些多个应用公用一个 Zookeeper 进群的场景下，对实现不同应用间的相互隔离非常有帮助。</p>
+<h2 id="12-会话管理"><a href="#12-会话管理" class="headerlink" title="12. 会话管理"></a><strong>12. 会话管理</strong></h2><p>分桶策略：将类似的会话放在同一区块中进行管理，以便于 Zookeeper 对会话进行不同区块的隔离处理以及同一区块的统一处理。</p>
+<p>分配原则：每个会话的“下次超时时间点”（ExpirationTime）</p>
+<p>计算公式：</p>
+<p>ExpirationTime_ = currentTime + sessionTimeout</p>
+<p>ExpirationTime = (ExpirationTime_ / ExpirationInrerval + 1) *</p>
+<p>ExpirationInterval , ExpirationInterval 是指 Zookeeper 会话超时检查时间间隔，默认 tickTime</p>
+<h2 id="13-服务器角色"><a href="#13-服务器角色" class="headerlink" title="13. 服务器角色"></a><strong>13. 服务器角色</strong></h2><p>Leader</p>
+<p>（1）事务请求的唯一调度和处理者，保证集群事务处理的顺序性</p>
+<p>（2）集群内部各服务的调度者</p>
+<p>Follower</p>
+<p>（1）处理客户端的非事务请求，转发事务请求给 Leader 服务器</p>
+<p>（2）参与事务请求 Proposal 的投票</p>
+<p>（3）参与 Leader 选举投票</p>
+<p>Observer</p>
+<p>（1）3.0 版本以后引入的一个服务器角色，在不影响集群事务处理能力的基础上提升集群的非事务处理能力</p>
+<p>（2）处理客户端的非事务请求，转发事务请求给 Leader 服务器</p>
+<p>（3）不参与任何形式的投票</p>
+<h2 id="14-Zookeeper-下-Server-工作状态"><a href="#14-Zookeeper-下-Server-工作状态" class="headerlink" title="14. Zookeeper 下 Server 工作状态"></a><strong>14. Zookeeper 下 Server 工作状态</strong></h2><p>服务器具有四种状态，分别是 LOOKING、FOLLOWING、LEADING、OBSERVING。</p>
+<p>（1）LOOKING：寻 找 Leader 状态。当服务器处于该状态时，它会认为当前集群中没有 Leader，因此需要进入 Leader 选举状态。</p>
+<p>（2）FOLLOWING：跟随者状态。表明当前服务器角色是 Follower。</p>
+<p>（3）LEADING：领导者状态。表明当前服务器角色是 Leader。</p>
+<p>（4）OBSERVING：观察者状态。表明当前服务器角色是 Observer。</p>
+<h2 id="15-数据同步"><a href="#15-数据同步" class="headerlink" title="15. 数据同步"></a><strong>15. 数据同步</strong></h2><p>整个集群完成 Leader 选举之后，Learner（Follower 和 Observer 的统称）回向Leader 服务器进行注册。当 Learner 服务器想 Leader 服务器完成注册后，进入数据同步环节。</p>
+<p>数据同步流程：（均以消息传递的方式进行）</p>
+<p>Learner 向 Learder 注册</p>
+<p>数据同步</p>
+<p>同步确认</p>
+<p>Zookeeper 的数据同步通常分为四类：</p>
+<p>（1）直接差异化同步（DIFF 同步）</p>
+<p>（2）先回滚再差异化同步（TRUNC+DIFF 同步）</p>
+<p>（3）仅回滚同步（TRUNC 同步）</p>
+<p>（4）全量同步（SNAP 同步）</p>
+<p>在进行数据同步前，Leader 服务器会完成数据同步初始化：</p>
+<p>peerLastZxid：</p>
+<p>· 从 learner 服务器注册时发送的 ACKEPOCH 消息中提取 lastZxid（该Learner 服务器最后处理的 ZXID）</p>
+<p>minCommittedLog：</p>
+<p>· Leader 服务器 Proposal 缓存队列 committedLog 中最小 ZXIDmaxCommittedLog：</p>
+<p>· Leader 服务器 Proposal 缓存队列 committedLog 中最大 ZXID直接差异化同步（DIFF 同步）</p>
+<p>· 场景：peerLastZxid 介于 minCommittedLog 和 maxCommittedLog之间先回滚再差异化同步（TRUNC+DIFF 同步）</p>
+<p>· 场景：当新的 Leader 服务器发现某个 Learner 服务器包含了一条自己没有的事务记录，那么就需要让该 Learner 服务器进行事务回滚–回滚到 Leader服务器上存在的，同时也是最接近于 peerLastZxid 的 ZXID仅回滚同步（TRUNC 同步）</p>
+<p>· 场景：peerLastZxid 大于 maxCommittedLog</p>
+<p>全量同步（SNAP 同步）</p>
+<p>· 场景一：peerLastZxid 小于 minCommittedLog</p>
+<p>· 场景二：Leader 服务器上没有 Proposal 缓存队列且 peerLastZxid 不等于 lastProcessZxid</p>
+<h2 id="16-zookeeper-是如何保证事务的顺序一致性的？"><a href="#16-zookeeper-是如何保证事务的顺序一致性的？" class="headerlink" title="16. zookeeper 是如何保证事务的顺序一致性的？"></a><strong>16. zookeeper 是如何保证事务的顺序一致性的？</strong></h2><p>zookeeper 采用了全局递增的事务 Id 来标识，所有的 proposal（提议）都在被提出的时候加上了 zxid，zxid 实际上是一个 64 位的数字，高 32 位是 epoch（ 时期; 纪元; 世; 新时代）用来标识 leader 周期，如果有新的 leader 产生出来，epoch会自增，低 32 位用来递增计数。当新产生 proposal 的时候，会依据数据库的两阶段过程，首先会向其他的 server 发出事务执行请求，如果超过半数的机器都能执行并且能够成功，那么就会开始执行。</p>
+<h2 id="17-分布式集群中为什么会有-Master主节点？"><a href="#17-分布式集群中为什么会有-Master主节点？" class="headerlink" title="17. 分布式集群中为什么会有 Master主节点？"></a><strong>17. 分布式集群中为什么会有 Master主节点？</strong></h2><p>在分布式环境中，有些业务逻辑只需要集群中的某一台机器进行执行，其他的机器可以共享这个结果，这样可以大大减少重复计算，提高性能，于是就需要进行 leader 选举。</p>
+<h2 id="18-zk-节点宕机如何处理？"><a href="#18-zk-节点宕机如何处理？" class="headerlink" title="18. zk 节点宕机如何处理？"></a><strong>18. zk 节点宕机如何处理？</strong></h2><p>Zookeeper 本身也是集群，推荐配置不少于 3 个服务器。Zookeeper 自身也要保证当一个节点宕机时，其他节点会继续提供服务。</p>
+<p>如果是一个 Follower 宕机，还有 2 台服务器提供访问，因为 Zookeeper 上的数据是有多个副本的，数据并不会丢失；</p>
+<p>如果是一个 Leader 宕机，Zookeeper 会选举出新的 Leader。</p>
+<p>ZK 集群的机制是只要超过半数的节点正常，集群就能正常提供服务。只有在 ZK节点挂得太多，只剩一半或不到一半节点能工作，集群才失效。</p>
+<p>所以</p>
+<p>3 个节点的 cluster 可以挂掉 1 个节点(leader 可以得到 2 票&gt;1.5)</p>
+<p>2 个节点的 cluster 就不能挂掉任何 1 个节点了(leader 可以得到 1 票&lt;=1)</p>
+<h2 id="19-zookeeper-负载均衡和-nginx-负载均衡区别"><a href="#19-zookeeper-负载均衡和-nginx-负载均衡区别" class="headerlink" title="19. zookeeper 负载均衡和 nginx 负载均衡区别"></a><strong>19. zookeeper 负载均衡和 nginx 负载均衡区别</strong></h2><p>zk 的负载均衡是可以调控，nginx 只是能调权重，其他需要可控的都需要自己写插件；但是 nginx 的吞吐量比 zk 大很多，应该说按业务选择用哪种方式。</p>
+<h2 id="20-Zookeeper-有哪几种几种部署模式？"><a href="#20-Zookeeper-有哪几种几种部署模式？" class="headerlink" title="20. Zookeeper 有哪几种几种部署模式？"></a><strong>20. Zookeeper 有哪几种几种部署模式？</strong></h2><p>Zookeeper 有三种部署模式：</p>
+<ol>
+<li>单机部署：一台集群上运行；</li>
+<li>集群部署：多台集群运行；</li>
+<li>伪集群部署：一台集群启动多个 Zookeeper 实例运行。</li>
+</ol>
+<h2 id="21-集群最少要几台机器，集群规则是怎样的？集群中有-3-台服务器，其中一个节点宕机，这个时候-Zookeeper-还可以使用吗？"><a href="#21-集群最少要几台机器，集群规则是怎样的？集群中有-3-台服务器，其中一个节点宕机，这个时候-Zookeeper-还可以使用吗？" class="headerlink" title="21. 集群最少要几台机器，集群规则是怎样的？集群中有 3 台服务器，其中一个节点宕机，这个时候 Zookeeper 还可以使用吗？"></a><strong>21. 集群最少要几台机器，集群规则是怎样的？集群中有 3 台服务器，其中一个节点宕机，这个时候 Zookeeper 还可以使用吗？</strong></h2><p>集群规则为 2N+1 台，N&gt;0，即 3 台。可以继续使用，单数服务器只要没超过一半的服务器宕机就可以继续使用。</p>
+<h2 id="22-集群支持动态添加机器吗？"><a href="#22-集群支持动态添加机器吗？" class="headerlink" title="22. 集群支持动态添加机器吗？"></a><strong>22. 集群支持动态添加机器吗？</strong></h2><p>其实就是水平扩容了，Zookeeper 在这方面不太好。两种方式：</p>
+<p>全部重启：关闭所有 Zookeeper 服务，修改配置之后启动。不影响之前客户端的会话。</p>
+<p>逐个重启：在过半存活即可用的原则下，一台机器重启不影响整个集群对外提供服务。这是比较常用的方式。</p>
+<p>3.5 版本开始支持动态扩容。</p>
+<h2 id="23-Zookeeper-对节点的-watch-监听通知是永久的吗？为什么不是永久的"><a href="#23-Zookeeper-对节点的-watch-监听通知是永久的吗？为什么不是永久的" class="headerlink" title="23. Zookeeper 对节点的 watch 监听通知是永久的吗？为什么不是永久的?"></a><strong>23. Zookeeper 对节点的 watch 监听通知是永久的吗？为什么不是永久的?</strong></h2><p>不是。官方声明：一个 Watch 事件是一个一次性的触发器，当被设置了 Watch的数据发生了改变的时候，则服务器将这个改变发送给设置了 Watch 的客户端，以便通知它们。</p>
+<p>为什么不是永久的，举个例子，如果服务端变动频繁，而监听的客户端很多情况下，每次变动都要通知到所有的客户端，给网络和服务器造成很大压力。</p>
+<p>一般是客户端执行 getData(“/节点 A”,true)，如果节点 A 发生了变更或删除，客户端会得到它的 watch 事件，但是在之后节点 A 又发生了变更，而客户端又没有设置 watch 事件，就不再给客户端发送。</p>
+<p>在实际应用中，很多情况下，我们的客户端不需要知道服务端的每一次变动，我只要最新的数据即可。</p>
+<h2 id="24-Zookeeper-的-java-客户端都有哪些？"><a href="#24-Zookeeper-的-java-客户端都有哪些？" class="headerlink" title="24. Zookeeper 的 java 客户端都有哪些？"></a><strong>24. Zookeeper 的 java 客户端都有哪些？</strong></h2><p>java 客户端：zk 自带的 zkclient 及 Apache 开源的 Curator。</p>
+<h2 id="25-chubby-是什么，和-zookeeper-比你怎么看？"><a href="#25-chubby-是什么，和-zookeeper-比你怎么看？" class="headerlink" title="25. chubby 是什么，和 zookeeper 比你怎么看？"></a><strong>25. chubby 是什么，和 zookeeper 比你怎么看？</strong></h2><p>chubby 是 google 的，完全实现 paxos 算法，不开源。zookeeper 是 chubby的开源实现，使用 zab 协议，paxos 算法的变种。</p>
+<h2 id="26-说几个-zookeeper-常用的命令。"><a href="#26-说几个-zookeeper-常用的命令。" class="headerlink" title="26. 说几个 zookeeper 常用的命令。"></a><strong>26. 说几个 zookeeper 常用的命令。</strong></h2><p>常用命令：ls get set create delete 等。</p>
+<h2 id="27-ZAB-和-Paxos-算法的联系与区别？"><a href="#27-ZAB-和-Paxos-算法的联系与区别？" class="headerlink" title="27. ZAB 和 Paxos 算法的联系与区别？"></a><strong>27. ZAB 和 Paxos 算法的联系与区别？</strong></h2><p>相同点：</p>
+<p>（1）两者都存在一个类似于 Leader 进程的角色，由其负责协调多个 Follower 进程的运行</p>
+<p>（2）Leader 进程都会等待超过半数的 Follower 做出正确的反馈后，才会将一个提案进行提交</p>
+<p>（3）ZAB 协议中，每个 Proposal 中都包含一个 epoch 值来代表当前的 Leader周期，Paxos 中名字为 Ballot</p>
+<p>不同点：</p>
+<p>ZAB 用来构建高可用的分布式数据主备系统（Zookeeper），Paxos 是用来构建分布式一致性状态机系统。</p>
+<h2 id="28-Zookeeper-的典型应用场景"><a href="#28-Zookeeper-的典型应用场景" class="headerlink" title="28. Zookeeper 的典型应用场景"></a><strong>28. Zookeeper 的典型应用场景</strong></h2><p>Zookeeper 是一个典型的发布/订阅模式的分布式数据管理与协调框架，开发人员可以使用它来进行分布式数据的发布和订阅。</p>
+<p>通过对 Zookeeper 中丰富的数据节点进行交叉使用，配合 Watcher 事件通知机制，可以非常方便的构建一系列分布式应用中年都会涉及的核心功能，如：</p>
+<p>（1）数据发布/订阅</p>
+<p>（2）负载均衡</p>
+<p>（3）命名服务</p>
+<p>（4）分布式协调/通知</p>
+<p>（5）集群管理</p>
+<p>（6）Master 选举</p>
+<p>（7）分布式锁</p>
+<p>（8）分布式队列</p>
+<p><strong>数据发布/订阅</strong></p>
+<p>介绍</p>
+<p>数据发布/订阅系统，即所谓的配置中心，顾名思义就是发布者发布数据供订阅者进行数据订阅。</p>
+<p>目的</p>
+<p>动态获取数据（配置信息）</p>
+<p>实现数据（配置信息）的集中式管理和数据的动态更新</p>
+<p>设计模式</p>
+<p>Push 模式</p>
+<p>Pull 模式</p>
+<p>数据（配置信息）特性</p>
+<p>（1）数据量通常比较小</p>
+<p>（2）数据内容在运行时会发生动态更新</p>
+<p>（3）集群中各机器共享，配置一致</p>
+<p>如：机器列表信息、运行时开关配置、数据库配置信息等</p>
+<p>基于 Zookeeper 的实现方式</p>
+<p>· 数据存储：将数据（配置信息）存储到 Zookeeper 上的一个数据节点</p>
+<p>· 数据获取：应用在启动初始化节点从 Zookeeper 数据节点读取数据，并在该节点上注册一个数据变更 Watcher</p>
+<p>· 数据变更：当变更数据时，更新 Zookeeper 对应节点数据，Zookeeper会将数据变更通知发到各客户端，客户端接到通知后重新读取变更后的数据即可。</p>
+<p><strong>负载均衡</strong></p>
+<p>zk 的命名服务</p>
+<p>命名服务是指通过指定的名字来获取资源或者服务的地址，利用 zk 创建一个全局的路径，这个路径就可以作为一个名字，指向集群中的集群，提供的服务的地址，或者一个远程的对象等等。</p>
+<p><strong>分布式通知和协调</strong></p>
+<p>对于系统调度来说：操作人员发送通知实际是通过控制台改变某个节点的状态，然后 zk 将这些变化发送给注册了这个节点的 watcher 的所有客户端。</p>
+<p>对于执行情况汇报：每个工作进程都在某个目录下创建一个临时节点。并携带工作的进度数据，这样汇总的进程可以监控目录子节点的变化获得工作进度的实时的全局情况。</p>
+<p><strong>zk 的命名服务（文件系统）</strong></p>
+<p>命名服务是指通过指定的名字来获取资源或者服务的地址，利用 zk 创建一个全局的路径，即是唯一的路径，这个路径就可以作为一个名字，指向集群中的集群，提供的服务的地址，或者一个远程的对象等等。</p>
+<p><strong>zk 的配置管理（文件系统、通知机制）</strong></p>
+<p>程序分布式的部署在不同的机器上，将程序的配置信息放在 zk 的 znode 下，当有配置发生改变时，也就是 znode 发生变化时，可以通过改变 zk 中某个目录节点的内容，利用 watcher 通知给各个客户端，从而更改配置。</p>
+<p><strong>Zookeeper 集群管理（文件系统、通知机制）</strong></p>
+<p>所谓集群管理无在乎两点：是否有机器退出和加入、选举 master。</p>
+<p>对于第一点，所有机器约定在父目录下创建临时目录节点，然后监听父目录节点</p>
+<p>的子节点变化消息。一旦有机器挂掉，该机器与 zookeeper 的连接断开，其所创建的临时目录节点被删除，所有其他机器都收到通知：某个兄弟目录被删除，于是，所有人都知道：它上船了。</p>
+<p>新机器加入也是类似，所有机器收到通知：新兄弟目录加入，highcount 又有了，对于第二点，我们稍微改变一下，所有机器创建临时顺序编号目录节点，每次选取编号最小的机器作为 master 就好。</p>
+<p><strong>Zookeeper 分布式锁（文件系统、通知机制）</strong></p>
+<p>有了 zookeeper 的一致性文件系统，锁的问题变得容易。锁服务可以分为两类，一个是保持独占，另一个是控制时序。</p>
+<p>对于第一类，我们将 zookeeper 上的一个 znode 看作是一把锁，通过 createznode的方式来实现。所有客户端都去创建 /distribute_lock 节点，最终成功创建的那个客户端也即拥有了这把锁。用完删除掉自己创建的 distribute_lock 节点就释放出锁。</p>
+<p>对于第二类， /distribute_lock 已经预先存在，所有客户端在它下面创建临时顺序编号目录节点，和选 master 一样，编号最小的获得锁，用完删除，依次方便。</p>
+<p>Zookeeper 队列管理（文件系统、通知机制）</p>
+<p>两种类型的队列：</p>
+<p>（1）同步队列，当一个队列的成员都聚齐时，这个队列才可用，否则一直等待所有成员到达。</p>
+<p>（2）队列按照 FIFO 方式进行入队和出队操作。</p>
+<p>第一类，在约定目录下创建临时目录节点，监听节点数目是否是我们要求的数目。</p>
+<p>第二类，和分布式锁服务中的控制时序场景基本原理一致，入列有编号，出列按编号。在特定的目录下创建 PERSISTENT_SEQUENTIAL 节点，创建成功时Watcher 通知等待的队列，队列删除序列号最小的节点用以消费。此场景下Zookeeper 的 znode 用于消息存储，znode 存储的数据就是消息队列中的消息内容，SEQUENTIAL 序列号就是消息的编号，按序取出即可。由于创建的节点是持久化的，所以不必担心队列消息的丢失问题。</p>
+<h2 id="29-Zookeeper-都有哪些功能？"><a href="#29-Zookeeper-都有哪些功能？" class="headerlink" title="29. Zookeeper 都有哪些功能？"></a><strong>29. Zookeeper 都有哪些功能？</strong></h2><ol>
+<li>集群管理：监控节点存活状态、运行请求等；</li>
+<li>主节点选举：主节点挂掉了之后可以从备用的节点开始新一轮选主，主节点选举说的就是这个选举的过程，使用 Zookeeper 可以协助完成这个过程；</li>
+<li>分布式锁：Zookeeper 提供两种锁：独占锁、共享锁。独占锁即一次只能有一个线程使用资源，共享锁是读锁共享，读写互斥，即可以有多线线程同时读同一个资源，如果要使用写锁也只能有一个线程使用。Zookeeper 可以对分布式锁进行控制。</li>
+<li>命名服务：在分布式系统中，通过使用命名服务，客户端应用能够根据指定名字来获取资源或服务的地址，提供者等信息。</li>
+</ol>
+<h2 id="30-说一下-Zookeeper-的通知机制？"><a href="#30-说一下-Zookeeper-的通知机制？" class="headerlink" title="30. 说一下 Zookeeper 的通知机制？"></a><strong>30. 说一下 Zookeeper 的通知机制？</strong></h2><p>client 端会对某个 znode 建立一个 watcher 事件，当该 znode 发生变化时，这些 client 会收到 zk 的通知，然后 client 可以根据 znode 变化来做出业务上的改变等。</p>
+<h2 id="31-Zookeeper-和-Dubbo-的关系？"><a href="#31-Zookeeper-和-Dubbo-的关系？" class="headerlink" title="31. Zookeeper 和 Dubbo 的关系？"></a><strong>31. Zookeeper 和 Dubbo 的关系？</strong></h2><p>Zookeeper的作用：</p>
+<p>zookeeper用来注册服务和进行负载均衡，哪一个服务由哪一个机器来提供必需让调用者知道，简单来说就是ip地址和服务名称的对应关系。当然也可以通过硬编码的方式把这种对应关系在调用方业务代码中实现，但是如果提供服务的机器挂掉调用者无法知晓，如果不更改代码会继续请求挂掉的机器提供服务。zookeeper通过心跳机制可以检测挂掉的机器并将挂掉机器的ip和服务对应关系从列表中删除。至于支持高并发，简单来说就是横向扩展，在不更改代码的情况通过添加机器来提高运算能力。通过添加新的机器向zookeeper注册服务，服务的提供者多了能服务的客户就多了。</p>
+<p>dubbo：</p>
+<p>是管理中间层的工具，在业务层到数据仓库间有非常多服务的接入和服务提供者需要调度，dubbo提供一个框架解决这个问题。</p>
+<p>注意这里的dubbo只是一个框架，至于你架子上放什么是完全取决于你的，就像一个汽车骨架，你需要配你的轮子引擎。这个框架中要完成调度必须要有一个分布式的注册中心，储存所有服务的元数据，你可以用zk，也可以用别的，只是大家都用zk。</p>
+<p>zookeeper和dubbo的关系：</p>
+<p>Dubbo 的将注册中心进行抽象，它可以外接不同的存储媒介给注册中心提供服务，有 ZooKeeper，Memcached，Redis 等。</p>
+<p>引入了 ZooKeeper 作为存储媒介，也就把 ZooKeeper 的特性引进来。首先是负载均衡，单注册中心的承载能力是有限的，在流量达到一定程度的时 候就需要分流，负载均衡就是为了分流而存在的，一个 ZooKeeper 群配合相应的 Web 应用就可以很容易达到负载均衡；资源同步，单单有负载均衡还不 够，节点之间的数据和资源需要同步，ZooKeeper 集群就天然具备有这样的功能；命名服务，将树状结构用于维护全局的服务地址列表，服务提供者在启动 的时候，向 ZooKeeper 上的指定节点 /dubbo/${serviceName}/providers 目录下写入自己的 URL 地址，这个操作就完成了服务的发布。 其他特性还有 Mast 选举，分布式锁等。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj7cwqh2laj30so0ggka4.jpg" alt="image-20200929112431231"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/29/java/SpringCloud%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3422,337 +3720,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://halomzh.github.io/2020/09/27/java/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88JVM%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="halomzh">
-      <meta itemprop="description" content="学习记录">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="halomzh.github.io">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/27/java/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88JVM%EF%BC%89/" class="post-title-link" itemprop="url">Java虚拟机（JVM）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-09-27 22:09:02" itemprop="dateCreated datePublished" datetime="2020-09-27T22:09:02+08:00">2020-09-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 01:53:56" itemprop="dateModified" datetime="2020-10-01T01:53:56+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">Java概览</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Java虚拟机（JVM）"><a href="#Java虚拟机（JVM）" class="headerlink" title="Java虚拟机（JVM）"></a>Java虚拟机（JVM）</h1><h2 id="Java内存区域"><a href="#Java内存区域" class="headerlink" title="Java内存区域"></a><strong>Java内存区域</strong></h2><h3 id="说一下-JVM-的主要组成部分及其作用？"><a href="#说一下-JVM-的主要组成部分及其作用？" class="headerlink" title="说一下 JVM 的主要组成部分及其作用？"></a><strong>说一下 JVM 的主要组成部分及其作用？</strong></h3><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kdb8px1j30y90jnjxw.jpg" alt="FA5BD499D5D34924A16D24765028A216"></p>
-<p>JVM包含两个子系统和两个组件，两个子系统为Class loader(类装载)、Execution engine(执行引擎)；两个组件为Runtime data area(运行时数据区)、Native Interface(本地接口)。</p>
-<ul>
-<li>Class loader(类装载)：根据给定的全限定名类名(如：java.lang.Object)来装载class文件到Runtime data area中的method area。</li>
-<li>Execution engine（执行引擎）：执行classes中的指令。</li>
-<li>Native Interface(本地接口)：与native libraries交互，是其它编程语言交互的接口。</li>
-<li>Runtime data area(运行时数据区域)：这就是我们常说的JVM的内存。</li>
-</ul>
-<p><strong>作用</strong> ：首先通过编译器把 Java 代码转换成字节码，类加载器（ClassLoader）再把字节码加载到内存中，将其放在运行时数据区（Runtime data area）的方法区内，而字节码文件只是 JVM 的一套指令集规范，并不能直接交给底层操作系统去执行，因此需要特定的命令解析器执行引擎（Execution Engine），将字节码翻译成底层系统指令，再交由 CPU 去执行，而这个过程中需要调用其他语言的本地库接口（Native Interface）来实现整个程序的功能。</p>
-<h3 id="下面是Java程序运行机制详细说明"><a href="#下面是Java程序运行机制详细说明" class="headerlink" title="下面是Java程序运行机制详细说明"></a><strong>下面是Java程序运行机制详细说明</strong></h3><p>Java程序运行机制步骤</p>
-<ul>
-<li>首先利用IDE集成开发工具编写Java源代码，源文件的后缀为.java；</li>
-<li>再利用编译器(javac命令)将源代码编译成字节码文件，字节码文件的后缀名为.class；</li>
-<li>运行字节码的工作是由解释器(java命令)来完成的。</li>
-</ul>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kf6xm08j30hs0asjrt.jpg" alt="F80D55D74C1648BCA49BA9F03423F082"></p>
-<p>从上图可以看，java文件通过编译器变成了.class文件，接下来类加载器又将这些.class文件加载到JVM中。</p>
-<p>其实可以一句话来解释：类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个 java.lang.Class对象，用来封装类在方法区内的数据结构。</p>
-<h3 id="说一下-JVM-运行时数据区"><a href="#说一下-JVM-运行时数据区" class="headerlink" title="说一下 JVM 运行时数据区"></a><strong>说一下 JVM 运行时数据区</strong></h3><p><strong>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存区域划分为若干个不同的数据区域</strong>。这些区域都有各自的用途，以及创建和销毁的时间，有些区域随着虚拟机进程的启动而存在，有些区域则是依赖线程的启动和结束而建立和销毁。Java 虚拟机所管理的内存被划分为如下几个区域：</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kfq40wej30zr0ottfb.jpg" alt="F516335DE2B14C6EB43A1CA01D00928B"></p>
-<p>不同虚拟机的运行时数据区可能略微有所不同，但都会遵从 Java 虚拟机规范， Java 虚拟机规范规定的区域分为以下 5 个部分：</p>
-<ul>
-<li>程序计数器（Program Counter Register）：当前线程所执行的字节码的行号指示器，字节码解析器的工作是通过改变这个计数器的值，来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能，都需要依赖这个计数器来完成；</li>
-<li>Java 虚拟机栈（Java Virtual Machine Stacks）：用于存储局部变量表、操作数栈、动态链接、方法出口等信息；</li>
-<li>本地方法栈（Native Method Stack）：与虚拟机栈的作用是一样的，只不过虚拟机栈是服务 Java 方法的，而本地方法栈是为虚拟机调用 Native 方法服务的；</li>
-<li>Java 堆（Java Heap）：Java 虚拟机中内存最大的一块，是被所有线程共享的，几乎所有的对象实例都在这里分配内存；</li>
-<li>方法区（Methed Area）：用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译后的代码等数据。</li>
-</ul>
-<h3 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a><strong>深拷贝和浅拷贝</strong></h3><p>浅拷贝（shallowCopy）只是增加了一个指针指向已存在的内存地址，</p>
-<p>深拷贝（deepCopy）是增加了一个指针并且申请了一个新的内存，使这个增加的指针指向这个新的内存，</p>
-<p>使用深拷贝的情况下，释放内存的时候不会因为出现浅拷贝时释放同一个内存的错误。</p>
-<p>浅复制：仅仅是指向被复制的内存地址，如果原地址发生改变，那么浅复制出来的对象也会相应的改变。</p>
-<p>深复制：在计算机中开辟一块<strong>新的内存地址</strong>用于存放复制的对象。</p>
-<h3 id="说一下堆栈的区别？"><a href="#说一下堆栈的区别？" class="headerlink" title="说一下堆栈的区别？"></a><strong>说一下堆栈的区别？</strong></h3><p>物理地址</p>
-<p>堆的物理地址分配对对象是不连续的。因此性能慢些。在GC的时候也要考虑到不连续的分配，所以有各种算法。比如，标记-消除，复制，标记-压缩，分代（即新生代使用复制算法，老年代使用标记——压缩）</p>
-<p>栈使用的是数据结构中的栈，先进后出的原则，物理地址分配是连续的。所以性能快。</p>
-<p>内存分别</p>
-<p>堆因为是不连续的，所以分配的内存是在运行期确认的，因此大小不固定。一般堆大小远远大于栈。</p>
-<p>栈是连续的，所以分配的内存大小要在编译期就确认，大小是固定的。</p>
-<p>存放的内容</p>
-<p>堆存放的是对象的实例和数组。因此该区更关注的是数据的存储</p>
-<p>栈存放：局部变量，操作数栈，返回结果。该区更关注的是程序方法的执行。</p>
-<p>PS：</p>
-<ol>
-<li>静态变量放在方法区</li>
-<li>静态的对象还是放在堆。</li>
-</ol>
-<p>程序的可见度</p>
-<p>堆对于整个应用程序都是共享、可见的。</p>
-<p>栈只对于线程是可见的。所以也是线程私有。他的生命周期和线程相同。</p>
-<h3 id="队列和栈是什么？有什么区别？"><a href="#队列和栈是什么？有什么区别？" class="headerlink" title="队列和栈是什么？有什么区别？"></a><strong>队列和栈是什么？有什么区别？</strong></h3><p>队列和栈都是被用来预存储数据的。</p>
-<ul>
-<li>操作的名称不同。队列的插入称为入队，队列的删除称为出队。栈的插入称为进栈，栈的删除称为出栈。</li>
-<li>可操作的方式不同。队列是在队尾入队，队头出队，即两边都可操作。而栈的进栈和出栈都是在栈顶进行的，无法对栈底直接进行操作。</li>
-<li>操作的方法不同。队列是先进先出（FIFO），即队列的修改是依先进先出的原则进行的。新来的成员总是加入队尾（不能从中间插入），每次离开的成员总是队列头上（不允许中途离队）。而栈为后进先出（LIFO）,即每次删除（出栈）的总是当前栈中最新的元素，即最后插入（进栈）的元素，而最先插入的被放在栈的底部，要到最后才能删除。</li>
-</ul>
-<h2 id="HotSpot虚拟机对象探秘"><a href="#HotSpot虚拟机对象探秘" class="headerlink" title="HotSpot虚拟机对象探秘"></a><strong>HotSpot虚拟机对象探秘</strong></h2><h3 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a><strong>对象的创建</strong></h3><p>说到对象的创建，首先让我们看看 Java 中提供的几种对象创建方式：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Header</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>使用new关键字</td>
-<td>调用了构造函数</td>
-</tr>
-<tr>
-<td>使用Class的newInstance方法</td>
-<td>调用了构造函数</td>
-</tr>
-<tr>
-<td>使用Constructor类的newInstance方法</td>
-<td>调用了构造函数</td>
-</tr>
-<tr>
-<td>使用clone方法</td>
-<td>没有调用构造函数</td>
-</tr>
-<tr>
-<td>使用反序列化</td>
-<td>没有调用构造函数</td>
-</tr>
-</tbody></table>
-<p>下面是对象创建的主要流程:</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5khdccjlj30un0amn3c.jpg" alt="4D063533E1A34DCBA86CB1CABCA47932"></p>
-<p>虚拟机遇到一条new指令时，先检查常量池是否已经加载相应的类，如果没有，必须先执行相应的类加载。类加载通过后，接下来分配内存。若Java堆中内存是绝对规整的，使用“指针碰撞“方式分配内存；如果不是规整的，就从空闲列表中分配，叫做”空闲列表“方式。划分内存时还需要考虑一个问题-并发，也有两种方式: CAS同步处理，或者本地线程分配缓冲(Thread Local Allocation Buffer, TLAB)。然后内存空间初始化操作，接着是做一些必要的对象设置(元信息、哈希码…)，最后执行方法。</p>
-<h3 id="为对象分配内存"><a href="#为对象分配内存" class="headerlink" title="为对象分配内存"></a><strong>为对象分配内存</strong></h3><p>类加载完成后，接着会在Java堆中划分一块内存分配给对象。内存分配根据Java堆是否规整，有两种方式：</p>
-<ul>
-<li>指针碰撞：如果Java堆的内存是规整，即所有用过的内存放在一边，而空闲的的放在另一边。分配内存时将位于中间的指针指示器向空闲的内存移动一段与对象大小相等的距离，这样便完成分配内存工作。</li>
-<li>空闲列表：如果Java堆的内存不是规整的，则需要由虚拟机维护一个列表来记录那些内存是可用的，这样在分配的时候可以从列表中查询到足够大的内存分配给对象，并在分配后更新列表记录。</li>
-</ul>
-<p>选择哪种分配方式是由 Java 堆是否规整来决定的，而 Java 堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5khx2c8wj317p0bqdqy.jpg" alt="4FEFF8DFA92B41CB96572F8897907DE8"></p>
-<h3 id="处理并发安全问题"><a href="#处理并发安全问题" class="headerlink" title="处理并发安全问题"></a><strong>处理并发安全问题</strong></h3><p>对象的创建在虚拟机中是一个非常频繁的行为，哪怕只是修改一个指针所指向的位置，在并发情况下也是不安全的，可能出现正在给对象 A 分配内存，指针还没来得及修改，对象 B 又同时使用了原来的指针来分配内存的情况。解决这个问题有两种方案：</p>
-<ul>
-<li>对分配内存空间的动作进行同步处理（采用 CAS + 失败重试来保障更新操作的原子性）；</li>
-<li>把内存分配的动作按照线程划分在不同的空间之中进行，即每个线程在 Java 堆中预先分配一小块内存，称为本地线程分配缓冲（Thread Local Allocation Buffer, TLAB）。哪个线程要分配内存，就在哪个线程的 TLAB 上分配。只有 TLAB 用完并分配新的 TLAB 时，才需要同步锁。通过-XX:+/-UserTLAB参数来设定虚拟机是否使用TLAB。</li>
-</ul>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kiiiy67j317r09rtgt.jpg" alt="D27E36648640464E8257761FD4A14AC5"></p>
-<h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a><strong>对象的访问定位</strong></h3><p>Java程序需要通过 JVM 栈上的引用访问堆中的具体对象。对象的访问方式取决于 JVM 虚拟机的实现。目前主流的访问方式有 <strong>句柄</strong> 和 <strong>直接指针</strong> 两种方式。</p>
-<p><strong>指针：</strong> 指向对象，代表一个对象在内存中的起始地址。</p>
-<p><strong>句柄：</strong> 可以理解为指向指针的指针，维护着对象的指针。句柄不直接指向对象，而是指向对象的指针（句柄不发生变化，指向固定内存地址），再由对象的指针指向对象的真实内存地址。</p>
-<h4 id="句柄访问"><a href="#句柄访问" class="headerlink" title="句柄访问"></a><strong>句柄访问</strong></h4><p>Java堆中划分出一块内存来作为<strong>句柄池</strong>，引用中存储对象的<strong>句柄地址</strong>，而句柄中包含了<strong>对象实例数据</strong>与<strong>对象类型数据</strong>各自的<strong>具体地址</strong>信息，具体构造如下图所示：</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kj1uvywj30qm0f2775.jpg" alt="4A48F20793CB461A86B42B12AE4F7251"></p>
-<p><strong>优势</strong>：引用中存储的是<strong>稳定</strong>的句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变<strong>句柄中</strong>的<strong>实例数据指针</strong>，而<strong>引用</strong>本身不需要修改。</p>
-<h4 id="直接指针"><a href="#直接指针" class="headerlink" title="直接指针"></a><strong>直接指针</strong></h4><p>如果使用<strong>直接指针</strong>访问，<strong>引用</strong> 中存储的直接就是<strong>对象地址</strong>，那么Java堆对象内部的布局中就必须考虑如何放置访问<strong>类型数据</strong>的相关信息。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kjqidhdj30qn0ex0v4.jpg" alt="EC6B5BFFE0B44C6994AC32D1D62BB990"></p>
-<p><strong>优势</strong>：速度更<strong>快</strong>，节省了<strong>一次指针定位</strong>的时间开销。由于对象的访问在Java中非常频繁，因此这类开销积少成多后也是非常可观的执行成本。HotSpot 中采用的就是这种方式。</p>
-<h2 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a><strong>内存溢出异常</strong></h2><h3 id="Java会存在内存泄漏吗？请简单描述"><a href="#Java会存在内存泄漏吗？请简单描述" class="headerlink" title="Java会存在内存泄漏吗？请简单描述"></a><strong>Java会存在内存泄漏吗？请简单描述</strong></h3><p>内存泄漏是指不再被使用的对象或者变量一直被占据在内存中。理论上来说，Java是有GC垃圾回收机制的，也就是说，不再被使用的对象，会被GC自动回收掉，自动从内存中清除。</p>
-<p>但是，即使这样，Java也还是存在着内存泄漏的情况，java导致内存泄露的原因很明确：长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。</p>
-<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a><strong>垃圾收集器</strong></h2><h3 id="简述Java垃圾回收机制"><a href="#简述Java垃圾回收机制" class="headerlink" title="简述Java垃圾回收机制"></a><strong>简述Java垃圾回收机制</strong></h3><p>在java中，程序员是不需要显示的去释放一个对象的内存的，而是由虚拟机自行执行。在JVM中，有一个垃圾回收线程，它是低优先级的，在正常情况下是不会执行的，只有在虚拟机空闲或者当前堆内存不足时，才会触发执行，扫面那些没有被任何引用的对象，并将它们添加到要回收的集合中，进行回收。</p>
-<h3 id="GC是什么？为什么要GC"><a href="#GC是什么？为什么要GC" class="headerlink" title="GC是什么？为什么要GC"></a><strong>GC是什么？为什么要GC</strong></h3><p>GC 是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存</p>
-<p>回收会导致程序或系统的不稳定甚至崩溃，Java 提供的 GC 功能可以自动监测对象是否超过作用域从而达到自动</p>
-<p>回收内存的目的，Java 语言没有提供释放已分配内存的显示操作方法。</p>
-<h3 id="垃圾回收的优点和原理。并考虑2种回收机制"><a href="#垃圾回收的优点和原理。并考虑2种回收机制" class="headerlink" title="垃圾回收的优点和原理。并考虑2种回收机制"></a><strong>垃圾回收的优点和原理。并考虑2种回收机制</strong></h3><p>java语言最显著的特点就是引入了垃圾回收机制，它使java程序员在编写程序时不再考虑内存管理的问题。</p>
-<p>由于有这个垃圾回收机制，java中的对象不再有“作用域”的概念，只有引用的对象才有“作用域”。</p>
-<p>垃圾回收机制有效的防止了内存泄露，可以有效的使用可使用的内存。</p>
-<p>垃圾回收器通常作为一个单独的低级别的线程运行，在不可预知的情况下对内存堆中已经死亡的或很长时间没有用过的对象进行清除和回收。</p>
-<p>程序员不能实时的对某个对象或所有对象调用垃圾回收器进行垃圾回收。</p>
-<p>垃圾回收有分代复制垃圾回收、标记垃圾回收、增量垃圾回收。</p>
-<h3 id="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"><a href="#垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？" class="headerlink" title="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"></a><strong>垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？</strong></h3><p>对于GC来说，当程序员创建对象时，GC就开始监控这个对象的地址、大小以及使用情况。</p>
-<p>通常，GC采用有向图的方式记录和管理堆(heap)中的所有对象。通过这种方式确定哪些对象是”可达的”，哪些对象是”不可达的”。当GC确定一些对象为”不可达”时，GC就有责任回收这些内存空间。</p>
-<p>可以。程序员可以手动执行System.gc()，通知GC运行，但是Java语言规范并不保证GC一定会执行。</p>
-<h3 id="Java-中都有哪些引用类型？"><a href="#Java-中都有哪些引用类型？" class="headerlink" title="Java 中都有哪些引用类型？"></a><strong>Java 中都有哪些引用类型？</strong></h3><ul>
-<li>强引用：发生 gc 的时候不会被回收。</li>
-<li>软引用：有用但不是必须的对象，在发生内存溢出之前会被回收。</li>
-<li>弱引用：有用但不是必须的对象，在下一次GC时会被回收。</li>
-<li>虚引用（幽灵引用/幻影引用）：无法通过虚引用获得对象，用 PhantomReference 实现虚引用，虚引用的用途是在 gc 时返回一个通知。</li>
-</ul>
-<h3 id="怎么判断对象是否可以被回收？"><a href="#怎么判断对象是否可以被回收？" class="headerlink" title="怎么判断对象是否可以被回收？"></a><strong>怎么判断对象是否可以被回收？</strong></h3><p>垃圾收集器在做垃圾回收的时候，首先需要判定的就是哪些内存是需要被回收的，哪些对象是「存活」的，是不可以被回收的；哪些对象已经「死掉」了，需要被回收。</p>
-<p>一般有两种方法来判断：</p>
-<ul>
-<li>引用计数器法：为每个对象创建一个引用计数，有对象引用时计数器 +1，引用被释放时计数 -1，当计数器为 0 时就可以被回收。它有一个缺点不能解决循环引用的问题；</li>
-<li>可达性分析算法：从 GC Roots 开始向下搜索，搜索所走过的路径称为引用链。当一个对象到 GC Roots 没有任何引用链相连时，则证明此对象是可以被回收的。</li>
-</ul>
-<h3 id="在Java中，对象什么时候可以被垃圾回收"><a href="#在Java中，对象什么时候可以被垃圾回收" class="headerlink" title="在Java中，对象什么时候可以被垃圾回收"></a><strong>在Java中，对象什么时候可以被垃圾回收</strong></h3><p>当对象对当前使用这个对象的应用程序变得不可触及的时候，这个对象就可以被回收了。</p>
-<p>垃圾回收不会发生在永久代，如果永久代满了或者是超过了临界值，会触发完全垃圾回收(Full GC)。如果你仔细查看垃圾收集器的输出信息，就会发现永久代也是被回收的。这就是为什么正确的永久代大小对避免Full GC是非常重要的原因。</p>
-<h3 id="JVM中的永久代中会发生垃圾回收吗"><a href="#JVM中的永久代中会发生垃圾回收吗" class="headerlink" title="JVM中的永久代中会发生垃圾回收吗"></a><strong>JVM中的永久代中会发生垃圾回收吗</strong></h3><p>垃圾回收不会发生在永久代，如果永久代满了或者是超过了临界值，会触发完全垃圾回收(Full GC)。如果你仔细查看垃圾收集器的输出信息，就会发现永久代也是被回收的。这就是为什么正确的永久代大小对避免Full GC是非常重要的原因。请参考下Java8：从永久代到元数据区</p>
-<p>(译者注：Java8中已经移除了永久代，新加了一个叫做元数据区的native内存区)</p>
-<h3 id="说一下-JVM-有哪些垃圾回收算法？"><a href="#说一下-JVM-有哪些垃圾回收算法？" class="headerlink" title="说一下 JVM 有哪些垃圾回收算法？"></a><strong>说一下 JVM 有哪些垃圾回收算法？</strong></h3><ul>
-<li>标记-清除算法：标记无用对象，然后进行清除回收。缺点：效率不高，无法清除垃圾碎片。</li>
-<li>复制算法：按照容量划分二个大小相等的内存区域，当一块用完的时候将活着的对象复制到另一块上，然后再把已使用的内存空间一次清理掉。缺点：内存使用率不高，只有原来的一半。</li>
-<li>标记-整理算法：标记无用对象，让所有存活的对象都向一端移动，然后直接清除掉端边界以外的内存。</li>
-<li>分代算法：根据对象存活周期的不同将内存划分为几块，一般是新生代和老年代，新生代基本采用复制算法，老年代采用标记整理算法。</li>
-</ul>
-<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a><strong>标记-清除算法</strong></h3><p>标记无用对象，然后进行清除回收。</p>
-<p>标记-清除算法（Mark-Sweep）是一种常见的基础垃圾收集算法，它将垃圾收集分为两个阶段：</p>
-<ul>
-<li>标记阶段：标记出可以回收的对象。</li>
-<li>清除阶段：回收被标记的对象所占用的空间。</li>
-</ul>
-<p>标记-清除算法之所以是基础的，是因为后面讲到的垃圾收集算法都是在此算法的基础上进行改进的。</p>
-<p><strong>优点</strong>：实现简单，不需要对象进行移动。</p>
-<p><strong>缺点</strong>：标记、清除过程效率低，产生大量不连续的内存碎片，提高了垃圾回收的频率。</p>
-<p>标记-清除算法的执行的过程如下图所示</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kkihd33j30s00f1ab9.jpg" alt="8F3D835351414F329D7A97E25685EAAD"></p>
-<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a><strong>复制算法</strong></h3><p>为了解决标记-清除算法的效率不高的问题，产生了复制算法。它把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾收集时，遍历当前使用的区域，把存活对象复制到另外一个区域中，最后将当前使用的区域的可回收的对象进行回收。</p>
-<p><strong>优点</strong>：按顺序分配内存即可，实现简单、运行高效，不用考虑内存碎片。</p>
-<p><strong>缺点</strong>：可用的内存大小缩小为原来的一半，对象存活率高时会频繁进行复制。</p>
-<p>复制算法的执行过程如下图所示</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kl884fxj30ry0f0ab6.jpg" alt="36046BFE497E4ABCAB78166E85E31E10"></p>
-<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a><strong>标记-整理算法</strong></h3><p>在新生代中可以使用复制算法，但是在老年代就不能选择复制算法了，因为老年代的对象存活率会较高，这样会有较多的复制操作，导致效率变低。标记-清除算法可以应用在老年代中，但是它效率不高，在内存回收后容易产生大量内存碎片。因此就出现了一种标记-整理算法（Mark-Compact）算法，与标记-整理算法不同的是，在标记可回收的对象后将所有存活的对象压缩到内存的一端，使他们紧凑的排列在一起，然后对端边界以外的内存进行回收。回收后，已用和未用的内存都各自一边。</p>
-<p><strong>优点</strong>：解决了标记-清理算法存在的内存碎片问题。</p>
-<p><strong>缺点</strong>：仍需要进行局部对象移动，一定程度上降低了效率。</p>
-<p>标记-整理算法的执行过程如下图所示</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5klq5guwj30ru0f2gn0.jpg" alt="343C9455075740CFA0CA6D6EE4A5876D"></p>
-<h3 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a><strong>分代收集算法</strong></h3><p>当前商业虚拟机都采用<strong>分代收集</strong>的垃圾收集算法。分代收集算法，顾名思义是根据对象的<strong>存活周期</strong>将内存划分为几块。一般包括<strong>年轻代</strong>、<strong>老年代</strong> 和 <strong>永久代</strong>，如图所示：</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5km7buvhj30ol0720tn.jpg" alt="D7F3E0234FE64C099A2A2CBE1E5D1735"></p>
-<h3 id="说一下-JVM-有哪些垃圾回收器？"><a href="#说一下-JVM-有哪些垃圾回收器？" class="headerlink" title="说一下 JVM 有哪些垃圾回收器？"></a><strong>说一下 JVM 有哪些垃圾回收器？</strong></h3><p>如果说垃圾收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。下图展示了7种作用于不同分代的收集器，其中用于回收新生代的收集器包括Serial、PraNew、Parallel Scavenge，回收老年代的收集器包括Serial Old、Parallel Old、CMS，还有用于回收整个Java堆的G1收集器。不同收集器之间的连线表示它们可以搭配使用。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kmt77m7j30jt0djtcp.jpg" alt="66568EABCA6B432AAB609584BCCD3EE4"></p>
-<ul>
-<li>Serial收集器（复制算法): 新生代单线程收集器，标记和清理都是单线程，优点是简单高效；</li>
-<li>ParNew收集器 (复制算法): 新生代收并行集器，实际上是Serial收集器的多线程版本，在多核CPU环境下有着比Serial更好的表现；</li>
-<li>Parallel Scavenge收集器 (复制算法): 新生代并行收集器，追求高吞吐量，高效利用 CPU。吞吐量 = 用户线程时间/(用户线程时间+GC线程时间)，高吞吐量可以高效率的利用CPU时间，尽快完成程序的运算任务，适合后台应用等对交互相应要求不高的场景；</li>
-<li>Serial Old收集器 (标记-整理算法): 老年代单线程收集器，Serial收集器的老年代版本；</li>
-<li>Parallel Old收集器 (标记-整理算法)： 老年代并行收集器，吞吐量优先，Parallel Scavenge收集器的老年代版本；</li>
-<li>CMS(Concurrent Mark Sweep)收集器（标记-清除算法）： 老年代并行收集器，以获取最短回收停顿时间为目标的收集器，具有高并发、低停顿的特点，追求最短GC回收停顿时间。</li>
-<li>G1(Garbage First)收集器 (标记-整理算法)： Java堆并行收集器，G1收集器是JDK1.7提供的一个新收集器，G1收集器基于“标记-整理”算法实现，也就是说不会产生内存碎片。此外，G1收集器不同于之前的收集器的一个重要特点是：G1回收的范围是整个Java堆(包括新生代，老年代)，而前六种收集器回收的范围仅限于新生代或老年代。</li>
-</ul>
-<h3 id="详细介绍一下-CMS-垃圾回收器？"><a href="#详细介绍一下-CMS-垃圾回收器？" class="headerlink" title="详细介绍一下 CMS 垃圾回收器？"></a><strong>详细介绍一下 CMS 垃圾回收器？</strong></h3><p>CMS 是英文 Concurrent Mark-Sweep 的简称，是以牺牲吞吐量为代价来获得最短回收停顿时间的垃圾回收器。对于要求服务器响应速度的应用上，这种垃圾回收器非常适合。在启动 JVM 的参数加上“-XX:+UseConcMarkSweepGC”来指定使用 CMS 垃圾回收器。</p>
-<p>CMS 使用的是标记-清除的算法实现的，所以在 gc 的时候回产生大量的内存碎片，当剩余内存不能满足程序运行要求时，系统将会出现 Concurrent Mode Failure，临时 CMS 会采用 Serial Old 回收器进行垃圾清除，此时的性能将会被降低。</p>
-<h3 id="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"><a href="#新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？" class="headerlink" title="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"></a><strong>新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？</strong></h3><ul>
-<li>新生代回收器：Serial、ParNew、Parallel Scavenge</li>
-<li>老年代回收器：Serial Old、Parallel Old、CMS</li>
-<li>整堆回收器：G1</li>
-</ul>
-<p>新生代垃圾回收器一般采用的是复制算法，复制算法的优点是效率高，缺点是内存利用率低；老年代回收器一般采用的是标记-整理的算法进行垃圾回收。</p>
-<h3 id="简述分代垃圾回收器是怎么工作的？"><a href="#简述分代垃圾回收器是怎么工作的？" class="headerlink" title="简述分代垃圾回收器是怎么工作的？"></a><strong>简述分代垃圾回收器是怎么工作的？</strong></h3><p>分代回收器有两个分区：老生代和新生代，新生代默认的空间占比总空间的 1/3，老生代的默认占比是 2/3。</p>
-<p>新生代使用的是复制算法，新生代里有 3 个分区：Eden、To Survivor、From Survivor，它们的默认占比是 8:1:1，它的执行流程如下：</p>
-<ul>
-<li>把 Eden + From Survivor 存活的对象放入 To Survivor 区；</li>
-<li>清空 Eden 和 From Survivor 分区；</li>
-<li>From Survivor 和 To Survivor 分区交换，From Survivor 变 To Survivor，To Survivor 变 From Survivor。</li>
-</ul>
-<p>每次在 From Survivor 到 To Survivor 移动时都存活的对象，年龄就 +1，当年龄到达 15（默认配置是 15）时，升级为老生代。大对象也会直接进入老生代。</p>
-<p>老生代当空间占用到达某个值之后就会触发全局垃圾收回，一般使用标记整理的执行算法。以上这些循环往复就构成了整个分代垃圾回收的整体执行流程。</p>
-<h2 id="内存分配策略"><a href="#内存分配策略" class="headerlink" title="内存分配策略"></a><strong>内存分配策略</strong></h2><h3 id="简述java内存分配与回收策率以及Minor-GC和Major-GC"><a href="#简述java内存分配与回收策率以及Minor-GC和Major-GC" class="headerlink" title="简述java内存分配与回收策率以及Minor GC和Major GC"></a><strong>简述java内存分配与回收策率以及Minor GC和Major GC</strong></h3><p>所谓自动内存管理，最终要解决的也就是内存分配和内存回收两个问题。前面我们介绍了内存回收，这里我们再来聊聊内存分配。</p>
-<p>对象的内存分配通常是在 Java 堆上分配（随着虚拟机优化技术的诞生，某些场景下也会在栈上分配，后面会详细介绍），对象主要分配在新生代的 Eden 区，如果启动了本地线程缓冲，将按照线程优先在 TLAB 上分配。少数情况下也会直接在老年代上分配。总的来说分配规则不是百分百固定的，其细节取决于哪一种垃圾收集器组合以及虚拟机相关参数有关，但是虚拟机对于内存的分配还是会遵循以下几种「普世」规则：</p>
-<h3 id="对象优先在-Eden-区分配"><a href="#对象优先在-Eden-区分配" class="headerlink" title="对象优先在 Eden 区分配"></a><strong>对象优先在 Eden 区分配</strong></h3><p>多数情况，对象都在新生代 Eden 区分配。当 Eden 区分配没有足够的空间进行分配时，虚拟机将会发起一次 Minor GC。如果本次 GC 后还是没有足够的空间，则将启用分配担保机制在老年代中分配内存。</p>
-<p>这里我们提到 Minor GC，如果你仔细观察过 GC 日常，通常我们还能从日志中发现 Major GC/Full GC。</p>
-<ul>
-<li><strong>Minor GC</strong> 是指发生在新生代的 GC，因为 Java 对象大多都是朝生夕死，所有 Minor GC 非常频繁，一般回收速度也非常快；</li>
-<li><strong>Major GC/Full GC</strong> 是指发生在老年代的 GC，出现了 Major GC 通常会伴随至少一次 Minor GC。Major GC 的速度通常会比 Minor GC 慢 10 倍以上。</li>
-</ul>
-<h3 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a><strong>大对象直接进入老年代</strong></h3><p>所谓大对象是指需要大量连续内存空间的对象，频繁出现大对象是致命的，会导致在内存还有不少空间的情况下提前触发 GC 以获取足够的连续空间来安置新对象。</p>
-<p>前面我们介绍过新生代使用的是标记-清除算法来处理垃圾回收的，如果大对象直接在新生代分配就会导致 Eden 区和两个 Survivor 区之间发生大量的内存复制。因此对于大对象都会直接在老年代进行分配。</p>
-<h3 id="长期存活对象将进入老年代"><a href="#长期存活对象将进入老年代" class="headerlink" title="长期存活对象将进入老年代"></a><strong>长期存活对象将进入老年代</strong></h3><p>虚拟机采用分代收集的思想来管理内存，那么内存回收时就必须判断哪些对象应该放在新生代，哪些对象应该放在老年代。因此虚拟机给每个对象定义了一个对象年龄的计数器，如果对象在 Eden 区出生，并且能够被 Survivor 容纳，将被移动到 Survivor 空间中，这时设置对象年龄为 1。对象在 Survivor 区中每「熬过」一次 Minor GC 年龄就加 1，当年龄达到一定程度（默认 15） 就会被晋升到老年代。</p>
-<h2 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a><strong>虚拟机类加载机制</strong></h2><h3 id="简述java类加载机制"><a href="#简述java类加载机制" class="headerlink" title="简述java类加载机制?"></a><strong>简述java类加载机制?</strong></h3><p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验，解析和初始化，最终形成可以被虚拟机直接使用的java类型。</p>
-<h3 id="描述一下JVM加载Class文件的原理机制"><a href="#描述一下JVM加载Class文件的原理机制" class="headerlink" title="描述一下JVM加载Class文件的原理机制"></a><strong>描述一下JVM加载Class文件的原理机制</strong></h3><p>Java中的所有类，都需要由类加载器装载到JVM中才能运行。类加载器本身也是一个类，而它的工作就是把class文件从硬盘读取到内存中。在写程序的时候，我们几乎不需要关心类的加载，因为这些都是隐式装载的，除非我们有特殊的用法，像是反射，就需要显式的加载所需要的类。</p>
-<p>类装载方式，有两种 ：</p>
-<p>1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中，</p>
-<p>2.显式装载， 通过class.forname()等方法，显式加载需要的类</p>
-<p>Java类的加载是动态的，它并不会一次性将所有类全部加载后再运行，而是保证程序运行的基础类(像是基类)完全加载到jvm中，至于其他类，则在需要的时候才加载。这当然就是为了节省内存开销。</p>
-<h3 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些?"></a><strong>什么是类加载器，类加载器有哪些?</strong></h3><p>实现通过类的权限定名获取该类的二进制字节流的代码块叫做类加载器。</p>
-<p>主要有一下四种类加载器:</p>
-<ol>
-<li>启动类加载器(Bootstrap ClassLoader)用来加载java核心类库，无法被java程序直接引用。</li>
-<li>扩展类加载器(extensions class loader):它用来加载 Java 的扩展库。Java 虚拟机的实现会提供一个扩展库目录。该类加载器在此目录里面查找并加载 Java 类。</li>
-<li>系统类加载器（system class loader）：它根据 Java 应用的类路径（CLASSPATH）来加载 Java 类。一般来说，Java 应用的类都是由它来完成加载的。可以通过 ClassLoader.getSystemClassLoader()来获取它。</li>
-<li>用户自定义类加载器，通过继承 java.lang.ClassLoader类的方式实现。</li>
-</ol>
-<h3 id="说一下类装载的执行过程？"><a href="#说一下类装载的执行过程？" class="headerlink" title="说一下类装载的执行过程？"></a><strong>说一下类装载的执行过程？</strong></h3><p>类装载分为以下 5 个步骤：</p>
-<ul>
-<li>加载：根据查找路径找到相应的 class 文件然后导入；</li>
-<li>验证：检查加载的 class 文件的正确性；</li>
-<li>准备：给类中的静态变量分配内存空间；</li>
-<li>解析：虚拟机将常量池中的符号引用替换成直接引用的过程。符号引用就理解为一个标示，而在直接引用直接指向内存中的地址；</li>
-<li>初始化：对静态变量和静态代码块执行初始化工作。</li>
-</ul>
-<h3 id="什么是双亲委派模型？"><a href="#什么是双亲委派模型？" class="headerlink" title="什么是双亲委派模型？"></a><strong>什么是双亲委派模型？</strong></h3><p>在介绍双亲委派模型之前先说下类加载器。对于任意一个类，都需要由加载它的类加载器和这个类本身一同确立在 JVM 中的唯一性，每一个类加载器，都有一个独立的类名称空间。类加载器就是根据指定全限定名称将 class 文件加载到 JVM 内存，然后再转化为 class 对象。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gj5kns3460j30g70e9ac7.jpg" alt="9BBB0225B3264E22849DB1DB1617DCA0"></p>
-<p>类加载器分类：</p>
-<ul>
-<li>启动类加载器（Bootstrap ClassLoader），是虚拟机自身的一部分，用来加载Java_HOME/lib/目录中的，或者被 -Xbootclasspath 参数所指定的路径中并且被虚拟机识别的类库；</li>
-<li>其他类加载器：</li>
-<li>扩展类加载器（Extension ClassLoader）：负责加载\lib\ext目录或Java. ext. dirs系统变量指定的路径中的所有类库；</li>
-<li>应用程序类加载器（Application ClassLoader）。负责加载用户类路径（classpath）上的指定类库，我们可以直接使用这个类加载器。一般情况，如果我们没有自定义类加载器默认就是用这个加载器。</li>
-</ul>
-<p>双亲委派模型：如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这个请求委派给父类加载器去完成，每一层的类加载器都是如此，这样所有的加载请求都会被传送到顶层的启动类加载器中，只有当父加载无法完成加载请求（它的搜索范围中没找到所需的类）时，子加载器才会尝试去加载类。</p>
-<p>当一个类收到了类加载请求时，不会自己先去加载这个类，而是将其委派给父类，由父类去加载，如果此时父类不能加载，反馈给子类，由子类去完成类的加载。</p>
-<h2 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a><strong>JVM调优</strong></h2><h3 id="说一下-JVM-调优的工具？"><a href="#说一下-JVM-调优的工具？" class="headerlink" title="说一下 JVM 调优的工具？"></a><strong>说一下 JVM 调优的工具？</strong></h3><p>JDK 自带了很多监控工具，都位于 JDK 的 bin 目录下，其中最常用的是 jconsole 和 jvisualvm 这两款视图监控工具。</p>
-<ul>
-<li>jconsole：用于对 JVM 中的内存、线程和类等进行监控；</li>
-<li>jvisualvm：JDK 自带的全能分析工具，可以分析：内存快照、线程快照、程序死锁、监控内存的变化、gc 变化等。</li>
-</ul>
-<h3 id="常用的-JVM-调优的参数都有哪些？"><a href="#常用的-JVM-调优的参数都有哪些？" class="headerlink" title="常用的 JVM 调优的参数都有哪些？"></a><strong>常用的 JVM 调优的参数都有哪些？</strong></h3><ul>
-<li>-Xms2g：初始化推大小为 2g；</li>
-<li>-Xmx2g：堆最大内存为 2g；</li>
-<li>-XX:NewRatio=4：设置年轻的和老年代的内存比例为 1:4；</li>
-<li>-XX:SurvivorRatio=8：设置新生代 Eden 和 Survivor 比例为 8:2；</li>
-<li>–XX:+UseParNewGC：指定使用 ParNew + Serial Old 垃圾回收器组合；</li>
-<li>-XX:+UseParallelOldGC：指定使用 ParNew + ParNew Old 垃圾回收器组合；</li>
-<li>-XX:+UseConcMarkSweepGC：指定使用 CMS + Serial Old 垃圾回收器组合；</li>
-<li>-XX:+PrintGC：开启打印 gc 信息；</li>
-<li>-XX:+PrintGCDetails：打印 gc 详细信息。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3822,20 +3789,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
